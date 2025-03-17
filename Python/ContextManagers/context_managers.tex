@@ -1,0 +1,723 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+
+% Ajustamos los márgenes para corregir las advertencias de fancyhdr
+\usepackage[letterpaper, margin=1in, bottom=2.5in, top=1.2in]{geometry}
+
+% Cargamos primero el paquete fancyhdr
+\usepackage{fancyhdr}
+% Corregimos los parámetros headheight y footskip
+\setlength{\headheight}{15pt} % Al menos 14.49998pt según la advertencia
+\setlength{\footskip}{72pt}   % Al menos 71.60547pt según la advertencia
+
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{anyfontsize}
+\usepackage{graphicx}
+\usepackage{tikz} % Necesario para los elementos gráficos
+\usepackage{listings} % Para resaltado de sintaxis
+\usepackage{sourcesanspro}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{fontawesome5}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{mdframed} % Para marcos más estables
+\usepackage{qrcode} % Paquete para generar códigos QR
+
+% Cargar tikz y la biblioteca de cajitas para mdframed
+\usetikzlibrary{calc,shapes,positioning}
+
+% IMPORTANT: Force the text color to be white for the entire document
+\AtBeginDocument{\color{primaryColor}}
+
+% Colors updated with better contrast
+\definecolor{myblue}{cmyk}{1.0,0.8,0.05,0.20}
+\definecolor{bgColor}{RGB}{15, 22, 36}  % Very dark blue, almost black background
+\definecolor{primaryColor}{RGB}{255, 255, 255}  % White text - full white for better contrast
+\definecolor{accentColor}{RGB}{255, 212, 59}  % Python Yellow
+\definecolor{pythonBlue}{RGB}{120, 180, 255}  % Azul Python más claro para mejor contraste
+\definecolor{secondaryColor}{RGB}{220, 230, 240}  % Lighter blue-gray for better contrast
+\definecolor{terminalBg}{RGB}{22, 22, 22}  % Terminal background remains dark
+\definecolor{terminalFrame}{RGB}{40, 40, 40}  % Terminal frame slightly darker
+\definecolor{lineNumberColor}{RGB}{100, 100, 100}  % Color más sutil para los números de línea
+\definecolor{dividerColor}{RGB}{60, 70, 90}  % Color más sutil para la línea divisoria
+
+% Colores mejorados para el código con mayor contraste
+\definecolor{codeTextColor}{RGB}{255, 255, 255}  % Blanco puro para el texto básico
+\definecolor{codeKeywordColor}{RGB}{135, 206, 250}  % Azul cielo para palabras clave
+\definecolor{codeCommentColor}{RGB}{144, 238, 144}  % Verde claro para comentarios
+\definecolor{codeStringColor}{RGB}{255, 215, 135}  % Amarillo para strings
+\definecolor{codeMethodColor}{RGB}{255, 160, 122}  % Naranja claro para métodos
+\definecolor{codeFunctionColor}{RGB}{255, 215, 0}  % Dorado para funciones
+\definecolor{codeNumberColor}{RGB}{255, 255, 150}  % Amarillo claro para números
+
+% Set page background color
+\pagecolor{bgColor}
+
+% Hyperref configuration
+\hypersetup{
+    colorlinks=true,
+    linkcolor=accentColor,
+    filecolor=accentColor,
+    urlcolor=accentColor,
+}
+
+% Configuración básica para listings que evita problemas con saltos de página
+\lstset{
+  language=Python,
+  basicstyle=\normalsize\ttfamily\bfseries\color{codeTextColor}, % Tamaño reducido, en blanco y negrita
+  backgroundcolor=\color{terminalBg},
+  commentstyle=\color{codeCommentColor},
+  keywordstyle=\color{codeKeywordColor},
+  stringstyle=\color{codeStringColor},
+  numberstyle=\color{lineNumberColor}, % Números de línea más sutiles
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4,
+  showstringspaces=false,
+  frame=none,
+  xleftmargin=15pt,
+  xrightmargin=0pt,
+  aboveskip=10pt,
+  belowskip=10pt,
+  numbers=left,
+  numbersep=8pt,
+  extendedchars=true,
+  keepspaces=true,
+  columns=flexible,
+  lineskip=6pt, % Espacio entre líneas ligeramente reducido
+  % Keywords de Python (palabras reservadas)
+  morekeywords={self, yield, lambda, with, as, from, True, False, None, import, in, for, 
+                if, elif, else, while, return, def, class, try, except, finally, raise, 
+                break, continue, global, nonlocal, pass, assert, del, yield from},
+  % Funciones incorporadas resaltadas de manera distinta
+  emph={[2]print,range,sum,int,str,float,list,dict,set,tuple,next,len,type,map,filter,
+         reduce,zip,enumerate,sorted,reversed,min,max,open,any,all},
+  emphstyle={[2]\color{codeFunctionColor}}
+}
+
+% TERMINAL ESTILO MAC MEJORADA CON BOTONES A LA IZQUIERDA Y MENOS ESPACIO SUPERIOR
+\newenvironment{macterminal}{%
+    \begin{mdframed}[
+        linecolor=terminalFrame,
+        backgroundcolor=terminalBg,
+        roundcorner=5pt,
+        skipabove=10pt,
+        skipbelow=10pt,
+        linewidth=1pt,
+        innertopmargin=10pt, % Reducido
+        frametitle={%
+            \tikz[baseline=(current bounding box.east), outer sep=0pt]{
+                \fill[red!80!black] (0,0) circle (5pt);
+                \fill[yellow!80!black] (0.7,0) circle (5pt);
+                \fill[green!70!black] (1.4,0) circle (5pt);
+            }
+        },
+        frametitlealignment=\raggedright, % Alineado a la izquierda
+        frametitleaboveskip=8pt, % Espacio entre el título y el borde superior
+        frametitlebelowskip=0pt, % Reducir el espacio entre el título y el contenido
+    ]
+    % No necesitamos más espacio vertical aquí
+}{%
+    \end{mdframed}%
+}
+
+% Utilities
+\newcommand{\verspace}{\vspace{10pt}}
+
+% Section styling - Esquema más elegante y mejorado contraste
+\titleformat{\section}
+  {\LARGE\bfseries\color{primaryColor}} % Secciones principales en blanco para mejor contraste y más grandes
+  {\thesection. }
+  {0pt}
+  {}
+  []
+
+\titleformat{\subsection}
+  {\Large\bfseries\color{accentColor}} % Subsecciones en amarillo Python y más grandes
+  {\thesubsection. }
+  {0pt}
+  {}
+  []
+
+\titleformat{\subsubsection}
+  {\large\bfseries\color{pythonBlue}} % Subsubsecciones en azul Python más claro y más grandes
+  {\thesubsubsection. }
+  {0pt}
+  {}
+  []
+
+% Spacing for sections
+\titlespacing*{\section}{0pt}{20pt}{10pt}
+\titlespacing*{\subsection}{0pt}{15pt}{7pt}
+\titlespacing*{\subsubsection}{0pt}{10pt}{5pt}
+
+% Configure header and footer
+\pagestyle{fancy}
+\fancyhf{}
+
+% Crear un encabezado elegante para todas las páginas (excepto la portada)
+\fancyhead[L]{
+    \begin{tikzpicture}[remember picture, overlay]
+        % Rectángulo de fondo para la sección Python
+        \fill[pythonBlue, rounded corners=3pt] (0,0) rectangle (2.2cm,0.7cm);
+        % Texto Python
+        \node[text=primaryColor, font=\bfseries] at (1.1cm,0.35cm) {PYTHON};
+        
+        % Pequeño separador
+        \fill[secondaryColor] (2.35cm,0.1cm) rectangle (2.40cm,0.6cm);
+        
+        % Texto Context Managers con el color de acento
+        \node[text=accentColor, font=\bfseries, anchor=west] at (2.35cm,0.35cm) {CONTEXT MANAGERS};
+    \end{tikzpicture}
+}
+
+% Línea de encabezado
+\renewcommand{\headrulewidth}{0pt}
+
+% Línea divisoria más sutil
+\renewcommand{\footrule}{
+  \vspace{0.5cm}
+  \noindent\makebox[\linewidth]{\color{dividerColor}\rule{\linewidth}{0.2pt}}
+  \vspace{0.5cm}
+}
+\renewcommand{\footrulewidth}{0.2pt}
+\renewcommand{\footruleskip}{1cm}
+
+% Configure footer with profile info
+\fancyfoot[C]{
+    \vspace*{0.2cm}
+    \noindent
+    \begin{minipage}{\textwidth}
+        \begin{flushleft}
+            % Profile image placeholder with TikZ
+            \raisebox{0.7cm}{
+            \begin{tikzpicture}[baseline]
+                \path[fill=bgColor] (0,0) circle (0.8cm);
+                \clip (0,0) circle (0.8cm);
+                \node at (0,0) {
+                    % Placeholder for profile image
+                    \includegraphics[width=1.6cm,height=1.6cm]{profile-image.jpeg}
+                };
+            \end{tikzpicture}
+            }
+            \begin{minipage}[b]{0.8\textwidth}
+                % Name
+                {\large\bfseries\color{primaryColor}Alejandro Sánchez Yalí}
+                
+                % Professional description
+                \par\vspace{1pt}
+                {\small\color{secondaryColor}Software Developer | AI \& Blockchain Enthusiast}
+                
+                % Contact
+                \par\vspace{1pt}
+                {\small\color{accentColor}\faGlobe\hspace{5pt}\color{secondaryColor}www.asanchezyali.com}
+            \end{minipage}
+        \end{flushleft}
+        \vspace{8pt} % Space at bottom
+    \end{minipage}
+}
+
+% Estilo para la portada (sin encabezado ni pie de página)
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \renewcommand{\headrulewidth}{0pt}
+    \renewcommand{\footrulewidth}{0pt}
+}
+
+% Bullet styling for lists
+\renewcommand{\labelitemi}{\textcolor{accentColor}{$\bullet$}} % Primer nivel de viñetas en amarillo (mejor contraste)
+\renewcommand{\labelitemii}{\textcolor{pythonBlue}{$\circ$}} % Segundo nivel de viñetas en azul
+
+% Aumentar globalmente el tamaño de texto un 20%
+\usepackage{relsize}
+\AtBeginDocument{\relsize{1}} % Incrementa la fuente en aproximadamente un 20%
+
+% Comando simplificado para la etiqueta Python
+\newcommand{\languagetag}[1]{
+    \begin{tikzpicture}[baseline]
+        \node[fill=pythonBlue, text=primaryColor, rounded corners=5pt, inner sep=7pt] {
+            {\normalsize\textbf{#1}}
+        };
+    \end{tikzpicture}
+}
+
+% Alternativa usando una versión modificada de la URL
+\newcommand{\elegantqr}[2]{
+    \qrcode[height=2.5cm]{#1}
+    \\[0.1cm]
+    {\hspace{0.2cm}\color{primaryColor}\small #2\par}
+}
+
+% Definir el título personalizado con alineación exacta para todos los elementos
+\newcommand{\titlepagecontents}{%
+    \vspace*{3cm}
+    % Asegurar que todos los elementos estén alineados a la izquierda
+    \begin{flushleft}
+    \languagetag{Python}\\[0.4cm]
+    {\fontsize{48}{52}\bfseries\color{primaryColor}Python \color{accentColor}Context\\\color{accentColor}Managers\par}
+    \vspace{0.3cm}
+    {\fontsize{18}{52}\color{secondaryColor}Elegant Resource Management with the «{\color{accentColor}with}» Statement\par}
+    \vspace{0.3cm}
+    {\color{secondaryColor}\today\par}
+    \vspace{2cm}
+    % El QR se alineará a la izquierda aunque internamente esté centrado
+    \elegantqr{https://github.com/asanchezyali/social-media-posts/tree/main/Python/ContextManagers}{Source Code}
+    \end{flushleft}
+}
+
+
+% En la página del título, aplicar el contenido sin márgenes adicionales
+\makeatletter
+\renewcommand{\maketitle}{%
+    \begin{titlepage}
+    \setlength{\parindent}{0pt}
+    \setlength{\leftskip}{0pt}
+    \titlepagecontents
+    \end{titlepage}
+}
+\makeatother
+
+% También necesitamos corregir la definición para la página final
+\newcommand{\finalpagecontents}{%
+    \vspace*{4cm}
+    \begin{center}
+        \begin{tikzpicture}
+            % Title text
+            \node[text width=14cm, align=center] at (0,0) {
+                {\fontsize{48}{52}\bfseries\color{primaryColor}Ready to \color{accentColor}Level Up\\\color{primaryColor}Your Python?\par}
+            };
+            
+            % Add vertical space
+            \node at (0,-2) {};
+            
+            % Question text
+            \node[text width=14cm, align=center] at (0,-4) {
+                {\fontsize{22}{26}\color{secondaryColor}You've learned something powerful today.\\\vspace{0.5cm}Try creating a context manager in your next project\\\vspace{0.5cm}and watch your code become cleaner and safer!\par}
+            };
+        \end{tikzpicture}
+    \end{center}
+}
+
+\begin{document}
+\color{primaryColor} % Explicitly set text color to white for the entire document
+
+\begin{titlepage}
+    % Eliminamos todos los espacios adicionales para asegurar la alineación
+    \titlepagecontents
+\end{titlepage}
+
+\section{What Are Context Managers?}
+
+Context managers in Python provide an elegant way to manage resources automatically. Using the \textbf{\textcolor{accentColor}{with}} statement, they handle setup and cleanup operations, ensuring resources are properly acquired and released, even when errors occur.
+
+\begin{itemize}
+    \item \textbf{\textcolor{pythonBlue}{Resource Safety:}} Automatic cleanup even during exceptions
+    \item \textbf{\textcolor{pythonBlue}{Code Simplicity:}} Eliminates boilerplate try/finally blocks
+    \item \textbf{\textcolor{pythonBlue}{Error Handling:}} Built-in mechanism for exception management
+\end{itemize}
+
+\subsection{The «with» Statement}
+
+Compare traditional resource management with context managers:
+
+\begin{macterminal}
+\begin{lstlisting}
+# Without context manager
+file = open('data.txt', 'r')
+try:
+    content = file.read()
+finally:
+    file.close()
+
+# With context manager
+with open('data.txt', 'r') as file:
+    content = file.read()
+# File is automatically closed
+\end{lstlisting}
+\end{macterminal}
+
+\section{Creating Context Managers}
+
+\subsection{Class-Based Implementation}
+
+To implement a context manager as a class, you need to define the \textbf{\textcolor{accentColor}{\_\_enter\_\_}} and \textbf{\textcolor{accentColor}{\_\_exit\_\_}} methods:
+
+\begin{itemize}
+    \item \textbf{\textcolor{pythonBlue}{\_\_enter\_\_}}: Called when entering the \textbf{with} block - handles setup
+    \item \textbf{\textcolor{pythonBlue}{\_\_exit\_\_}}: Called when exiting the \textbf{with} block - handles cleanup
+\end{itemize}
+
+\begin{macterminal}
+\begin{lstlisting}
+class SimpleTimer:
+    """A simple context manager that measures execution time."""
+    
+    def __init__(self, name):
+        self.name = name
+        self.start_time = None
+        
+    def __enter__(self):
+        """
+        Called when entering the -with- block.
+        Sets up the timer by recording the start time.
+        """
+        import time
+        print(f"Starting timer: {self.name}")
+        self.start_time = time.time()
+        return self  # This object will be assigned to the variable after -as-
+        
+    def __exit__(self, exc_type, exc_value, traceback):
+        """
+        Called when exiting the -with- block (whether normally or due to exception).
+        Calculates and displays the elapsed time.
+        
+        Parameters:
+        - exc_type: Type of exception that occurred (or None if no exception)
+        - exc_value: The exception object (or None)
+        - traceback: The traceback object (or None)
+        """
+        import time
+        elapsed = time.time() - self.start_time
+        
+        if exc_type is None:
+            # No exception occurred
+            print(f"Timer {self.name} finished: {elapsed:.4f} seconds")
+        else:
+            # An exception occurred
+            print(f"Timer {self.name} aborted: {elapsed:.4f} seconds")
+            print(f"Exception: {exc_type.__name__}: {exc_value}")
+            
+        # Return False to let exceptions propagate
+        # Return True would suppress the exception
+        return False
+
+# Using our custom context manager
+with SimpleTimer("calculation") as timer:
+    print("Performing calculation...")
+    # Simulate some work
+    total = sum(i**2 for i in range(1000000))
+    print(f"Result: {total}")
+
+# The __exit__ method is called automatically when leaving the with block
+print("After the with block")
+\end{lstlisting}
+\end{macterminal}
+
+\subsection{Function-Based Implementation}
+
+Using the \textbf{\textcolor{accentColor}{@contextmanager}} decorator for a simpler approach:
+
+\begin{macterminal}
+\begin{lstlisting}
+from contextlib import contextmanager
+
+@contextmanager
+def file_manager(filename, mode):
+    try:
+        # Setup code
+        f = open(filename, mode)
+        yield f  # Yield the resource
+    finally:
+        # Cleanup code
+        f.close()
+
+# Usage
+with file_manager('example.txt', 'r') as f:
+    content = f.read()
+\end{lstlisting}
+\end{macterminal}
+
+\section{Practical Applications}
+
+\subsection{Database Transactions}
+
+A database context manager handles connections and transactions safely. This example explains how it works without requiring database expertise:
+
+\begin{macterminal}
+\begin{lstlisting}
+import sqlite3
+
+class DatabaseConnection:
+    """
+    A context manager for database connections.
+    - Automatically opens and closes database connections
+    - Handles transactions (commit on success, rollback on error)
+    """
+    def __init__(self, db_name):
+        # Store the database name for later use
+        self.db_name = db_name  
+        self.conn = None
+        
+    def __enter__(self):
+        """
+        Called when entering the 'with' block.
+        This method:
+        1. Opens the database connection
+        2. Returns the connection object for use in the 'with' block
+        """
+        print(f"Opening database connection to {self.db_name}")
+        # sqlite3.connect creates a connection to the database
+        self.conn = sqlite3.connect(self.db_name)
+        return self.conn
+        
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """
+        Called when exiting the 'with' block (in any case).
+        This method:
+        1. Checks if there was an exception (error)
+        2. Rolls back changes if there was an error
+        3. Commits changes if everything was successful
+        4. Always closes the connection
+        
+        Parameters:
+        - exc_type: The type of exception that occurred (or None if no exception)
+        - exc_val: The exception object (or None)
+        - exc_tb: The traceback object (or None)
+        """
+        if self.conn:
+            if exc_type:  # If an exception/error occurred in the 'with' block
+                print("Error occurred! Rolling back changes...")
+                # rollback() undoes all changes made in the current transaction
+                self.conn.rollback()
+            else:  # If everything went well (no exceptions)
+                print("Operations successful! Saving changes...")
+                # commit() saves all changes made in the current transaction
+                self.conn.commit()
+                
+            print("Closing database connection")
+            # Always close the connection to free up resources
+            self.conn.close()
+            
+        # Return False to let exceptions propagate (be raised)
+        # Return True would suppress the exception
+        return False
+
+# Simple usage example with an in-memory database (no file needed)
+with DatabaseConnection(':memory:') as conn:
+    # Create a cursor object to execute SQL commands
+    cursor = conn.cursor()
+    
+    print("Creating a table...")
+    # Create a simple table to store people
+    cursor.execute('''
+    CREATE TABLE people (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        age INTEGER
+    )''')
+    
+    print("Adding a person to the database...")
+    # Insert a person into the table
+    cursor.execute('INSERT INTO people (name, age) VALUES (?, ?)', 
+                  ('John', 25))
+    
+    print("Checking if the person was added...")
+    # Verify the person was added
+    cursor.execute('SELECT * FROM people')
+    result = cursor.fetchone()  # Get the first row
+    print(f"Person in database: {result}")
+    
+# When this block ends:
+# 1. The __exit__ method is called automatically
+# 2. Changes are committed (saved) if no errors occurred
+# 3. The connection is closed
+print("Outside the with block - connection is already closed")
+\end{lstlisting}
+\end{macterminal}
+
+This example shows how context managers eliminate the need to manually open and close database connections, and handle transaction management (commit/rollback) automatically.
+
+\subsection{Temporary State Changes}
+
+Temporarily modify settings or environments:
+
+\begin{macterminal}
+\begin{lstlisting}
+import os
+from contextlib import contextmanager
+
+@contextmanager
+def change_directory(path):
+    """Temporarily change the working directory."""
+    old_dir = os.getcwd()
+    try:
+        print(f"Changing directory to: {path}")
+        os.chdir(path)
+        yield  # Give control back to the with block
+    finally:
+        print(f"Changing back to: {old_dir}")
+        os.chdir(old_dir)  # Always restore the original directory
+
+# Code runs with /tmp as working directory
+with change_directory("/tmp"):
+    print(f"Current directory: {os.getcwd()}")
+    # Do some work in the temporary directory
+    
+# Original directory is restored automatically
+print("Back to the original directory")
+print(f"Current directory: {os.getcwd()}")
+\end{lstlisting}
+\end{macterminal}
+
+\section{Advanced Features}
+
+\subsection{Exception Handling}
+
+Context managers can control whether exceptions are propagated or suppressed:
+
+\begin{macterminal}
+\begin{lstlisting}
+class ExceptionHandler:
+    def __enter__(self):
+        return self
+        
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_type is not None:
+            print(f"Handled: {exc_type.__name__}: {exc_val}")
+            return True  # Suppress the exception
+        return False  # Propagate any exception
+
+# Exception will be suppressed
+with ExceptionHandler():
+    result = 1 / 0
+    print("This won't execute")
+print("But this will")  # Execution continues
+\end{lstlisting}
+\end{macterminal}
+
+\subsection{Useful Built-in Context Managers}
+
+Python provides several ready-to-use context managers:
+
+\begin{macterminal}
+\begin{lstlisting}
+from contextlib import suppress, redirect_stdout
+import io
+
+# Suppress specific exceptions
+with suppress(FileNotFoundError):
+    # No exception if file doesn't exist
+    open('non_existent.txt').read()
+
+# Redirect output
+f = io.StringIO()
+with redirect_stdout(f):
+    print("Hello, world!")
+output = f.getvalue()  # Contains "Hello, world!"
+print(output)
+\end{lstlisting}
+\end{macterminal}
+
+\section{Performance Measurement}
+
+Create a simple timer context manager:
+
+\begin{macterminal}
+\begin{lstlisting}
+import time
+from contextlib import contextmanager
+
+@contextmanager
+def timer(label):
+    """
+    A context manager that measures and prints the execution time
+    of the code inside the 'with' block.
+    
+    Parameters:
+    - label: A descriptive name for the operation being timed
+    """
+    # 1. Setup phase: Record the start time
+    start = time.time()
+    try:
+        # 2. Yield control to the with-block
+        #    Note: We don't yield a value here since we don't need
+        #    to expose any object to the with-block
+        yield
+    finally:
+        # 3. Cleanup phase: Calculate and display elapsed time
+        #    This runs even if an exception occurs in the with-block
+        end = time.time()
+        elapsed = end - start
+        print(f"{label}: {elapsed:.4f} seconds")
+
+# Example 1: Basic usage
+with timer("Processing data"):
+    # Time-consuming operation
+    time.sleep(0.5)  # Simulate work with a delay
+    
+# Example 2: Nested timers for profiling different parts of code
+with timer("Complete operation"):
+    # First subtask
+    with timer("Data loading"):
+        time.sleep(0.2)  # Simulate loading data
+    
+    # Second subtask
+    with timer("Processing"):
+        time.sleep(0.3)  # Simulate processing
+    
+    # Third subtask
+    with timer("Saving results"):
+        time.sleep(0.1)  # Simulate saving
+
+# Output will show:
+# Processing data: 0.5002 seconds
+#  Data loading: 0.2001 seconds
+#  Processing: 0.3002 seconds
+#  Saving results: 0.1002 seconds
+# Complete operation: 0.6009 seconds
+\end{lstlisting}
+\end{macterminal}
+
+\section{Best Practices}
+
+\begin{itemize}
+    \item \textbf{\textcolor{pythonBlue}{Use for Resource Management:}} Files, connections, locks
+    \item \textbf{\textcolor{pythonBlue}{Keep Context Managers Focused:}} Single responsibility
+    \item \textbf{\textcolor{pythonBlue}{Handle Exceptions Properly:}} Decide when to propagate or suppress
+    \item \textbf{\textcolor{pythonBlue}{Document Behavior:}} Especially exception handling
+    \item \textbf{\textcolor{pythonBlue}{Test Both Paths:}} Success and exception scenarios
+\end{itemize}
+
+\section{Conclusion}
+
+Context managers make Python code cleaner, safer, and more maintainable by automating resource management and error handling. Whether using the built-in managers or creating custom ones, they provide an elegant solution for handling resources properly in all circumstances.
+
+\begin{itemize}
+    \item \textbf{\textcolor{pythonBlue}{Automation:}} Eliminates manual resource management
+    \item \textbf{\textcolor{pythonBlue}{Safety:}} Ensures resources are properly released
+    \item \textbf{\textcolor{pythonBlue}{Flexibility:}} Implement via classes or decorators
+\end{itemize}
+
+\section{References}
+\begin{itemize}
+    \item Python Documentation. \textit{The with statement}. \href{https://docs.python.org/3/reference/compound_stmts.html#the-with-statement}{Link}
+    
+    \item Real Python. \textit{Context Managers and Python's with Statement}. \href{https://realpython.com/python-with-statement/}{Link}
+    
+    \item GeeksforGeeks. \textit{Context Manager in Python}. \href{https://www.geeksforgeeks.org/context-manager-in-python/}{Link}
+    
+    \item DataCamp. \textit{Writing Custom Context Managers in Python}. \href{https://www.datacamp.com/tutorial/writing-custom-context-managers-in-python/}{Link}
+
+    \item Python Documentation. \textit{contextlib — Utilities for with-statement contexts}. \href{https://docs.python.org/3/library/contextlib.html/}{Link}
+
+    \item Python Morsels. \textit{Creating a context manager in Python}. 
+    \href{https://www.pythonmorsels.com/creating-a-context-manager//}{Link}
+
+    \item Python Tutorial. \textit{Python Context Manager}. 
+    \href{https://www.pythontutorial.net/advanced-python/python-context-managers/}{Link}
+
+    \item Code Rabbit. \textit{Guide To Python Context Managers: Beyond Files}. 
+    \href{https://analyticsindiamag.com/deep-tech/guide-to-python-context-managers-beyond-files/}{Link}
+    
+    \item Every Day Codes \textit{Python Context Managers: Beyond in Depth}. 
+    \href{https://everyday.codes/python/python-context-managers-in-depth/}{Link}
+    \item Translated, Edited and written in collaboration with AI.
+\end{itemize}
+
+\clearpage
+\thispagestyle{empty}
+\finalpagecontents
+
+\end{document}
