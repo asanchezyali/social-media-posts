@@ -18,6 +18,7 @@
 \usepackage{setspace}
 \usepackage{hyperref}
 \usepackage{mdframed}
+\usepackage{qrcode} % Added QR code package
 \usetikzlibrary{calc,shapes,positioning}
 
 \AtBeginDocument{\color{primaryColor}}
@@ -104,6 +105,13 @@
     ]
 }{%
     \end{mdframed}%
+}
+
+% Added elegantqr command
+\newcommand{\elegantqr}[2]{
+    \qrcode[height=2.5cm]{#1}
+    \\[0.1cm]
+    {\hspace{0.2cm}\color{primaryColor}\small #2\par}
 }
 
 \newcommand{\verspace}{\vspace{5pt}}
@@ -202,13 +210,19 @@
 }
 
 \newcommand{\titlepagecontents}{%
-    \vspace*{5cm}
+    \vspace*{3cm}
+    % Formatted similar to the Python generators document
+    \begin{flushleft}
     \noindent\languagetag{Artificial Intelligence}\\[0.4cm]
     \noindent{\fontsize{48}{52}\bfseries\color{primaryColor}Reasoning \color{accentColor}Frameworks\par}
     \vspace{0.3cm}
     \noindent{\fontsize{18}{52}\color{secondaryColor}Effective Strategies for AI Problem-Solving\par}
     \vspace{0.3cm}
     \noindent{\color{secondaryColor}\today\par}
+    \vspace{2cm}
+    % Added QR code
+    \elegantqr{https://github.com/asanchezyali/ai-reasoning-frameworks}{Source Code}
+    \end{flushleft}
 }
 
 \newcommand{\finalpagecontents}{%

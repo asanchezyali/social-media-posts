@@ -23,6 +23,7 @@
 \usepackage{setspace}
 \usepackage{hyperref}
 \usepackage{mdframed} % Para marcos más estables
+\usepackage{qrcode} % Paquete para generar códigos QR
 
 % Cargar tikz y la biblioteca de cajitas para mdframed
 \usetikzlibrary{calc,shapes,positioning}
@@ -31,6 +32,7 @@
 \AtBeginDocument{\color{primaryColor}}
 
 % Colors updated with better contrast
+\definecolor{myblue}{cmyk}{1.0,0.8,0.05,0.20}
 \definecolor{bgColor}{RGB}{15, 22, 36}  % Very dark blue, almost black background
 \definecolor{primaryColor}{RGB}{255, 255, 255}  % White text - full white for better contrast
 \definecolor{accentColor}{RGB}{255, 212, 59}  % Python Yellow
@@ -88,7 +90,7 @@
   % Keywords de Python (palabras reservadas)
   morekeywords={self, yield, lambda, with, as, from, True, False, None, import, in, for, 
                 if, elif, else, while, return, def, class, try, except, finally, raise, 
-                break, continue, global, nonlocal, pass, assert, del},
+                break, continue, global, nonlocal, pass, assert, del, yield from},
   % Funciones incorporadas resaltadas de manera distinta
   emph={[2]print,range,sum,int,str,float,list,dict,set,tuple,next,len,type,map,filter,
          reduce,zip,enumerate,sorted,reversed,min,max,open,any,all},
@@ -241,20 +243,45 @@
     \end{tikzpicture}
 }
 
-% Definir el título personalizado con alineación exacta
-\newcommand{\titlepagecontents}{%
-    \vspace*{6cm}
-    \noindent\languagetag{Python}\\[0.4cm]
-    \noindent{\fontsize{48}{52}\bfseries\color{primaryColor}Python \color{accentColor}Generators\par}
-    \vspace{0.3cm}
-    \noindent{\fontsize{18}{52}\color{secondaryColor}Elegant, Memory-Efficient Iterations A Powerful Python Feature\par}
-    \vspace{0.3cm}
-    \noindent{\color{secondaryColor}\today\par}
+% Alternativa usando una versión modificada de la URL
+\newcommand{\elegantqr}[2]{
+    \qrcode[height=2.5cm]{#1}
+    \\[0.1cm]
+    {\hspace{0.2cm}\color{primaryColor}\small #2\par}
 }
 
-% Definir la página final similar al documento de JavaScript
+% Definir el título personalizado con alineación exacta para todos los elementos
+\newcommand{\titlepagecontents}{%
+    \vspace*{3cm}
+    % Asegurar que todos los elementos estén alineados a la izquierda
+    \begin{flushleft}
+    \languagetag{Python}\\[0.4cm]
+    {\fontsize{48}{52}\bfseries\color{primaryColor}Python \color{accentColor}Generators\par}
+    \vspace{0.3cm}
+    {\fontsize{18}{52}\color{secondaryColor}Elegant, Memory-Efficient Iterations A Powerful Python Feature\par}
+    \vspace{0.3cm}
+    {\color{secondaryColor}\today\par}
+    \vspace{2cm}
+    % El QR se alineará a la izquierda aunque internamente esté centrado
+    \elegantqr{https://github.com/asanchezyali/social-media-posts/tree/main/Python/Generators}{Source Code}
+    \end{flushleft}
+}
+
+
+% En la página del título, aplicar el contenido sin márgenes adicionales
+\makeatletter
+\renewcommand{\maketitle}{%
+    \begin{titlepage}
+    \setlength{\parindent}{0pt}
+    \setlength{\leftskip}{0pt}
+    \titlepagecontents
+    \end{titlepage}
+}
+\makeatother
+
+% También necesitamos corregir la definición para la página final
 \newcommand{\finalpagecontents}{%
-    \vspace*{6cm}
+    \vspace*{4cm}
     \begin{center}
         \begin{tikzpicture}
             % Title text
@@ -263,10 +290,10 @@
             };
             
             % Add vertical space
-            \node at (0,-3) {};
+            \node at (0,-2) {};
             
             % Question text
-            \node[text width=14cm, align=center] at (0,-6) {
+            \node[text width=14cm, align=center] at (0,-4) {
                 {\fontsize{22}{26}\color{secondaryColor}How will you optimize your code with generators?\par}
             };
         \end{tikzpicture}
@@ -293,11 +320,32 @@ Generators are special functions that return an iterator using the \textbf{\text
     \item \textbf{\textcolor{pythonBlue}{Memory Efficiency:}} Values are generated one at a time, not stored in memory
     \item \textbf{\textcolor{pythonBlue}{Lazy Evaluation:}} Values are computed only when needed
     \item \textbf{\textcolor{pythonBlue}{Simplicity:}} Cleaner code compared to implementing iterators manually
+    \item \textbf{\textcolor{pythonBlue}{State Preservation:}} Generators maintain their state between calls
+    \item \textbf{\textcolor{pythonBlue}{Sequence Creation:}} Easily model complex or infinite sequences
 \end{itemize}
 
 \subsection{Generators vs. Lists}
 
 When comparing generators to traditional data structures like lists, we find several key differences:
+
+\begin{macterminal}
+\begin{lstlisting}
+# List comprehension - loads all in memory
+numbers_list = [x * 2 for x in range(1000000)]
+
+# Generator expression - computes on-demand
+numbers_gen = (x * 2 for x in range(1000000))
+
+# Memory comparison
+import sys
+list_size = sys.getsizeof(numbers_list) 
+# ~8.06 MB
+gen_size = sys.getsizeof(numbers_gen)    
+# ~200B
+\end{lstlisting}
+\end{macterminal}
+
+Other important differences include:
 
 \begin{itemize}
     \item \textbf{\textcolor{pythonBlue}{Memory Usage:}} Generators consume significantly less memory than equivalent lists
@@ -340,16 +388,19 @@ Generator expressions provide a concise way to create generators, similar to lis
 
 \begin{macterminal}
 \begin{lstlisting}
-# List comprehension (creates entire list in memory)
-squares_list = [x*x for x in range(1000000)]  # Uses more memory
+# Method 1: Generator function with yield
+def count_up_to(max):
+    count = 1
+    while count <= max:
+        yield count
+        count += 1
 
-# Generator expression (creates generator object)
-squares_gen = (x*x for x in range(1000000))   # Uses minimal memory
+# Method 2: Generator expression
+squares = (x**2 for x in range(10))
 
-# Using the generator expression
-print(next(squares_gen))  # 0
-print(next(squares_gen))  # 1
-print(next(squares_gen))  # 4
+# Using generators
+for num in count_up_to(5):
+    print(num)  # Prints: 1, 2, 3, 4, 5
 \end{lstlisting}
 \end{macterminal}
 
@@ -378,6 +429,91 @@ for num in fib:
     print(num, end=' ')  # 0 1 1 2 3 5 8 13 21 34
 \end{lstlisting}
 \end{macterminal}
+
+\subsection{Infinite Sequences}
+
+Generators are particularly useful for working with potentially infinite sequences:
+
+\begin{macterminal}
+\begin{lstlisting}
+# Creating an infinite sequence of Fibonacci numbers
+def fibonacci():
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
+
+# Using the infinite generator safely
+fib_gen = fibonacci()
+for _ in range(10):
+    print(next(fib_gen))
+    
+# Output: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34
+\end{lstlisting}
+\end{macterminal}
+
+\subsection{The yield from Statement}
+
+Python 3.3 introduced the \textbf{\textcolor{accentColor}{yield from}} statement, which simplifies delegation to sub-generators:
+
+\begin{macterminal}
+\begin{lstlisting}
+from collections.abc import Sequence
+
+# Without yield from
+def subgenerator(n):
+    for i in range(n):
+        yield i
+
+def main_generator_old(n):
+    for val in subgenerator(n):
+        yield val
+
+# With yield from - more elegant
+def main_generator_new(n):
+    yield from subgenerator(n)
+    
+def flatten(nested_list):
+    for item in nested_list:
+        if isinstance(item, Sequence) and not isinstance(item, (str, bytes)):
+            yield from flatten(item)
+        else:
+            yield item
+\end{lstlisting}
+\end{macterminal}
+
+\section{Generator Pipelines}
+
+Generators can be chained together to create powerful data processing pipelines:
+
+\begin{macterminal}
+\begin{lstlisting}
+def read_file(file_path):
+    with open(file_path, 'r') as f:
+        for line in f:
+            yield line.strip()
+
+def grep(lines, pattern):
+    for line in lines:
+        if pattern in line:
+            yield line
+
+def uppercase(lines):
+    for line in lines:
+        yield line.upper()
+        
+# Usage
+file_lines = read_file('data.txt')
+filtered = grep(file_lines, 'python')
+result = uppercase(filtered)
+
+# Process results
+for line in result:
+    print(line)
+\end{lstlisting}
+\end{macterminal}
+
+This approach is memory-efficient because each line is processed one at a time through the entire pipeline.
 
 \section{Memory Efficiency with Generators}
 
@@ -412,29 +548,137 @@ gen_size = sum(stat.size for stat in gen_snapshot.statistics('filename'))
 print(f"List memory: {list_size / 1024 / 1024:.2f} MB")
 print(f"Generator memory: {gen_size / 1024 / 1024:.2f} MB")
 print(f"Memory ratio: {list_size / gen_size:.0f}x")
+\end{lstlisting}
+\end{macterminal}
 
-# Create a large list
-large_list = [i * i for i in range(1000000)]
-list_snapshot = tracemalloc.take_snapshot()
-list_size = sum(stat.size for stat in list_snapshot.statistics('filename'))
+\subsection{Processing Large Files}
 
-# Reset monitoring
-tracemalloc.stop()
-tracemalloc.start()
+Generators are particularly useful when working with files that would be too large to fit in memory:
 
-# Create an equivalent generator
-large_gen = (i * i for i in range(1000000))
-gen_snapshot = tracemalloc.take_snapshot()
-gen_size = sum(stat.size for stat in gen_snapshot.statistics('filename'))
+\begin{macterminal}
+\begin{lstlisting}
+# Processing a large file with a list
+def process_file_list(filename):
+    with open(filename) as f:
+        # All lines loaded in memory at once
+        return [line.upper() for line in f]
 
-# Compare memory usage
-print(f"List memory: {list_size / 1024 / 1024:.2f} MB")
-print(f"Generator memory: {gen_size / 1024 / 1024:.2f} MB")
-print(f"Memory ratio: {list_size / gen_size:.0f}x")
+# Processing with a generator
+def process_file_generator(filename):
+    with open(filename) as f:
+        for line in f:
+            # Process one line at a time
+            yield line.upper()
 \end{lstlisting}
 \end{macterminal}
 
 The memory savings can be substantial, especially when processing large datasets.
+
+\section{The Iterator Protocol}
+
+Under the hood, generators implement Python's iterator protocol, which requires \textbf{\textcolor{accentColor}{\_\_iter\_\_}} and \textbf{\textcolor{accentColor}{\_\_next\_\_}} methods:
+
+\begin{macterminal}
+\begin{lstlisting}
+# Generator functions implement this protocol:
+class Counter:
+    def __init__(self, max_value):
+        self.max_value = max_value
+        self.current = 0
+        
+    def __iter__(self):
+        return self
+        
+    def __next__(self):
+        if self.current >= self.max_value:
+            raise StopIteration
+        self.current += 1
+        return self.current
+
+# A generator function does this automatically
+def counter(max_value):
+    current = 0
+    while current < max_value:
+        current += 1
+        yield current
+\end{lstlisting}
+\end{macterminal}
+
+This demonstrates how generators simplify the creation of iterators by handling the boilerplate code.
+
+\section{Real-World Applications}
+
+\subsection{Log Processing}
+
+Efficiently process large log files without excessive memory usage:
+
+\begin{macterminal}
+\begin{lstlisting}
+# Processing a large log file efficiently
+def parse_log_line(line):
+    # Extract timestamp and message
+    parts = line.split(" ", 1)
+    return {"timestamp": parts[0], "message": parts[1]}
+
+def filter_errors(log_entries):
+    for entry in log_entries:
+        if "ERROR" in entry["message"]:
+            yield entry
+
+def process_logs(filename):
+    with open(filename) as f:
+        # Parse each line
+        entries = (parse_log_line(line) for line in f)
+        # Filter for errors
+        errors = filter_errors(entries)
+        # Group by hour
+        for error in errors:
+            yield error
+\end{lstlisting}
+\end{macterminal}
+
+\subsection{Data Transformation Pipelines}
+
+Create efficient data processing workflows:
+
+\begin{macterminal}
+\begin{lstlisting}
+def csv_reader(file_path):
+    for line in open(file_path, 'r'):
+        yield line.strip().split(',')
+
+def select_columns(data, indices):
+    for row in data:
+        yield [row[i] for i in indices]
+
+def filter_rows(data, condition_func):
+    for row in data:
+        if condition_func(row):
+            yield row
+            
+# Usage example
+data = csv_reader('large_dataset.csv')
+selected = select_columns(data, [0, 2, 3])
+filtered = filter_rows(selected, lambda x: float(x[1]) > 100)
+
+for row in filtered:
+    print(row)
+\end{lstlisting}
+\end{macterminal}
+
+\section{Best Practices}
+
+To get the most from generators in Python:
+
+\begin{itemize}
+    \item \textbf{\textcolor{pythonBlue}{Use generator expressions}} for simple transformations
+    \item \textbf{\textcolor{pythonBlue}{Use generator functions}} for complex logic or when state is needed
+    \item \textbf{\textcolor{pythonBlue}{Chain generators together}} to create processing pipelines
+    \item \textbf{\textcolor{pythonBlue}{Remember generators are single-use}} — create new ones if needed
+    \item \textbf{\textcolor{pythonBlue}{Use yield from}} to delegate to sub-generators
+    \item \textbf{\textcolor{pythonBlue}{Add type hints}} with typing.Generator for clarity
+    \item \textbf{\textcolor{pythonBlue}{Consider contextlib.contextmanager}} for resource management
+\end{itemize}
 
 \section{Conclusion}
 
