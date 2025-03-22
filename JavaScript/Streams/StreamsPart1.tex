@@ -154,12 +154,6 @@
 }
 
 \renewcommand{\headrulewidth}{0pt}
-
-\renewcommand{\footrule}{
-  \vspace{0.5cm}
-  \noindent\makebox[\linewidth]{\color{dividerColor}\rule{\linewidth}{0.2pt}}
-  \vspace{0.5cm}
-}
 \renewcommand{\footrulewidth}{0.2pt}
 \renewcommand{\footruleskip}{1cm}
 
@@ -230,7 +224,7 @@
     {\color{secondaryColor}\today\par}
     \vspace{2cm}
     % El QR se alineará a la izquierda aunque internamente esté centrado
-    \elegantqr{https://github.com/asanchezyali/social-media-posts/tree/main/Python/Decorators}{Source Code}
+    \elegantqr{https://github.com/asanchezyali/social-media-posts/tree/main/JavaScript/Streams}{Source Code}
     \end{flushleft}
 }
 
@@ -584,6 +578,43 @@ Adopting streams requires a shift from batch-oriented thinking to event-driven, 
 
     \item Translated, Edited and written in collaboration with AI.
 \end{itemize}
+
+\section{Explore My Other Posts}
+\vspace{10pt}
+\begin{tikzpicture}
+  % Section background - increased height slightly to ensure all content fits
+  \fill[color=terminalBg, rounded corners=5pt] (0,0) rectangle (\textwidth,-5);
+  
+  % Calculate width available for text (total width minus QR code width minus margins)
+  \pgfmathsetmacro{\availableWidth}{\textwidth-4cm}
+  
+  % Left column content
+  \begin{scope}
+    % Section title
+    \node[text=accentColor, font=\Large\bfseries, anchor=north west] at (0.5cm,-0.5cm) {Enjoyed This Content?};
+    
+    % Subtitle
+    \node[text=primaryColor, font=\normalsize, anchor=north west] at (0.5cm,-1.2cm) {Don't miss my previous post about:};
+    
+    % Python post title - with highlighted style and limited width
+    \node[text=secondaryColor, font=\large\bfseries, anchor=north west, text width=\availableWidth] at (0.5cm,-1.9cm) {\color{accentColor}Python Context Managers: \color{primaryColor}Elegant Resource Management with the «{\color{accentColor}with}» Statement};
+    
+    % Brief description of the post - with limited width and adjusted position
+    \node[text=jsSecondary, font=\normalsize, text width=\availableWidth, anchor=north west] at (0.5cm,-3.1cm) {
+      Discover how Python Context Managers can help you elegantly manage resources, 
+      prevent memory leaks, and write cleaner code.
+    };
+  \end{scope}
+  
+  % QR Code on the right - vertically centered
+  \node[anchor=center] at ({\textwidth-1.5cm}, {-2.5cm}) {
+    \qrcode[height=2.2cm]{https://www.linkedin.com/feed/update/urn:li:activity:7307438566157021186/}
+  };
+  
+\end{tikzpicture}
+\vspace{5pt}
+
+
 
 \clearpage
 \thispagestyle{empty}
