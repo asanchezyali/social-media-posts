@@ -1,0 +1,554 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[letterpaper, margin=1in, bottom=3in, top=2.2in]{geometry}
+\usepackage{fancyhdr}
+\setlength{\headheight}{15pt}
+\setlength{\footskip}{72pt}
+
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{anyfontsize}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{sourcesanspro}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{fontawesome5}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{mdframed}
+\usepackage{qrcode} % Añadir paquete para generar códigos QR
+\usetikzlibrary{calc,shapes,positioning}
+
+\AtBeginDocument{\color{primaryColor}}
+
+% Colors updated with JavaScript brand colors
+\definecolor{bgColor}{RGB}{13, 17, 23}  % Dark background similar to JS docs
+\definecolor{primaryColor}{RGB}{255, 255, 255}  % White text for better contrast
+\definecolor{accentColor}{RGB}{255, 220, 60}  % Brighter JavaScript Yellow for better contrast
+\definecolor{jsSecondary}{RGB}{180, 180, 180}  % Light gray as secondary color for better contrast
+\definecolor{secondaryColor}{RGB}{230, 235, 240}  % Almost white gray for better contrast
+\definecolor{terminalBg}{RGB}{22, 22, 22}  % Terminal background
+\definecolor{terminalFrame}{RGB}{40, 40, 40}  % Terminal frame
+\definecolor{lineNumberColor}{RGB}{100, 100, 100}  % Line number color
+\definecolor{dividerColor}{RGB}{120, 130, 150}  % Brighter divider color for better visibility
+
+% Colores para código 
+\definecolor{codeTextColor}{RGB}{255, 255, 255}  % Blanco puro para el texto básico
+\definecolor{codeKeywordColor}{RGB}{97, 175, 239}  % Azul claro para palabras clave
+\definecolor{codeCommentColor}{RGB}{121, 192, 120}  % Verde para comentarios
+\definecolor{codeStringColor}{RGB}{255, 220, 60}  % Amarillo JS más brillante para strings
+\definecolor{codeMethodColor}{RGB}{255, 160, 122}  % Naranja claro para métodos
+\definecolor{codeFunctionColor}{RGB}{230, 180, 80}  % Tono amarillo-dorado para funciones
+\definecolor{codeNumberColor}{RGB}{180, 230, 180}  % Verde claro para números
+
+\pagecolor{bgColor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=accentColor,
+    filecolor=accentColor,
+    urlcolor=accentColor,
+}
+
+% Definir lenguaje JavaScript para listings
+\lstdefinelanguage{JavaScript}{
+  keywords={break, case, catch, continue, debugger, default, delete, do, else, false, finally, for, function, if, in, instanceof, new, null, return, switch, this, throw, true, try, typeof, var, void, while, with, let, const, class, export, import, yield, async, await},
+  sensitive=true,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]"
+}
+
+% Configuración para listings con JavaScript como lenguaje predeterminado
+\lstset{
+  language=JavaScript,
+  basicstyle=\small\ttfamily\bfseries\color{codeTextColor},
+  backgroundcolor=\color{terminalBg},
+  commentstyle=\color{codeCommentColor},
+  keywordstyle=\color{codeKeywordColor},
+  stringstyle=\color{codeStringColor},
+  numberstyle=\color{lineNumberColor},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=2,
+  showstringspaces=false,
+  frame=none,
+  xleftmargin=15pt,
+  xrightmargin=0pt,
+  aboveskip=5pt,
+  belowskip=5pt,
+  numbers=left,
+  numbersep=8pt,
+  extendedchars=true,
+  keepspaces=true,
+  columns=flexible,
+  lineskip=2pt,
+  emph={[2]require,createReadStream,createWriteStream,pipe,on,once,createGzip,pipeline,Transform,Readable,Writable,Duplex},
+  emphstyle={[2]\color{codeFunctionColor}}
+}
+
+\newenvironment{macterminal}{%
+    \begin{mdframed}[
+        linecolor=terminalFrame,
+        backgroundcolor=terminalBg,
+        roundcorner=5pt,
+        skipabove=5pt,
+        skipbelow=5pt,
+        linewidth=1pt,
+        innertopmargin=5pt,
+        frametitle={%
+            \tikz[baseline=(current bounding box.east), outer sep=0pt]{
+                \fill[red!80!black] (0,0) circle (5pt);
+                \fill[yellow!80!black] (0.7,0) circle (5pt);
+                \fill[green!70!black] (1.4,0) circle (5pt);
+            }
+        },
+        frametitlealignment=\raggedright,
+        frametitleaboveskip=8pt,
+        frametitlebelowskip=0pt,
+    ]
+}{%
+    \end{mdframed}%
+}
+
+\newcommand{\verspace}{\vspace{5pt}}
+
+\titleformat{\section}
+  {\LARGE\bfseries\color{primaryColor}}
+  {\thesection. }
+  {0pt}
+  {}
+  []
+
+\titleformat{\subsection}
+  {\Large\bfseries\color{accentColor}}
+  {\thesubsection. }
+  {0pt}
+  {}
+  []
+
+\titleformat{\subsubsection}
+  {\large\bfseries\color{primaryColor}}
+  {\thesubsubsection. }
+  {0pt}
+  {}
+  []
+
+\titlespacing*{\section}{0pt}{18pt}{8pt}
+\titlespacing*{\subsection}{0pt}{12pt}{5pt}
+\titlespacing*{\subsubsection}{0pt}{8pt}{3pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+
+\fancyhead[L]{
+    \begin{tikzpicture}[remember picture, overlay]
+        \fill[accentColor, rounded corners=3pt] (0,0) rectangle (2.2cm,0.7cm);
+        \node[text=bgColor, font=\bfseries] at (1.1cm,0.35cm) {NODE.JS};
+        \fill[secondaryColor] (2.35cm,0.1cm) rectangle (2.40cm,0.6cm);
+        \node[text=primaryColor, font=\bfseries, anchor=west] at (2.35cm,0.35cm) {STREAMS};
+    \end{tikzpicture}
+}
+
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.2pt}
+\renewcommand{\footruleskip}{1cm}
+
+\fancyfoot[C]{
+    \vspace*{0.1cm}
+    \noindent
+    \begin{minipage}{\textwidth}
+        \begin{flushleft}
+            % Foto de perfil
+            \raisebox{0.7cm}{
+            \begin{tikzpicture}[baseline]
+                \path[fill=bgColor] (0,0) circle (0.6cm);
+                \clip (0,0) circle (0.6cm);
+                \node at (0,0) {
+                    \includegraphics[width=1.2cm,height=1.2cm]{profile-image.jpeg}
+                };
+            \end{tikzpicture}
+            }
+            % Información de perfil
+            \begin{minipage}[b]{0.5\textwidth}
+                {\large\bfseries\color{primaryColor}Alejandro Sánchez Yalí}
+                \par\vspace{1pt}
+                {\small\color{secondaryColor}Software Developer | AI \& Blockchain Enthusiast}
+                \par\vspace{1pt}
+                {\small\color{accentColor}\faGlobe\hspace{5pt}\color{secondaryColor}www.asanchezyali.com}
+            \end{minipage}
+        \end{flushleft}
+        \vspace{6pt}
+    \end{minipage}
+}
+
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \renewcommand{\headrulewidth}{0pt}
+    \renewcommand{\footrulewidth}{0pt}
+}
+
+\renewcommand{\labelitemi}{\textcolor{accentColor}{$\bullet$}}
+\renewcommand{\labelitemii}{\textcolor{secondaryColor}{$\circ$}}
+
+\usepackage{relsize}
+\AtBeginDocument{\relsize{1}}
+
+\newcommand{\languagetag}[1]{
+    \begin{tikzpicture}[baseline]
+        \node[fill=accentColor, text=bgColor, rounded corners=5pt, inner sep=7pt] {
+            {\normalsize\textbf{#1}}
+        };
+    \end{tikzpicture}
+}
+
+% Comando para QR elegante (para la página de título)
+\newcommand{\elegantqr}[2]{
+    \qrcode[height=2.5cm]{#1}
+    \\[0.1cm]
+    {\hspace{0.2cm}\color{primaryColor}\small #2\par}
+}
+
+\newcommand{\titlepagecontents}{%
+    \vspace*{3cm}
+    % Asegurar que todos los elementos estén alineados a la izquierda
+    \begin{flushleft}
+    \languagetag{Node.js}\\[0.4cm]
+    {\fontsize{48}{52}\bfseries\color{primaryColor}Streams in \color{accentColor}Node.js\par}
+    \vspace{0.3cm}
+    {\fontsize{18}{52}\color{secondaryColor}Part 2: Types \& Advanced Operations\par} 
+    \vspace{0.3cm}
+    {\color{secondaryColor}\today\par}
+    \vspace{2cm}
+    % El QR se alineará a la izquierda aunque internamente esté centrado
+    \elegantqr{https://github.com/asanchezyali/social-media-posts/tree/main/JavaScript/Streams}{Source Code}
+    \end{flushleft}
+}
+
+\newcommand{\finalpagecontents}{%
+    \vspace*{4cm}
+    \begin{center}
+        \begin{tikzpicture}
+            % Title text
+            \node[text width=14cm, align=center] at (0,0) {
+                {\fontsize{48}{52}\bfseries\color{primaryColor}Ready to \color{accentColor}Transform\\\color{primaryColor}Your Data Flow?\par}
+            };
+            
+            % Add vertical space
+            \node at (0,-3) {};
+            
+            % Simplified message text with larger font
+            \node[text width=14cm, align=center] at (0,-5) {
+            };
+        \end{tikzpicture}
+    \end{center}
+}
+
+\begin{document}
+\setlength{\parindent}{0pt}
+\color{primaryColor}
+
+\begin{titlepage}
+    \titlepagecontents
+\end{titlepage}
+
+\section{Types of Streams}
+
+Node.js provides four fundamental types of streams:
+
+\begin{itemize}
+    \item \textbf{\textcolor{accentColor}{Readable:}} Sources from which data can be read (files, HTTP requests)
+    
+    \item \textbf{\textcolor{accentColor}{Writable:}} Destinations to which data can be written (files, HTTP responses)
+    
+    \item \textbf{\textcolor{accentColor}{Duplex:}} Both readable and writable (TCP sockets)
+    
+    \item \textbf{\textcolor{accentColor}{Transform:}} Modify data as it passes through (compression, encryption)
+\end{itemize}
+
+\begin{macterminal}
+\begin{lstlisting}
+// Basic examples of stream types
+
+// Readable Stream
+const fs = require("fs");
+const readableStream = fs.createReadStream("file.txt");
+readableStream.on("data", (chunk) => {
+  console.log(`Received ${chunk.length} bytes`);
+});
+
+// Writable Stream
+const writableStream = fs.createWriteStream("output.txt");
+writableStream.write("Hello World\n");
+writableStream.end();
+
+// Transform Stream
+const { Transform } = require("stream");
+new Transform({
+  transform(chunk, encoding, callback) {
+    // Convert data to uppercase
+    callback(null, chunk.toString().toUpperCase());
+  },
+});
+
+\end{lstlisting}
+\end{macterminal}
+
+\section{Stream Operations}
+
+\subsection{The Pipe Method}
+
+The most powerful way to connect streams:
+
+\begin{macterminal}
+\begin{lstlisting}
+const fs = require('fs');
+const zlib = require('zlib');
+
+// Creating a pipeline using pipe()
+fs.createReadStream('file.txt')
+  .pipe(zlib.createGzip())
+  .pipe(fs.createWriteStream('file.txt.gz'))
+  .on('finish', () => {
+    console.log('Compression completed');
+  });
+\end{lstlisting}
+\end{macterminal}
+
+\subsection{Pipeline: Improved Error Handling}
+
+The \small{\textbf{\textcolor{accentColor}{pipeline()}}} function enhances error handling and resource cleanup:
+
+\begin{macterminal}
+\begin{lstlisting}
+const { pipeline } = require('stream');
+const fs = require('fs');
+const zlib = require('zlib');
+
+// Using pipeline for better error handling
+pipeline(
+  fs.createReadStream('input.txt'),
+  zlib.createGzip(),
+  fs.createWriteStream('output.gz'),
+  (err) => {
+    if (err) {
+      console.error('Pipeline failed', err);
+    } else {
+      console.log('Pipeline succeeded');
+    }
+  }
+);
+\end{lstlisting}
+\end{macterminal}
+
+\section{Practical Use Cases}
+
+\subsection{Processing Large Files}
+
+Streams excel when working with files that exceed available memory:
+
+\begin{macterminal}
+\begin{lstlisting}
+const fs = require('fs');
+const csv = require('csv-parser');
+
+// Process a large CSV file line by line
+fs.createReadStream('huge-data.csv')
+  .pipe(csv())
+  .on('data', (row) => {
+    // Process each row without loading the entire file
+    console.log(row);
+  })
+  .on('end', () => {
+    console.log('Processing complete');
+  });
+\end{lstlisting}
+\end{macterminal}
+
+\subsection{HTTP Streaming}
+
+Efficiently serve large files or video content:
+
+\begin{macterminal}
+\begin{lstlisting}
+const http = require('http');
+const fs = require('fs');
+
+const server = http.createServer((req, res) => {
+  if (req.url === '/video' && req.method === 'GET') {
+    const videoPath = './video.mp4';
+    const stat = fs.statSync(videoPath);
+    
+    res.writeHead(200, {
+      'Content-Length': stat.size,
+      'Content-Type': 'video/mp4'
+    });
+    
+    // Stream the file directly to the response
+    fs.createReadStream(videoPath).pipe(res);
+  } else {
+    res.writeHead(404);
+    res.end('Resource not found');
+  }
+});
+
+server.listen(3000, () => {
+  console.log('Server running at http://localhost:3000/');
+});
+\end{lstlisting}
+\end{macterminal}
+
+\section{Best Practices}
+
+\subsection{Managing Backpressure}
+
+Prevent memory overflow when reading faster than writing:
+
+\begin{macterminal}
+\begin{lstlisting}
+const fs = require('fs');
+
+const readableStream = fs.createReadStream('large-file.dat');
+const writableStream = fs.createWriteStream('destination.dat');
+
+readableStream.on('data', (chunk) => {
+  // write() returns false when internal buffer is full
+  const canWrite = writableStream.write(chunk);
+  
+  if (!canWrite) {
+    // Pause the readable stream until the writable drains
+    readableStream.pause();
+    
+    // Resume when the writable can accept more data
+    writableStream.once('drain', () => {
+      readableStream.resume();
+    });
+  }
+});
+
+readableStream.on('end', () => {
+  writableStream.end();
+});
+\end{lstlisting}
+\end{macterminal}
+
+\subsection{Custom Transform Streams}
+
+Create specialized processors for your data:
+
+\begin{macterminal}
+\begin{lstlisting}
+const { Transform } = require('stream');
+
+// Stream to filter lines containing a keyword
+class LineFilter extends Transform {
+  constructor(keyword) {
+    super();
+    this.keyword = keyword;
+    this.incomplete = '';
+  }
+  
+  _transform(chunk, encoding, callback) {
+    // Convert chunk to string and combine with previous data
+    const data = this.incomplete + chunk.toString();
+    // Split by lines
+    const lines = data.split('\n');
+    // Save the last line for the next chunk
+    this.incomplete = lines.pop();
+    
+    // Filter and send lines containing the keyword
+    for (const line of lines) {
+      if (line.includes(this.keyword)) {
+        this.push(line + '\n');
+      }
+    }
+    callback();
+  }
+  
+  _flush(callback) {
+    // Process any remaining data
+    if (this.incomplete && this.incomplete.includes(this.keyword)) {
+      this.push(this.incomplete + '\n');
+    }
+    callback();
+  }
+}
+\end{lstlisting}
+\end{macterminal}
+
+\section{Conclusions}
+
+\section{Conclusions}
+
+
+\subsection{Powerful Data Processing Pipelines}
+
+Node.js streams provide a versatile framework for building efficient data processing pipelines. By connecting different stream types through piping or the pipeline API, developers can create complex data workflows that process information incrementally. This architecture naturally fits many real-world problems, from ETL processes to real-time data transformations. The ability to compose streams together like building blocks makes it possible to create maintainable solutions that can evolve with changing requirements.
+
+\subsection{Enhanced Application Robustness}
+
+The pipeline API and proper handling of backpressure significantly improve application reliability. These techniques ensure that data flows smoothly between streams without overwhelming memory resources. By implementing error handling at each stage of the stream pipeline, applications can gracefully recover from failures and ensure proper resource cleanup. These practices are essential for building production-grade systems that can handle unexpected conditions and maintain performance under varying loads.
+
+\subsection{Domain-Specific Solutions}
+
+The ability to create custom Transform streams unlocks Node.js's streaming capabilities for specific application domains. By extending the standard stream classes, developers can implement specialized data processing logic that maintains all the benefits of the streaming architecture. This approach enables the creation of reusable components that can be integrated into larger stream pipelines, promoting code reuse and separation of concerns. Custom streams represent the full potential of Node.js's streaming model when applied to unique business problems.
+
+
+\section{References}
+
+\begin{itemize}
+    \item Node.js. (2023). \textit{Stream | Node.js v18.x Documentation}. \href{https://nodejs.org/docs/latest-v18.x/api/stream.html}{Link}
+    
+    \item NodeSource. (2022). \textit{Understanding Streams in Node.js}. \href{https://nodesource.com/blog/understanding-streams-in-nodejs}{Link}
+    
+    \item Alapont, R. (2023). \textit{Streamlining Your Code: Best Practices for Node.js Streams}. \href{https://dev.to/ruben_alapont/streamlining-your-code-best-practices-for-nodejs-streams-1ji0}{Link}
+    
+    \item Alapont, R. (2023). \textit{Error Handling in Node.js Streams: Best Practices}. \href{https://dev.to/ruben_alapont/error-handling-in-nodejs-streams-best-practices-dhb}{Link}
+    
+    \item Clarion Technologies. (2022). \textit{Node.js for Real-Time Data Streaming}. \href{https://www.clariontech.com/blog/node.js-real-time-data-streaming}{Link}
+
+    \item Translated, Edited and written in collaboration with AI.
+\end{itemize}
+
+\section{Explore My Other Posts}
+\vspace{10pt}
+\begin{tikzpicture}
+  % Section background - increased height slightly to ensure all content fits
+  \fill[color=terminalBg, rounded corners=5pt] (0,0) rectangle (\textwidth,-5);
+  
+  % Calculate width available for text (total width minus QR code width minus margins)
+  \pgfmathsetmacro{\availableWidth}{\textwidth-4cm}
+  
+  % Left column content
+  \begin{scope}
+    % Section title
+    \node[text=accentColor, font=\Large\bfseries, anchor=north west] at (0.5cm,-0.5cm) {Enjoyed This Content?};
+    
+    % Subtitle
+    \node[text=primaryColor, font=\normalsize, anchor=north west] at (0.5cm,-1.2cm) {Don't miss my previous post about:};
+    
+    % Node.js Streams Part 1 title - with highlighted style and limited width
+    \node[text=secondaryColor, font=\large\bfseries, anchor=north west, text width=\availableWidth] at (0.5cm,-1.9cm) {\color{accentColor}Node.js Streams: \color{primaryColor}Part 1 - Introduction \& Memory Efficiency};
+    
+    % Brief description of the post - with limited width and adjusted position
+    \node[text=jsSecondary, font=\normalsize, text width=\availableWidth, anchor=north west] at (0.5cm,-3.1cm) {
+      Learn the fundamentals of Node.js Streams and discover how they can dramatically reduce memory usage when processing large files.
+    };
+  \end{scope}
+  
+  % QR Code on the right - vertically centered
+  \node[anchor=center] at ({\textwidth-1.5cm}, {-2.5cm}) {
+    \qrcode[height=2.2cm]{https://www.linkedin.com/feed/update/urn:li:activity:7309333697692946432/}
+  };
+  
+\end{tikzpicture}
+\vspace{5pt}
+
+\clearpage
+\thispagestyle{empty}
+\finalpagecontents
+
+\end{document}
