@@ -1,0 +1,688 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+
+% Ajustamos los márgenes para corregir las advertencias de fancyhdr
+\usepackage[letterpaper, margin=1in, bottom=3in, top=2.2in]{geometry}
+
+% Cargamos primero el paquete fancyhdr
+\usepackage{fancyhdr}
+% Corregimos los parámetros headheight y footskip
+\setlength{\headheight}{15pt} % Al menos 14.49998pt según la advertencia
+\setlength{\footskip}{72pt}   % Al menos 71.60547pt según la advertencia
+
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{anyfontsize}
+\usepackage{graphicx}
+\usepackage{tikz} % Necesario para los elementos gráficos
+\usepackage{listings} % Para resaltado de sintaxis
+\usepackage{sourcesanspro}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{fontawesome5}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{mdframed} % Para marcos más estables
+\usepackage{qrcode} % Paquete para generar códigos QR
+
+% Cargar tikz y la biblioteca de cajitas para mdframed
+\usetikzlibrary{calc,shapes,positioning}
+
+% IMPORTANT: Force the text color to be white for the entire document
+\AtBeginDocument{\color{primaryColor}}
+
+% Colors updated with better contrast
+\definecolor{myblue}{cmyk}{1.0,0.8,0.05,0.20}
+\definecolor{bgColor}{RGB}{15, 22, 36}  % Very dark blue, almost black background
+\definecolor{primaryColor}{RGB}{255, 255, 255}  % White text - full white for better contrast
+\definecolor{accentColor}{RGB}{255, 212, 59}  % Python Yellow
+\definecolor{pythonBlue}{RGB}{120, 180, 255}  % Azul Python más claro para mejor contraste
+\definecolor{secondaryColor}{RGB}{220, 230, 240}  % Lighter blue-gray for better contrast
+\definecolor{terminalBg}{RGB}{22, 22, 22}  % Terminal background remains dark
+\definecolor{terminalFrame}{RGB}{40, 40, 40}  % Terminal frame slightly darker
+\definecolor{lineNumberColor}{RGB}{100, 100, 100}  % Color más sutil para los números de línea
+\definecolor{dividerColor}{RGB}{60, 70, 90}  % Color más sutil para la línea divisoria
+
+% Colores mejorados para el código con mayor contraste
+\definecolor{codeTextColor}{RGB}{255, 255, 255}  % Blanco puro para el texto básico
+\definecolor{codeKeywordColor}{RGB}{135, 206, 250}  % Azul cielo para palabras clave
+\definecolor{codeCommentColor}{RGB}{144, 238, 144}  % Verde claro para comentarios
+\definecolor{codeStringColor}{RGB}{255, 215, 135}  % Amarillo para strings
+\definecolor{codeMethodColor}{RGB}{255, 160, 122}  % Naranja claro para métodos
+\definecolor{codeFunctionColor}{RGB}{255, 215, 0}  % Dorado para funciones
+\definecolor{codeNumberColor}{RGB}{255, 255, 150}  % Amarillo claro para números
+
+% Set page background color
+\pagecolor{bgColor}
+
+% Hyperref configuration
+\hypersetup{
+    colorlinks=true,
+    linkcolor=accentColor,
+    filecolor=accentColor,
+    urlcolor=accentColor,
+}
+
+% Configuración básica para listings que evita problemas con saltos de página
+\lstset{
+  language=Python,
+  basicstyle=\normalsize\ttfamily\bfseries\color{codeTextColor}, % Tamaño reducido, en blanco y negrita
+  backgroundcolor=\color{terminalBg},
+  commentstyle=\color{codeCommentColor},
+  keywordstyle=\color{codeKeywordColor},
+  stringstyle=\color{codeStringColor},
+  numberstyle=\color{lineNumberColor}, % Números de línea más sutiles
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4,
+  showstringspaces=false,
+  frame=none,
+  xleftmargin=15pt,
+  xrightmargin=0pt,
+  aboveskip=10pt,
+  belowskip=10pt,
+  numbers=left,
+  numbersep=8pt,
+  extendedchars=true,
+  keepspaces=true,
+  columns=flexible,
+  lineskip=6pt, % Espacio entre líneas ligeramente reducido
+  % Keywords de Python (palabras reservadas)
+  morekeywords={self, yield, lambda, with, as, from, True, False, None, import, in, for, 
+                if, elif, else, while, return, def, class, try, except, finally, raise, 
+                break, continue, global, nonlocal, pass, assert, del, yield from},
+  % Funciones incorporadas resaltadas de manera distinta
+  emph={[2]print,range,sum,int,str,float,list,dict,set,tuple,next,len,type,map,filter,
+         reduce,zip,enumerate,sorted,reversed,min,max,open,any,all},
+  emphstyle={[2]\color{codeFunctionColor}}
+}
+
+% TERMINAL ESTILO MAC MEJORADA CON BOTONES A LA IZQUIERDA Y MENOS ESPACIO SUPERIOR
+\newenvironment{macterminal}{%
+    \begin{mdframed}[
+        linecolor=terminalFrame,
+        backgroundcolor=terminalBg,
+        roundcorner=5pt,
+        skipabove=10pt,
+        skipbelow=10pt,
+        linewidth=1pt,
+        innertopmargin=10pt, % Reducido
+        frametitle={%
+            \tikz[baseline=(current bounding box.east), outer sep=0pt]{
+                \fill[red!80!black] (0,0) circle (5pt);
+                \fill[yellow!80!black] (0.7,0) circle (5pt);
+                \fill[green!70!black] (1.4,0) circle (5pt);
+            }
+        },
+        frametitlealignment=\raggedright, % Alineado a la izquierda
+        frametitleaboveskip=8pt, % Espacio entre el título y el borde superior
+        frametitlebelowskip=0pt, % Reducir el espacio entre el título y el contenido
+    ]
+    % No necesitamos más espacio vertical aquí
+}{%
+    \end{mdframed}%
+}
+
+% Utilities
+\newcommand{\verspace}{\vspace{10pt}}
+
+% Section styling - Esquema más elegante y mejorado contraste
+\titleformat{\section}
+  {\LARGE\bfseries\color{primaryColor}} % Secciones principales en blanco para mejor contraste y más grandes
+  {\thesection. }
+  {0pt}
+  {}
+  []
+
+\titleformat{\subsection}
+  {\Large\bfseries\color{accentColor}} % Subsecciones en amarillo Python y más grandes
+  {\thesubsection. }
+  {0pt}
+  {}
+  []
+
+\titleformat{\subsubsection}
+  {\large\bfseries\color{pythonBlue}} % Subsubsecciones en azul Python más claro y más grandes
+  {\thesubsubsection. }
+  {0pt}
+  {}
+  []
+
+% Spacing for sections
+\titlespacing*{\section}{0pt}{20pt}{10pt}
+\titlespacing*{\subsection}{0pt}{15pt}{7pt}
+\titlespacing*{\subsubsection}{0pt}{10pt}{5pt}
+
+% Configure header and footer
+\pagestyle{fancy}
+\fancyhf{}
+
+% Crear un encabezado elegante para todas las páginas (excepto la portada)
+\fancyhead[L]{
+    \begin{tikzpicture}[remember picture, overlay]
+        % Rectángulo de fondo para la sección Python
+        \fill[pythonBlue, rounded corners=3pt] (0,0) rectangle (2.2cm,0.7cm);
+        % Texto Python
+        \node[text=primaryColor, font=\bfseries] at (1.1cm,0.35cm) {PYTHON};
+        
+        % Pequeño separador
+        \fill[secondaryColor] (2.35cm,0.1cm) rectangle (2.40cm,0.6cm);
+        
+        % Texto Concurrency & Parallelism con el color de acento
+        \node[text=accentColor, font=\bfseries, anchor=west] at (2.35cm,0.35cm) {CONCURRENCY (PART 1)};
+    \end{tikzpicture}
+}
+
+% Línea de encabezado
+\renewcommand{\headrulewidth}{0pt}
+
+
+% Configure footer with profile info
+\fancyfoot[C]{
+    \vspace*{0.2cm}
+    \noindent
+    \begin{minipage}{\textwidth}
+        \begin{flushleft}
+            % Profile image placeholder with TikZ
+            \raisebox{0.7cm}{
+            \begin{tikzpicture}[baseline]
+                \path[fill=bgColor] (0,0) circle (0.8cm);
+                \clip (0,0) circle (0.8cm);
+                \node at (0,0) {
+                    % Placeholder for profile image
+                    \includegraphics[width=1.6cm,height=1.6cm]{profile-image.jpeg}
+                };
+            \end{tikzpicture}
+            }
+            \begin{minipage}[b]{0.8\textwidth}
+                % Name
+                {\large\bfseries\color{primaryColor}Alejandro Sánchez Yalí}
+                
+                % Professional description
+                \par\vspace{1pt}
+                {\small\color{secondaryColor}Software Developer | AI \& Blockchain Enthusiast}
+                
+                % Contact
+                \par\vspace{1pt}
+                {\small\color{accentColor}\faGlobe\hspace{5pt}\color{secondaryColor}www.asanchezyali.com}
+            \end{minipage}
+        \end{flushleft}
+        \vspace{8pt} % Space at bottom
+    \end{minipage}
+}
+
+% Estilo para la portada (sin encabezado ni pie de página)
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \renewcommand{\headrulewidth}{0pt}
+    \renewcommand{\footrulewidth}{0pt}
+}
+
+% Bullet styling for lists
+\renewcommand{\labelitemi}{\textcolor{accentColor}{$\bullet$}} % Primer nivel de viñetas en amarillo (mejor contraste)
+\renewcommand{\labelitemii}{\textcolor{pythonBlue}{$\circ$}} % Segundo nivel de viñetas en azul
+
+% Aumentar globalmente el tamaño de texto un 20%
+\usepackage{relsize}
+\AtBeginDocument{\relsize{1}} % Incrementa la fuente en aproximadamente un 20%
+
+% Comando simplificado para la etiqueta Python
+\newcommand{\languagetag}[1]{
+    \begin{tikzpicture}[baseline]
+        \node[fill=pythonBlue, text=primaryColor, rounded corners=5pt, inner sep=7pt] {
+            {\normalsize\textbf{#1}}
+        };
+    \end{tikzpicture}
+}
+
+% Alternativa usando una versión modificada de la URL
+\newcommand{\elegantqr}[2]{
+    \qrcode[height=2.5cm]{#1}
+    \\[0.1cm]
+    {\hspace{0.2cm}\color{primaryColor}\small #2\par}
+}
+
+% Definir el título personalizado con alineación exacta para todos los elementos
+\newcommand{\titlepagecontents}{%
+    \vspace*{2cm}
+    % Asegurar que todos los elementos estén alineados a la izquierda
+    \begin{flushleft}
+    \languagetag{Python}\\[0.4cm]
+    {\fontsize{48}{52}\bfseries\color{primaryColor}Python \color{accentColor}Concurrency\par}
+    \vspace{0.3cm}
+    {\fontsize{18}{52}\color{secondaryColor}Part 1: Understanding the GIL, Threading and Multiprocessing in Python\par}
+    \vspace{0.3cm}
+    {\color{secondaryColor}\today\par}
+    \vspace{2cm}
+    % El QR se alineará a la izquierda aunque internamente esté centrado
+    \elegantqr{https://github.com/asanchezyali/social-media-posts/tree/main/Python/Concurrency}{Source Code}
+    \end{flushleft}
+}
+
+
+% En la página del título, aplicar el contenido sin márgenes adicionales
+\makeatletter
+\renewcommand{\maketitle}{%
+    \begin{titlepage}
+    \setlength{\parindent}{0pt}
+    \setlength{\leftskip}{0pt}
+    \titlepagecontents
+    \end{titlepage}
+}
+\makeatother
+
+\newcommand{\finalpagecontents}{%
+    \vspace*{4cm}
+    \begin{center}
+        \begin{tikzpicture}
+            % Title text
+            \node[text width=14cm, align=center] at (0,0) {
+                {\fontsize{48}{52}\bfseries\color{primaryColor}Ready to \color{accentColor}Level Up\\\color{primaryColor}Your Python?\par}
+            };
+            
+            % Add vertical space
+            \node at (0,-3) {};
+            
+            % Question text
+            \node[text width=14cm, align=center] at (0,-5) {
+                {\fontsize{22}{26}\color{secondaryColor}You've mastered powerful concurrency techniques.\\\vspace{0.5cm}Apply these patterns in your next project\\\vspace{0.5cm}and watch your code become faster and more efficient!\par \vspace{1cm}
+                \color{accentColor}Stay tuned for Part 2...\\\vspace{0.4cm}}
+                
+            };
+        \end{tikzpicture}
+    \end{center}
+}
+
+\begin{document}
+\color{primaryColor} % Explicitly set text color to white for the entire document
+
+\begin{titlepage}
+    % Eliminamos todos los espacios adicionales para asegurar la alineación
+    \titlepagecontents
+\end{titlepage}
+
+\section{Understanding Concurrency and Parallelism}
+
+Concurrency and parallelism are fundamental concepts in Python for improving application performance, but they serve different purposes and work in distinct ways:
+
+\begin{itemize}
+    \item \textbf{\textcolor{pythonBlue}{Concurrency:}} Dealing with multiple tasks by switching between them (not necessarily simultaneously)
+    \item \textbf{\textcolor{pythonBlue}{Parallelism:}} Executing multiple tasks truly simultaneously using multiple processors
+    \item \textbf{\textcolor{pythonBlue}{Performance Impact:}} Proper implementation can dramatically speed up I/O-bound or CPU-bound operations
+\end{itemize}
+
+\subsection{When to Use Each Approach}
+
+Choosing the right approach depends on your task type:
+
+\begin{itemize}
+    \item \textbf{\textcolor{pythonBlue}{For I/O-Bound Tasks}} (waiting for external resources):
+    \begin{itemize}
+        \item Network requests, file operations, database queries
+        \item \textbf{Best approach:} Threading or Asyncio
+    \end{itemize}
+    \item \textbf{\textcolor{pythonBlue}{For CPU-Bound Tasks}} (heavy computations):
+    \begin{itemize}
+        \item Data processing, image manipulation, numerical calculations
+        \item \textbf{Best approach:} Multiprocessing
+    \end{itemize}
+\end{itemize}
+
+\section{The Global Interpreter Lock (GIL)}
+
+\subsection{Understanding the GIL's Impact}
+
+The Global Interpreter Lock (GIL) is a mutex (lock) that protects access to Python objects, preventing multiple threads from executing Python bytecode simultaneously in a single process.
+
+\begin{itemize}
+    \item \textbf{\textcolor{pythonBlue}{Single-Threaded Execution:}} Only one thread can execute Python code at any given time
+    \item \textbf{\textcolor{pythonBlue}{I/O Release:}} The GIL is released during I/O operations, allowing other threads to run
+    \item \textbf{\textcolor{pythonBlue}{CPU Limitation:}} CPU-bound threads still time-share a single CPU core
+    \item \textbf{\textcolor{pythonBlue}{Multiprocessing Bypass:}} Multiprocessing avoids the GIL by using multiple processes
+\end{itemize}
+
+Think of the GIL as a talking stick in a meeting—only the person holding it can speak (execute code), and it must be passed around even when multiple people (threads) want to talk simultaneously.
+
+\subsection{GIL Workarounds}
+
+\begin{itemize}
+    \item \textbf{\textcolor{pythonBlue}{Use multiprocessing}} for CPU-intensive tasks
+    \item \textbf{\textcolor{pythonBlue}{Leverage asyncio}} for I/O-bound operations
+    \item \textbf{\textcolor{pythonBlue}{Offload to C extensions}} that release the GIL
+    \item \textbf{\textcolor{pythonBlue}{Consider alternative implementations}} like PyPy for specific use cases
+\end{itemize}
+
+\section{Threading in Python}
+
+\subsection{Thread Basics}
+
+Threads share memory space but execute concurrently:
+
+\begin{macterminal}
+\begin{lstlisting}
+import threading
+import time
+
+def worker(name, delay):
+    """A simple worker function that demonstrates a thread"""
+    print(f"Worker {name}: Starting")
+    for i in range(3):
+        time.sleep(delay)
+        print(f"Worker {name}: Step {i+1}")
+    print(f"Worker {name}: Finished")
+
+# Create thread objects
+thread1 = threading.Thread(target=worker, args=("A", 0.5))
+thread2 = threading.Thread(target=worker, args=("B", 0.8))
+
+# Start the threads
+print("Main thread: Starting workers")
+thread1.start()
+thread2.start()
+
+# Continue with other work in the main thread
+print("Main thread: Doing other work")
+time.sleep(1)
+print("Main thread: Work complete")
+
+# Wait for worker threads to finish
+thread1.join()
+thread2.join()
+print("Main thread: All workers finished")
+\end{lstlisting}
+\end{macterminal}
+
+\subsection{Thread Safety and Locks}
+
+When multiple threads access shared data, synchronization is essential:
+
+\begin{macterminal}
+\begin{lstlisting}
+import threading
+import time
+
+class Counter:
+    def __init__(self):
+        self.value = 0
+        self.lock = threading.Lock()
+        
+    def increment(self):
+        with self.lock:  # Thread-safe access to shared data
+            current = self.value
+            time.sleep(0.001)  # Simulate work
+            self.value = current + 1
+    
+    def get_value(self):
+        with self.lock:
+            return self.value
+
+def increment_counter(counter, count):
+    for _ in range(count):
+        counter.increment()
+
+# Create a shared counter
+counter = Counter()
+
+# Create threads to increment the counter
+threads = []
+num_threads = 10
+increments_per_thread = 100
+
+for _ in range(num_threads):
+    t = threading.Thread(
+        target=increment_counter, 
+        args=(counter, increments_per_thread)
+    )
+    threads.append(t)
+    t.start()
+
+# Wait for all threads to complete
+for t in threads:
+    t.join()
+
+# Check the result
+expected = num_threads * increments_per_thread
+actual = counter.get_value()
+print(f"Expected count: {expected}")
+print(f"Actual count: {actual}")
+print(f"Thread-safe: {expected == actual}")
+\end{lstlisting}
+\end{macterminal}
+
+\section{Multiprocessing for Parallel Computing}
+
+\subsection{Process Basics}
+
+Processes have separate memory spaces and bypass the GIL:
+
+\begin{macterminal}
+\begin{lstlisting}
+import multiprocessing as mp
+import time
+import os
+
+def cpu_bound_task(number):
+    """A CPU-intensive function that benefits from parallelization"""
+    print(f"Process {os.getpid()} processing {number}")
+    # Simulate CPU-intensive calculation
+    result = 0
+    for i in range(10**7):  # 10 million iterations
+        result += i * number
+    return result
+
+if __name__ == "__main__":
+    numbers = [1, 2, 3, 4, 5, 6, 7, 8]
+    
+    # Sequential processing
+    start_time = time.time()
+    sequential_results = [cpu_bound_task(n) for n in numbers]
+    sequential_time = time.time() - start_time
+    print(f"Sequential processing took {sequential_time:.2f} seconds")
+    
+    # Parallel processing
+    start_time = time.time()
+    with mp.Pool(processes=mp.cpu_count()) as pool:
+        parallel_results = pool.map(cpu_bound_task, numbers)
+    parallel_time = time.time() - start_time
+    print(f"Parallel processing took {parallel_time:.2f} seconds")
+    print(f"Speedup: {sequential_time / parallel_time:.2f}x")
+\end{lstlisting}
+\end{macterminal}
+
+\subsection{Sharing Data Between Processes}
+
+Unlike threads, processes require special mechanisms to share data:
+
+\begin{macterminal}
+\begin{lstlisting}
+import multiprocessing as mp
+
+def update_shared_dict(shared_dict, key, value):
+    """Update a value in a shared dictionary"""
+    shared_dict[key] = value
+    print(f"Process {mp.current_process().name} updated shared_dict[{key}] = {value}")
+
+def sum_shared_array(shared_array, result_queue):
+    """Calculate sum of a shared array and put result in a queue"""
+    total = sum(shared_array)
+    result_queue.put(total)
+    print(f"Process {mp.current_process().name} calculated sum: {total}")
+
+if __name__ == "__main__":
+    # Create a manager to coordinate shared objects
+    with mp.Manager() as manager:
+        # Create shared objects
+        shared_dict = manager.dict()  # Shared dictionary
+        shared_array = manager.list(range(10))  # Shared list
+        result_queue = manager.Queue()  # Shared queue
+        
+        # Create processes
+        processes = []
+        
+        # Processes to update the shared dictionary
+        for i in range(5):
+            p = mp.Process(
+                target=update_shared_dict,
+                args=(shared_dict, f"key_{i}", i*10)
+            )
+            processes.append(p)
+        
+        # Process to calculate sum of shared array
+        p = mp.Process(
+            target=sum_shared_array,
+            args=(shared_array, result_queue)
+        )
+        processes.append(p)
+        
+        # Start all processes
+        for p in processes:
+            p.start()
+            
+        # Wait for all processes to finish
+        for p in processes:
+            p.join()
+        
+        # Retrieve and display results
+        print("\nShared dictionary:", dict(shared_dict))
+        print("Sum from queue:", result_queue.get())
+\end{lstlisting}
+\end{macterminal}
+
+\section{Synchronization Tools}
+
+\subsection{Thread Synchronization Primitives}
+
+Python provides several mechanisms for coordinating threads:
+
+\begin{itemize}
+    \item \textbf{\textcolor{pythonBlue}{Lock:}} The most basic synchronization primitive, prevents simultaneous access
+    \item \textbf{\textcolor{pythonBlue}{RLock:}} Reentrant lock that can be acquired multiple times by the same thread
+    \item \textbf{\textcolor{pythonBlue}{Semaphore:}} Controls access to a shared resource by multiple threads
+    \item \textbf{\textcolor{pythonBlue}{Event:}} Signals between threads when a condition is met
+    \item \textbf{\textcolor{pythonBlue}{Condition:}} More sophisticated signaling mechanism for complex coordination
+    \item \textbf{\textcolor{pythonBlue}{Barrier:}} Makes threads wait until a specific number of them reach a common point
+\end{itemize}
+
+\begin{macterminal}
+\begin{lstlisting}
+import threading
+import time
+
+# Example: Using a semaphore to limit concurrent resource access
+class ConnectionPool:
+    def __init__(self, max_connections=3):
+        self.semaphore = threading.Semaphore(max_connections)
+        
+    def get_connection(self):
+        self.semaphore.acquire()
+        return self  # Return a connection object
+        
+    def release_connection(self):
+        self.semaphore.release()
+        
+    def __enter__(self):
+        return self.get_connection()
+        
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.release_connection()
+
+# Example usage
+def worker(pool, worker_id):
+    with pool:
+        print(f"Worker {worker_id}: Acquired connection")
+        time.sleep(1)  # Simulate work
+        print(f"Worker {worker_id}: Released connection")
+
+# Create a connection pool with max 3 connections
+pool = ConnectionPool(3)
+
+# Create and start 10 worker threads
+threads = []
+for i in range(10):
+    t = threading.Thread(target=worker, args=(pool, i))
+    threads.append(t)
+    t.start()
+
+# Wait for all threads to complete
+for t in threads:
+    t.join()
+\end{lstlisting}
+\end{macterminal}
+
+\section{Conclusion (Part 1)}
+
+In this first part of our exploration of concurrency and parallelism in Python, we have covered the essential fundamentals:
+
+\begin{itemize}
+    \item We understood the difference between concurrency (handling multiple tasks by alternating between them) and parallelism (executing multiple tasks simultaneously).
+    
+    \item We analyzed the Global Interpreter Lock (GIL) and its implications for concurrent programming in Python.
+    
+    \item We explored the \texttt{threading} module for concurrent programming oriented to I/O operations.
+    
+    \item We implemented proper synchronization to protect data shared between threads.
+    
+    \item We studied the \texttt{multiprocessing} module for true parallel execution.
+    
+    \item We learned about communication mechanisms between processes.
+\end{itemize}
+
+These tools are fundamental for developing efficient Python applications that handle multiple tasks. In the second part, we will dive deeper into \texttt{asyncio}, advanced patterns, and strategies for combining different concurrency models.
+
+\section{References (Part 1)}
+\begin{itemize}
+    \item Python Documentation. \textit{threading - Thread-based parallelism}. \href{https://docs.python.org/3/library/threading.html}{Link}
+    
+    \item Python Documentation. \textit{multiprocessing - Process-based parallelism}. \href{https://docs.python.org/3/library/multiprocessing.html}{Link}
+    
+    \item Real Python. \textit{Python's GIL: A Guide to How It Impacts Performance}. \href{https://realpython.com/python-gil/}{Link}
+    
+    \item Python Discord. \textit{Concurrency, parallelism, threading and multiprocessing}. \href{https://pythondiscord.com/pages/resources/guides/concurrency-parallelism/}{Link}
+
+    \item David Beazley. \textit{Understanding the Python GIL}. \href{https://www.dabeaz.com/python/UnderstandingGIL.pdf}{Link}
+    
+    \item Brett Slatkin. \textit{Effective Python}, Item 52-56: Concurrency and Parallelism. Addison-Wesley.
+    
+    \item Translated, Edited and written in collaboration with AI.
+\end{itemize}
+
+\section{Explore My Other Posts}
+\vspace{10pt}
+\begin{tikzpicture}
+  % Section background - increased height slightly to ensure all content fits
+  \fill[color=terminalBg, rounded corners=5pt] (0,0) rectangle (\textwidth,-5);
+  
+  % Calculate width available for text (total width minus QR code width minus margins)
+  \pgfmathsetmacro{\availableWidth}{\textwidth-4cm}
+  
+  % Left column content
+  \begin{scope}
+    % Section title
+    \node[text=accentColor, font=\Large\bfseries, anchor=north west] at (0.5cm,-0.5cm) {Enjoyed This Content?};
+    
+    % Subtitle
+    \node[text=primaryColor, font=\normalsize, anchor=north west] at (0.5cm,-1.2cm) {Don't miss my previous post about:};
+    
+    % Python post title - with highlighted style and limited width
+    \node[text=secondaryColor, font=\large\bfseries, anchor=north west, text width=\availableWidth] at (0.5cm,-1.9cm) {\color{accentColor}Python Context Managers: \color{primaryColor}Elegant Resource Management with the «{\color{accentColor}with}» Statement};
+    
+    % Brief description of the post - with limited width and adjusted position
+    \node[text=secondaryColor, font=\normalsize, text width=\availableWidth, anchor=north west] at (0.5cm,-3.1cm) {
+      Discover how Python Context Managers can help you elegantly manage resources, 
+      prevent memory leaks, and write cleaner code.
+    };
+  \end{scope}
+  
+  % QR Code on the right - vertically centered
+  \node[anchor=center] at ({\textwidth-1.5cm}, {-2.5cm}) {
+    \qrcode[height=2.2cm]{https://www.linkedin.com/feed/update/urn:li:activity:7307438566157021186/}
+  };
+  
+\end{tikzpicture}
+\vspace{5pt}
+
+\clearpage
+\thispagestyle{empty}
+\finalpagecontents
+
+\end{document}
