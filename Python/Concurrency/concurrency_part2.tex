@@ -1,0 +1,648 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+
+% Ajustamos los márgenes para corregir las advertencias de fancyhdr
+\usepackage[letterpaper, margin=1in, bottom=3in, top=2.2in]{geometry}
+
+% Cargamos primero el paquete fancyhdr
+\usepackage{fancyhdr}
+% Corregimos los parámetros headheight y footskip
+\setlength{\headheight}{15pt} % Al menos 14.49998pt según la advertencia
+\setlength{\footskip}{72pt}   % Al menos 71.60547pt según la advertencia
+
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{anyfontsize}
+\usepackage{graphicx}
+\usepackage{tikz} % Necesario para los elementos gráficos
+\usepackage{listings} % Para resaltado de sintaxis
+\usepackage{sourcesanspro}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{fontawesome5}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{mdframed} % Para marcos más estables
+\usepackage{qrcode} % Paquete para generar códigos QR
+\usepackage{eso-pic}
+
+% Cargar tikz y la biblioteca de cajitas para mdframed
+\usetikzlibrary{calc,shapes,positioning}
+
+% IMPORTANT: Force the text color to be white for the entire document
+\AtBeginDocument{\color{primaryColor}}
+
+% Colors updated with better contrast
+\definecolor{myblue}{cmyk}{1.0,0.8,0.05,0.20}
+\definecolor{bgColor}{RGB}{15, 22, 36}  % Very dark blue, almost black background
+\definecolor{primaryColor}{RGB}{255, 255, 255}  % White text - full white for better contrast
+\definecolor{accentColor}{RGB}{255, 212, 59}  % Python Yellow
+\definecolor{pythonBlue}{RGB}{120, 180, 255}  % Azul Python más claro para mejor contraste
+\definecolor{secondaryColor}{RGB}{220, 230, 240}  % Lighter blue-gray for better contrast
+\definecolor{terminalBg}{RGB}{22, 22, 22}  % Terminal background remains dark
+\definecolor{terminalFrame}{RGB}{40, 40, 40}  % Terminal frame slightly darker
+\definecolor{lineNumberColor}{RGB}{100, 100, 100}  % Color más sutil para los números de línea
+\definecolor{dividerColor}{RGB}{60, 70, 90}  % Color más sutil para la línea divisoria
+
+% Colores mejorados para el código con mayor contraste
+\definecolor{codeTextColor}{RGB}{255, 255, 255}  % Blanco puro para el texto básico
+\definecolor{codeKeywordColor}{RGB}{135, 206, 250}  % Azul cielo para palabras clave
+\definecolor{codeCommentColor}{RGB}{144, 238, 144}  % Verde claro para comentarios
+\definecolor{codeStringColor}{RGB}{255, 215, 135}  % Amarillo para strings
+\definecolor{codeMethodColor}{RGB}{255, 160, 122}  % Naranja claro para métodos
+\definecolor{codeFunctionColor}{RGB}{255, 215, 0}  % Dorado para funciones
+\definecolor{codeNumberColor}{RGB}{255, 255, 150}  % Amarillo claro para números
+
+% Set page background color
+\pagecolor{bgColor}
+
+% Hyperref configuration
+\hypersetup{
+    colorlinks=true,
+    linkcolor=accentColor,
+    filecolor=accentColor,
+    urlcolor=accentColor,
+}
+
+% Configuración básica para listings que evita problemas con saltos de página
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\bfseries\color{codeTextColor}, % Tamaño reducido, en blanco y negrita
+  backgroundcolor=\color{terminalBg},
+  commentstyle=\color{codeCommentColor},
+  keywordstyle=\color{codeKeywordColor},
+  stringstyle=\color{codeStringColor},
+  numberstyle=\color{lineNumberColor}, % Números de línea más sutiles
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4,
+  showstringspaces=false,
+  frame=none,
+  xleftmargin=15pt,
+  xrightmargin=0pt,
+  aboveskip=10pt,
+  belowskip=10pt,
+  numbers=left,
+  numbersep=8pt,
+  extendedchars=true,
+  keepspaces=true,
+  columns=flexible,
+  lineskip=6pt, % Espacio entre líneas ligeramente reducido
+  % Keywords de Python (palabras reservadas)
+  morekeywords={self, yield, lambda, with, as, from, True, False, None, import, in, for, 
+                if, elif, else, while, return, def, class, try, except, finally, raise, 
+                break, continue, global, nonlocal, pass, assert, del, yield from},
+  % Funciones incorporadas resaltadas de manera distinta
+  emph={[2]print,range,sum,int,str,float,list,dict,set,tuple,next,len,type,map,filter,
+         reduce,zip,enumerate,sorted,reversed,min,max,open,any,all},
+  emphstyle={[2]\color{codeFunctionColor}}
+}
+
+% TERMINAL ESTILO MAC MEJORADA CON BOTONES A LA IZQUIERDA Y MENOS ESPACIO SUPERIOR
+\newenvironment{macterminal}{%
+    \begin{mdframed}[
+        linecolor=terminalFrame,
+        backgroundcolor=terminalBg,
+        roundcorner=5pt,
+        skipabove=10pt,
+        skipbelow=10pt,
+        linewidth=1pt,
+        innertopmargin=10pt, % Reducido
+        frametitle={%
+            \tikz[baseline=(current bounding box.east), outer sep=0pt]{
+                \fill[red!80!black] (0,0) circle (5pt);
+                \fill[yellow!80!black] (0.7,0) circle (5pt);
+                \fill[green!70!black] (1.4,0) circle (5pt);
+            }
+        },
+        frametitlealignment=\raggedright, % Alineado a la izquierda
+        frametitleaboveskip=8pt, % Espacio entre el título y el borde superior
+        frametitlebelowskip=0pt, % Reducir el espacio entre el título y el contenido
+    ]
+    % No necesitamos más espacio vertical aquí
+}{%
+    \end{mdframed}%
+}
+
+% Utilities
+\newcommand{\verspace}{\vspace{10pt}}
+
+% Section styling - Esquema más elegante y mejorado contraste
+\titleformat{\section}
+  {\LARGE\bfseries\color{primaryColor}} % Secciones principales en blanco para mejor contraste y más grandes
+  {\thesection. }
+  {0pt}
+  {}
+  []
+
+\titleformat{\subsection}
+  {\Large\bfseries\color{accentColor}} % Subsecciones en amarillo Python y más grandes
+  {\thesubsection. }
+  {0pt}
+  {}
+  []
+
+\titleformat{\subsubsection}
+  {\large\bfseries\color{pythonBlue}} % Subsubsecciones en azul Python más claro y más grandes
+  {\thesubsubsection. }
+  {0pt}
+  {}
+  []
+
+% Spacing for sections
+\titlespacing*{\section}{0pt}{20pt}{10pt}
+\titlespacing*{\subsection}{0pt}{15pt}{7pt}
+\titlespacing*{\subsubsection}{0pt}{10pt}{5pt}
+
+% Configure header and footer
+\pagestyle{fancy}
+\fancyhf{}
+
+% Crear un encabezado elegante para todas las páginas (excepto la portada)
+\fancyhead[L]{
+    \begin{tikzpicture}[remember picture, overlay]
+        % Rectángulo de fondo para la sección Python
+        \fill[pythonBlue, rounded corners=3pt] (0,0) rectangle (2.2cm,0.7cm);
+        % Texto Python
+        \node[text=primaryColor, font=\bfseries] at (1.1cm,0.35cm) {PYTHON};
+        
+        % Pequeño separador
+        \fill[secondaryColor] (2.35cm,0.1cm) rectangle (2.40cm,0.6cm);
+        
+        % Texto Concurrency & Parallelism con el color de acento
+        \node[text=accentColor, font=\bfseries, anchor=west] at (2.35cm,0.35cm) {CONCURRENCY (PART 2)};
+    \end{tikzpicture}
+}
+
+% Línea de encabezado
+\renewcommand{\headrulewidth}{0pt}
+
+
+% Configure footer with profile info
+\fancyfoot[C]{
+    \vspace*{0.2cm}
+    \noindent
+    \begin{minipage}{\textwidth}
+        \begin{flushleft}
+            % Profile image placeholder with TikZ
+            \raisebox{0.7cm}{
+            \begin{tikzpicture}[baseline]
+                \path[fill=bgColor] (0,0) circle (0.8cm);
+                \clip (0,0) circle (0.8cm);
+                \node at (0,0) {
+                    % Placeholder for profile image
+                    \includegraphics[width=1.6cm,height=1.6cm]{slides/profile-image.jpeg}
+                };
+            \end{tikzpicture}
+            }
+            \begin{minipage}[b]{0.8\textwidth}
+                % Name
+                {\large\bfseries\color{primaryColor}Alejandro Sánchez Yalí}
+                
+                % Professional description
+                \par\vspace{1pt}
+                {\small\color{secondaryColor}Software Developer | AI \& Blockchain Enthusiast}
+                
+                % Contact
+                \par\vspace{1pt}
+                {\small\color{accentColor}\faGlobe\hspace{5pt}\color{secondaryColor}www.asanchezyali.com}
+            \end{minipage}
+        \end{flushleft}
+        \vspace{8pt} % Space at bottom
+    \end{minipage}
+}
+
+% Estilo para la portada (sin encabezado ni pie de página)
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \renewcommand{\headrulewidth}{0pt}
+    \renewcommand{\footrulewidth}{0pt}
+}
+
+% Bullet styling for lists
+\renewcommand{\labelitemi}{\textcolor{accentColor}{$\bullet$}} % Primer nivel de viñetas en amarillo (mejor contraste)
+\renewcommand{\labelitemii}{\textcolor{pythonBlue}{$\circ$}} % Segundo nivel de viñetas en azul
+
+% Aumentar globalmente el tamaño de texto un 20%
+\usepackage{relsize}
+\AtBeginDocument{\relsize{1}} % Incrementa la fuente en aproximadamente un 20%
+
+% Comando simplificado para la etiqueta Python
+\newcommand{\languagetag}[1]{
+    \begin{tikzpicture}[baseline]
+        \node[fill=pythonBlue, text=primaryColor, rounded corners=5pt, inner sep=7pt] {
+            {\normalsize\textbf{#1}}
+        };
+    \end{tikzpicture}
+}
+
+% Luego, define un comando para colocar la imagen de fondo en la primera página
+% Coloca esto antes de \begin{document} (cerca de la línea 310-325)
+\newcommand{\BackgroundPic}{%
+    \put(0,0){%
+        \begin{tikzpicture}[remember picture, overlay]
+            % Coloca la imagen de fondo que cubra toda la página
+            \node[inner sep=0pt] at (current page.center) {
+                \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio=false]{slides/Coder_at_Night_in_the_City.jpeg}
+            };
+            
+            % Agrega una capa semitransparente oscura sobre la imagen
+            % Puedes ajustar el color y la opacidad según necesites
+            \fill[black, opacity=0.7] (current page.south west) rectangle (current page.north east);
+            
+            % Si quieres un degradado oscuro en lugar de un color sólido, usa esto:
+            % \shade[top color=black!80, bottom color=black!40, opacity=0.7] 
+            %    (current page.south west) rectangle (current page.north east);
+        \end{tikzpicture}%
+    }%
+}
+
+
+% Alternativa usando una versión modificada de la URL
+\newcommand{\elegantqr}[2]{
+    \qrcode[height=2.5cm]{#1}
+    \\[0.1cm]
+    {\hspace{0.2cm}\color{primaryColor}\small #2\par}
+}
+
+% Definir el título personalizado con alineación exacta para todos los elementos
+\newcommand{\titlepagecontents}{%
+    \AddToShipoutPicture*{\BackgroundPic}
+    \vspace*{2cm}
+    % Asegurar que todos los elementos estén alineados a la izquierda
+    \begin{flushleft}
+    \languagetag{Python}\\[0.4cm]
+    {\fontsize{48}{52}\bfseries\color{primaryColor}Python \color{accentColor}Concurrency\par}
+    \vspace{0.3cm}
+    {\fontsize{18}{52}\color{secondaryColor}Part 2: Asyncio and HTTP Operations\par}
+    \vspace{0.3cm}
+    {\color{secondaryColor}\today\par}
+    \vspace{2cm}
+    % El QR se alineará a la izquierda aunque internamente esté centrado
+    \elegantqr{https://github.com/asanchezyali/social-media-posts/tree/main/Python/Concurrency}{Source Code}
+    \end{flushleft}
+}
+
+
+% En la página del título, aplicar el contenido sin márgenes adicionales
+\makeatletter
+\renewcommand{\maketitle}{%
+    \begin{titlepage}
+    \setlength{\parindent}{0pt}
+    \setlength{\leftskip}{0pt}
+    \titlepagecontents
+    \end{titlepage}
+}
+\makeatother
+
+\newcommand{\finalpagecontents}{%
+    \vspace*{4cm}
+    \begin{center}
+        \begin{tikzpicture}
+            % Title text
+            \node[text width=14cm, align=center] at (0,0) {
+                {\fontsize{48}{52}\bfseries\color{primaryColor}Don't miss\\\color{accentColor}Part 3\par}
+            };
+            
+            % Add vertical space
+            \node at (0,-3) {};
+            
+            % Question text
+            \node[text width=14cm, align=center] at (0,-5) {
+                {\fontsize{24}{30}\color{secondaryColor}In the final part of our series, we'll explore\\\vspace{0.5cm}
+                \color{accentColor}advanced patterns and hybrid approaches\\\vspace{0.4cm}
+                \color{primaryColor}to take your Python concurrency skills to the next level!\par}
+                
+            };
+        \end{tikzpicture}
+    \end{center}
+}
+
+\begin{document}
+\setlength{\parindent}{0pt}
+\color{primaryColor} % Explicitly set text color to white for the entire document
+
+\begin{titlepage}
+    % Eliminamos todos los espacios adicionales para asegurar la alineación
+    \titlepagecontents
+\end{titlepage}
+
+\section{Asyncio for Modern Concurrency}
+
+\subsection{Coroutines and the Event Loop}
+
+Asyncio provides a different concurrency model for I/O-bound tasks:
+
+\begin{macterminal}
+\begin{lstlisting}
+import asyncio
+import time
+
+async def say_after(delay, message):
+    """Coroutine that waits and then prints a message"""
+    await asyncio.sleep(delay)
+    print(message)
+
+async def main():
+    # Sequential execution
+    print("Sequential execution:")
+    start = time.time()
+    
+    await say_after(1, "Hello")
+    await say_after(2, "World")
+    
+    print(f"Sequential took {time.time() - start:.2f} seconds\n")
+    
+    # Concurrent execution
+    print("Concurrent execution:")
+    start = time.time()
+    
+    # Create tasks to run concurrently
+    hello_task = asyncio.create_task(say_after(1, "Hello"))
+    world_task = asyncio.create_task(say_after(2, "World"))
+    
+    # Wait for both tasks to complete
+    await hello_task
+    await world_task
+    
+    print(f"Concurrent took {time.time() - start:.2f} seconds")
+
+# Run the main coroutine
+asyncio.run(main())
+
+# Output
+# Sequential execution:
+# Hello
+# World
+# Sequential took 3.00 seconds
+
+# Concurrent execution:
+# Hello
+# World
+# Concurrent took 2.00 seconds
+\end{lstlisting}
+\end{macterminal}
+
+This example demonstrates the basic concepts of asyncio:
+
+\begin{itemize}
+    \item \textbf{\textcolor{pythonBlue}{Coroutines:}} Functions defined with \texttt{async def} that can be paused and resumed
+    \item \textbf{\textcolor{pythonBlue}{Tasks:}} Scheduled coroutines managed by the event loop
+    \item \textbf{\textcolor{pythonBlue}{Await:}} The keyword that yields control back to the event loop until an operation completes
+    \item \textbf{\textcolor{pythonBlue}{Event Loop:}} The central execution mechanism that coordinates all asyncio operations
+\end{itemize}
+
+The first example shows the difference between sequential execution (where operations block each other) and concurrent execution (where operations can run concurrently while one is waiting).
+
+\subsection{Async with HTTP Requests}
+
+A practical example of asyncio for concurrent HTTP requests:
+
+\begin{macterminal}
+\begin{lstlisting}
+import asyncio
+import aiohttp
+import time
+
+async def fetch_url(session, url):
+    """Fetch a URL asynchronously"""
+    start = time.time()
+    async with session.get(url) as response:
+        data = await response.text()
+        elapsed = time.time() - start
+        return {
+            'url': url,
+            'status': response.status,
+            'size': len(data),
+            'time': elapsed
+        }
+
+async def fetch_all(urls):
+    """Fetch multiple URLs concurrently"""
+    async with aiohttp.ClientSession() as session:
+        tasks = [fetch_url(session, url) for url in urls]
+        results = await asyncio.gather(*tasks)
+        return results
+
+async def main():
+    # List of URLs to fetch
+    urls = [
+        'https://www.python.org',
+        'https://docs.python.org',
+        'https://www.github.com',
+        'https://www.google.com',
+        'https://www.wikipedia.org',
+    ]
+    
+    # Sequential fetching for comparison
+    start = time.time()
+    async with aiohttp.ClientSession() as session:
+        results = []
+        for url in urls:
+            results.append(await fetch_url(session, url))
+    sequential_time = time.time() - start
+    
+    print(f"Sequential fetching: {sequential_time:.2f} seconds")
+    
+    # Concurrent fetching
+    start = time.time()
+    results = await fetch_all(urls)
+    concurrent_time = time.time() - start
+    
+    print(f"Concurrent fetching: {concurrent_time:.2f} seconds")
+    print(f"Speedup: {sequential_time/concurrent_time:.2f}x")
+    
+    # Display results
+    for result in results:
+        print(f"{result['url']}: {result['status']} ({result['size']} bytes, {result['time']:.2f}s)")
+
+# Run the main coroutine
+if __name__ == "__main__":
+    asyncio.run(main())
+
+# Output
+# Sequential fetching: 2.26 seconds
+# Concurrent fetching: 0.80 seconds
+# Speedup: 2.83x
+# https://www.python.org: 200 (51012 bytes, 0.12s)
+# https://docs.python.org: 200 (17129 bytes, 0.11s)
+# https://www.github.com: 200 (281297 bytes, 0.80s)
+# https://www.google.com: 200 (16957 bytes, 0.46s)
+# https://www.wikipedia.org: 200 (88783 bytes, 0.36s)
+\end{lstlisting}
+\end{macterminal}
+
+This example shows how to use asyncio for a common real-world scenario: fetching multiple web pages concurrently. Key points:
+
+\begin{itemize}
+    \item \textbf{\textcolor{pythonBlue}{aiohttp:}} An async-compatible HTTP client/server for Python
+    \item \textbf{\textcolor{pythonBlue}{asyncio.gather():}} Executes multiple awaitables concurrently and returns their results
+    \item \textbf{\textcolor{pythonBlue}{Resource Management:}} Using \texttt{async with} to properly manage session resources
+    \item \textbf{\textcolor{pythonBlue}{Performance Comparison:}} Direct comparison of sequential vs. concurrent approaches
+\end{itemize}
+
+This pattern is ideal for I/O-bound applications like web scrapers, API clients, and data fetchers.
+
+\subsection{Producer-Consumer Pattern with Asyncio}
+
+A classic concurrency pattern implemented with asyncio:
+
+\begin{macterminal}
+\begin{lstlisting}
+import asyncio
+import random
+
+async def producer_consumer_example():
+    # Create a queue with a maximum size
+    queue = asyncio.Queue(maxsize=5)
+    
+    async def producer():
+        """Produces tasks and adds them to the queue"""
+        for i in range(10):
+            # Create a task
+            task = f"Task-{i}"
+            
+            # Put the task in the queue (will wait if queue is full)
+            await queue.put(task)
+            print(f"Producer: Created {task}")
+            
+            # Simulate variable production time
+            await asyncio.sleep(random.uniform(0.1, 0.5))
+        
+        # Signal end of production
+        print("Producer: Done producing")
+    
+    async def consumer(name):
+        """Consumes tasks from the queue"""
+        while True:
+            try:
+                # Get a task from the queue (will wait if queue is empty)
+                task = await queue.get()
+                
+                # Check for sentinel value signaling end
+                if task is None:
+                    print(f"{name}: Received shutdown signal")
+                    queue.task_done()
+                    break
+                
+                print(f"{name}: Processing {task}")
+                
+                # Simulate processing time
+                await asyncio.sleep(random.uniform(0.2, 0.7))
+                
+                print(f"{name}: Completed {task}")
+                
+                # Signal task completion
+                queue.task_done()
+                
+            except asyncio.CancelledError:
+                break
+    
+    # Start producer and consumer tasks
+    producer_task = asyncio.create_task(producer())
+    consumer_tasks = [
+        asyncio.create_task(consumer(f"Consumer-{i}"))
+        for i in range(3)
+    ]
+    
+    # Wait for the producer to finish
+    await producer_task
+    
+    # Wait for all items to be processed
+    await queue.join()
+    
+    # Send shutdown signal to all consumers
+    for _ in range(len(consumer_tasks)):
+        await queue.put(None)
+    
+    # Wait for consumers to process shutdown signal
+    await asyncio.gather(*consumer_tasks)
+
+# Run the example
+if __name__ == "__main__":
+    asyncio.run(producer_consumer_example())
+\end{lstlisting}
+\end{macterminal}
+
+The producer-consumer pattern is a fundamental concurrency pattern that asyncio implements with these key components:
+
+\begin{itemize}
+    \item \textbf{\textcolor{pythonBlue}{asyncio.Queue:}} A thread-safe queue designed for use in asyncio applications
+    \item \textbf{\textcolor{pythonBlue}{Backpressure:}} Managing production rate with a maximum queue size
+    \item \textbf{\textcolor{pythonBlue}{Consumer Pool:}} Multiple consumers processing items concurrently
+    \item \textbf{\textcolor{pythonBlue}{Graceful Shutdown:}} Proper shutdown signals and waiting for all tasks to complete
+\end{itemize}
+
+This pattern is useful for scenarios like job queues, data processing pipelines, and message processing systems.
+
+\section{Conclusion (Part 2)}
+
+In this second part of our exploration of concurrency and parallelism in Python, we have focused on asyncio, a modern approach to concurrency:
+
+\begin{itemize}
+    \item We learned how asyncio provides single-threaded concurrency through its event loop architecture and coroutines.
+    
+    \item We explored practical applications of asyncio with HTTP requests using the aiohttp library, demonstrating significant performance improvements for I/O-bound operations.
+    
+    \item We implemented the classic producer-consumer pattern using asyncio.Queue, showing how to build efficient and well-managed data processing pipelines.
+\end{itemize}
+
+Asyncio represents a modern approach to concurrency in Python that is particularly well-suited for I/O-bound operations. Its elegant async/await syntax provides a readable and maintainable way to write concurrent code without the complexities of traditional threading approaches.
+
+In Part 3, we will explore hybrid approaches that combine different concurrency models, advanced patterns, and performance optimization techniques to further enhance your Python concurrency skills.
+
+\section{References (Part 2)}
+\begin{itemize}
+    \item Python Documentation. \textit{asyncio - Asynchronous I/O}. \href{https://docs.python.org/3/library/asyncio.html}{Link}
+    
+    \item Real Python. \textit{Async IO in Python: A Complete Walkthrough}. \href{https://realpython.com/async-io-python/}{Link}
+    
+    \item PyPI. \textit{aiohttp - Asynchronous HTTP Client/Server}. \href{https://pypi.org/project/aiohttp/}{Link}
+    
+    \item Lynn Root. \textit{Asyncio: We Did It Wrong}. \href{https://www.roguelynn.com/words/asyncio-we-did-it-wrong/}{Link}
+
+    \item Luciano Ramalho. \textit{Fluent Python}, Chapter 18: Concurrency with asyncio. O'Reilly Media.
+    
+    \item Translated, Edited and written in collaboration with AI.
+\end{itemize}
+
+\section{Explore My Other Posts}
+\vspace{10pt}
+\begin{tikzpicture}
+  % Section background - increased height slightly to ensure all content fits
+  \fill[color=terminalBg, rounded corners=5pt] (0,0) rectangle (\textwidth,-5);
+  
+  % Calculate width available for text (total width minus QR code width minus margins)
+  \pgfmathsetmacro{\availableWidth}{\textwidth-4cm}
+  
+  % Left column content
+  \begin{scope}
+    % Section title
+    \node[text=accentColor, font=\Large\bfseries, anchor=north west] at (0.5cm,-0.5cm) {Enjoyed This Content?};
+    
+    % Subtitle
+    \node[text=primaryColor, font=\normalsize, anchor=north west] at (0.5cm,-1.2cm) {Don't miss the first part of this series:};
+    
+    % Python post title - with highlighted style and limited width
+    \node[text=secondaryColor, font=\large\bfseries, anchor=north west, text width=\availableWidth] at (0.5cm,-1.9cm) {\color{accentColor}Python Concurrency Part 1: \color{primaryColor}Understanding the GIL, Threading and Multiprocessing};
+    
+    % Brief description of the post - with limited width and adjusted position
+    \node[text=secondaryColor, font=\normalsize, text width=\availableWidth, anchor=north west] at (0.5cm,-3.1cm) {
+      Learn the fundamentals of concurrent programming in Python, how the Global Interpreter Lock works, 
+      and when to use threading versus multiprocessing for optimal performance.
+    };
+  \end{scope}
+  
+  % QR Code on the right - vertically centered
+  \node[anchor=center] at ({\textwidth-1.5cm}, {-2.5cm}) {
+    \qrcode[height=2.2cm]{https://www.linkedin.com/feed/update/urn:li:activity:7310460714710691841/}
+  };
+  
+\end{tikzpicture}
+\vspace{5pt}
+
+\clearpage
+\thispagestyle{empty}
+\finalpagecontents
+
+\end{document}
