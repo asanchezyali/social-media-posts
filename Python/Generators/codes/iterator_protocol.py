@@ -13,9 +13,7 @@ class Counter:
         self.current += 1
         return self.current
 
-# A generator function does this automatically
-def counter(max_value):
-    current = 0
-    while current < max_value:
-        current += 1
-        yield current
+# Example usage
+counter = Counter(5)
+for number in counter:
+    print(number)

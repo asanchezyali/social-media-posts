@@ -2,7 +2,7 @@
 \usepackage[utf8]{inputenc}
 
 % Ajustamos los márgenes para corregir las advertencias de fancyhdr
-\usepackage[letterpaper, margin=1in, bottom=2.5in, top=1.2in]{geometry}
+\usepackage[letterpaper, margin=1in, bottom=3in, top=2.2in]{geometry}
 
 % Cargamos primero el paquete fancyhdr
 \usepackage{fancyhdr}
@@ -24,6 +24,7 @@
 \usepackage{hyperref}
 \usepackage{mdframed} % Para marcos más estables
 \usepackage{qrcode} % Paquete para generar códigos QR
+\usepackage{eso-pic}
 
 % Cargar tikz y la biblioteca de cajitas para mdframed
 \usetikzlibrary{calc,shapes,positioning}
@@ -176,15 +177,6 @@
 % Línea de encabezado
 \renewcommand{\headrulewidth}{0pt}
 
-% Línea divisoria más sutil
-\renewcommand{\footrule}{
-  \vspace{0.5cm}
-  \noindent\makebox[\linewidth]{\color{dividerColor}\rule{\linewidth}{0.2pt}}
-  \vspace{0.5cm}
-}
-\renewcommand{\footrulewidth}{0.2pt}
-\renewcommand{\footruleskip}{1cm}
-
 % Configure footer with profile info
 \fancyfoot[C]{
     \vspace*{0.2cm}
@@ -198,7 +190,7 @@
                 \clip (0,0) circle (0.8cm);
                 \node at (0,0) {
                     % Placeholder for profile image
-                    \includegraphics[width=1.6cm,height=1.6cm]{profile-image.jpeg}
+                    \includegraphics[width=1.6cm,height=1.6cm]{slides/profile-image.jpeg}
                 };
             \end{tikzpicture}
             }
@@ -243,6 +235,26 @@
     \end{tikzpicture}
 }
 
+
+\newcommand{\BackgroundPic}{%
+    \put(0,0){%
+        \begin{tikzpicture}[remember picture, overlay]
+            % Coloca la imagen de fondo que cubra toda la página
+            \node[inner sep=0pt] at (current page.center) {
+                \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio=false]{slides/Coding in Cyberpunk Style.jpeg}
+            };
+            
+            % Agrega una capa semitransparente oscura sobre la imagen
+            % Puedes ajustar el color y la opacidad según necesites
+            \fill[black, opacity=0.7] (current page.south west) rectangle (current page.north east);
+            
+            % Si quieres un degradado oscuro en lugar de un color sólido, usa esto:
+            % \shade[top color=black!80, bottom color=black!40, opacity=0.7] 
+            %    (current page.south west) rectangle (current page.north east);
+        \end{tikzpicture}%
+    }%
+}
+
 % Alternativa usando una versión modificada de la URL
 \newcommand{\elegantqr}[2]{
     \qrcode[height=2.5cm]{#1}
@@ -252,6 +264,7 @@
 
 % Definir el título personalizado con alineación exacta para todos los elementos
 \newcommand{\titlepagecontents}{%
+    \AddToShipoutPicture*{\BackgroundPic}
     \vspace*{3cm}
     % Asegurar que todos los elementos estén alineados a la izquierda
     \begin{flushleft}
@@ -301,6 +314,7 @@
 }
 
 \begin{document}
+\setlength{\parindent}{0pt}
 \color{primaryColor} % Explicitly set text color to white for the entire document
 
 \begin{titlepage}
@@ -401,6 +415,9 @@ squares = (x**2 for x in range(10))
 # Using generators
 for num in count_up_to(5):
     print(num)  # Prints: 1, 2, 3, 4, 5
+
+for num in squares:
+    print(num)  # Prints: 0, 1, 4, 9, 16j
 \end{lstlisting}
 \end{macterminal}
 
@@ -545,9 +562,14 @@ gen_snapshot = tracemalloc.take_snapshot()
 gen_size = sum(stat.size for stat in gen_snapshot.statistics('filename'))
 
 # Compare memory usage
-print(f"List memory: {list_size / 1024 / 1024:.2f} MB")
-print(f"Generator memory: {gen_size / 1024 / 1024:.2f} MB")
+print(f"List memory: {list_size / 1024 / 1024:.8f} MB")
+print(f"Generator memory: {gen_size / 1024 / 1024:.8f} MB")
 print(f"Memory ratio: {list_size / gen_size:.0f}x")
+
+# Output:
+# List memory: 38.57472229 MB
+# Generator memory: 0.00038147 MB
+# Memory ratio: 101121x
 \end{lstlisting}
 \end{macterminal}
 
@@ -595,12 +617,12 @@ class Counter:
         self.current += 1
         return self.current
 
-# A generator function does this automatically
-def counter(max_value):
-    current = 0
-    while current < max_value:
-        current += 1
-        yield current
+# Example usage
+counter = Counter(5)
+for number in counter:
+    print(number) 
+
+# Output: 1, 2, 3, 4, 5
 \end{lstlisting}
 \end{macterminal}
 
@@ -695,6 +717,42 @@ Python generators provide an elegant, memory-efficient way to work with data seq
 \end{itemize}
 
 Mastering generators is an essential skill for writing efficient, elegant Python code, especially when dealing with large data processing tasks.
+
+
+\section{Explore My Other Posts}
+\vspace{10pt}
+\begin{tikzpicture}
+  % Section background - increased height slightly to ensure all content fits
+  \fill[color=terminalBg, rounded corners=5pt] (0,0) rectangle (\textwidth,-5);
+  
+  % Calculate width available for text (total width minus QR code width minus margins)
+  \pgfmathsetmacro{\availableWidth}{\textwidth-4cm}
+  
+  % Left column content
+  \begin{scope}
+    % Section title
+    \node[text=accentColor, font=\Large\bfseries, anchor=north west] at (0.5cm,-0.5cm) {Enjoyed This Content?};
+    
+    % Subtitle
+    \node[text=primaryColor, font=\normalsize, anchor=north west] at (0.5cm,-1.2cm) {Don't miss my previous post about:};
+    
+    % Python post title - with highlighted style and limited width
+    \node[text=secondaryColor, font=\large\bfseries, anchor=north west, text width=\availableWidth] at (0.5cm,-1.9cm) {\color{accentColor}Python Context Managers: \color{primaryColor}Elegant Resource Management with the «{\color{accentColor}with}» Statement};
+    
+    % Brief description of the post - with limited width and adjusted position
+    \node[text=secondaryColor, font=\normalsize, text width=\availableWidth, anchor=north west] at (0.5cm,-3.1cm) {
+      Discover how Python Context Managers can help you elegantly manage resources, 
+      prevent memory leaks, and write cleaner code.
+    };
+  \end{scope}
+  
+  % QR Code on the right - vertically centered
+  \node[anchor=center] at ({\textwidth-1.5cm}, {-2.5cm}) {
+    \qrcode[height=2.2cm]{https://www.linkedin.com/feed/update/urn:li:activity:7307438566157021186/}
+  };
+  
+\end{tikzpicture}
+\vspace{5pt}
 
 \clearpage
 \thispagestyle{empty}
