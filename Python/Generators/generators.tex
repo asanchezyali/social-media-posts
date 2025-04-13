@@ -315,7 +315,7 @@
 
 \begin{document}
 \setlength{\parindent}{0pt}
-\color{primaryColor} % Explicitly set text color to white for the entire document
+% Eliminamos el redundante \color{primaryColor} aquí
 
 \begin{titlepage}
     % Eliminamos todos los espacios adicionales para asegurar la alineación
@@ -337,6 +337,8 @@ Generators are special functions that return an iterator using the \textbf{\text
     \item \textbf{\textcolor{pythonBlue}{State Preservation:}} Generators maintain their state between calls
     \item \textbf{\textcolor{pythonBlue}{Sequence Creation:}} Easily model complex or infinite sequences
 \end{itemize}
+
+When using \textbf{\textcolor{accentColor}{yield}}, the internal state of the function (local variables and execution point) is saved, allowing the function to resume from where it left off on the next call to \texttt{next()}.
 
 \subsection{Generators vs. Lists}
 
@@ -417,7 +419,7 @@ for num in count_up_to(5):
     print(num)  # Prints: 1, 2, 3, 4, 5
 
 for num in squares:
-    print(num)  # Prints: 0, 1, 4, 9, 16j
+    print(num)  # Prints: 0, 1, 4, 9, 16, 25, 36, 49, 64, 81
 \end{lstlisting}
 \end{macterminal}
 
@@ -444,6 +446,12 @@ def first_n_fibonacci(n):
 fib = first_n_fibonacci(10)
 for num in fib:
     print(num, end=' ')  # 0 1 1 2 3 5 8 13 21 34
+
+# Alternatively with next()
+fib = first_n_fibonacci(5)
+print(next(fib))  # 0
+print(next(fib))  # 1
+print(next(fib))  # 1
 \end{lstlisting}
 \end{macterminal}
 
@@ -573,6 +581,8 @@ print(f"Memory ratio: {list_size / gen_size:.0f}x")
 \end{lstlisting}
 \end{macterminal}
 
+While generators save memory, they can be slower than lists for operations requiring repeated access, as values must be recalculated each time.
+
 \subsection{Processing Large Files}
 
 Generators are particularly useful when working with files that would be too large to fit in memory:
@@ -626,7 +636,7 @@ for number in counter:
 \end{lstlisting}
 \end{macterminal}
 
-This demonstrates how generators simplify the creation of iterators by handling the boilerplate code.
+Generators eliminate the need to manually implement \texttt{\_\_iter\_\_} and \texttt{\_\_next\_\_}, as Python automatically generates them when you use \texttt{yield}.
 
 \section{Real-World Applications}
 
@@ -688,6 +698,25 @@ for row in filtered:
 \end{lstlisting}
 \end{macterminal}
 
+\subsection{Generators with itertools}
+
+Combining generators with Python's itertools library provides powerful data manipulation capabilities:
+
+\begin{macterminal}
+\begin{lstlisting}
+from itertools import islice
+
+def fibonacci():
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
+
+fib_slice = islice(fibonacci(), 10)
+print(list(fib_slice))  # [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+\end{lstlisting}
+\end{macterminal}
+
 \section{Best Practices}
 
 To get the most from generators in Python:
@@ -718,6 +747,15 @@ Python generators provide an elegant, memory-efficient way to work with data seq
 
 Mastering generators is an essential skill for writing efficient, elegant Python code, especially when dealing with large data processing tasks.
 
+\subsection{Further Reading}
+
+To dive deeper into Python generators, check these resources:
+\begin{itemize}
+    \item PEP 255 - The original Python Generator proposal
+    \item \textit{Fluent Python} by Luciano Ramalho, which dedicates an entire chapter to iterators and generators
+    \item Python's official documentation on generators and the itertools module
+    \item Remember this document was translated, edited and written in collaboration with AI.
+\end{itemize}
 
 \section{Explore My Other Posts}
 \vspace{10pt}
@@ -740,7 +778,7 @@ Mastering generators is an essential skill for writing efficient, elegant Python
     \node[text=secondaryColor, font=\large\bfseries, anchor=north west, text width=\availableWidth] at (0.5cm,-1.9cm) {\color{accentColor}Python Context Managers: \color{primaryColor}Elegant Resource Management with the «{\color{accentColor}with}» Statement};
     
     % Brief description of the post - with limited width and adjusted position
-    \node[text=secondaryColor, font=\normalsize, text width=\availableWidth, anchor=north west] at (0.5cm,-3.1cm) {
+    \node[text=secondaryColor, font=\small, text width=\availableWidth, anchor=north west] at (0.5cm,-3.1cm) {
       Discover how Python Context Managers can help you elegantly manage resources, 
       prevent memory leaks, and write cleaner code.
     };
@@ -748,7 +786,7 @@ Mastering generators is an essential skill for writing efficient, elegant Python
   
   % QR Code on the right - vertically centered
   \node[anchor=center] at ({\textwidth-1.5cm}, {-2.5cm}) {
-    \qrcode[height=2.2cm]{https://www.linkedin.com/feed/update/urn:li:activity:7307438566157021186/}
+    \qrcode[height=2.5cm]{https://www.linkedin.com/feed/update/urn:li:activity:7307438566157021186/}
   };
   
 \end{tikzpicture}
