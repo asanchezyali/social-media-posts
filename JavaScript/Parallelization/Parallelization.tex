@@ -66,7 +66,7 @@
 % Configuración para listings con JavaScript como lenguaje predeterminado
 \lstset{
   language=JavaScript,
-  basicstyle=\small\ttfamily\bfseries\color{codeTextColor},
+  basicstyle=\ttfamily\bfseries\color{codeTextColor},
   backgroundcolor=\color{terminalBg},
   commentstyle=\color{codeCommentColor},
   keywordstyle=\color{codeKeywordColor},
@@ -281,7 +281,7 @@
 
 \section{Breaking the Single-Thread Barrier in Node.js}
 
-Node.js is renowned for its non-blocking, event-driven architecture built on a single-threaded execution model. While this design excels at handling I/O-bound operations, it becomes a bottleneck for CPU-intensive tasks.
+Node.js is renowned for its non-blocking, event-driven architecture built on a single-threaded execution model. Although Node.js excels at handling concurrent I/O operations thanks to its event model, CPU-intensive tasks can block the event loop, which degrades application performance.
 
 Parallel and distributed computing techniques offer three key advantages:
 
@@ -300,18 +300,33 @@ Node.js operates on a single-threaded event loop, which excels at handling concu
 \begin{macterminal}
 \begin{lstlisting}
 // CPU-intensive operation blocking the event loop
+const http = require("http");
+
+// This function performs an intensive operation that will block the event loop
 function computeIntensive() {
   let result = 0;
-  for (let i = 0; i < 10000000000; i++) {
+  for (let i = 0; i < 1e9; i++) {
     result += i;
   }
   return result;
 }
 
-// This request handler will block all other requests
-app.get('/compute', (req, res) => {
-  const result = computeIntensive(); // Blocks event loop
-  res.json({ result });
+const server = http.createServer((req, res) => {
+  if (req.url === "/compute" && req.method === "GET") {
+    // This call completely blocks the server
+    // while the calculation executes
+    const result = computeIntensive();
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ result }));
+  } else {
+    res.writeHead(404, { "Content-Type": "text/plain" });
+    res.end("Not Found");
+  }
+});
+
+const PORT = 3000;
+server.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
 });
 \end{lstlisting}
 \end{macterminal}
@@ -326,7 +341,7 @@ This causes significant limitations:
 
 \section{Parallel Computing with Worker Threads}
 
-Worker Threads provide true parallelism by enabling the creation of separate JavaScript execution threads.
+Worker Threads provide true parallelism by enabling the creation of separate JavaScript execution threads. Unlike the cluster module, which is more suitable for I/O-bound tasks, Worker Threads are specifically designed for CPU-intensive tasks by allowing JavaScript code execution in separate threads.
 
 \begin{macterminal}
 \begin{lstlisting}
@@ -337,6 +352,7 @@ const os = require('os');
 // Determine available CPU cores
 const numCPUs = os.cpus().length;
 
+// This function creates and manages a worker thread
 function runWorker(workerData) {
   return new Promise((resolve, reject) => {
     const worker = new Worker('./worker.js', { workerData });
@@ -352,16 +368,18 @@ async function main() {
   try {
     console.time('parallel-execution');
     
-    // Create a worker for each CPU core
+    // Create a worker for each available CPU core
+    // and divide the work into equal parts
     const workers = Array(numCPUs).fill().map((_, index) => {
       return runWorker({
-        start: index * 250000000,
+        start: index * 250000000,  // Divide the total range among the cores
         end: (index + 1) * 250000000
       });
     });
     
-    // Wait for all workers to complete
+    // Wait for all workers to complete their work
     const results = await Promise.all(workers);
+    // Combine the partial results
     const finalResult = results.reduce((sum, current) => sum + current, 0);
     
     console.timeEnd('parallel-execution');
@@ -372,6 +390,10 @@ async function main() {
 }
 
 main();
+
+// Output
+// parallel-execution: 352.207ms
+// Final sum: 3124999997616684500
 \end{lstlisting}
 \end{macterminal}
 
@@ -391,6 +413,8 @@ The worker thread contains the CPU-intensive code:
 // worker.js - The code executed in parallel
 const { parentPort, workerData } = require('worker_threads');
 
+// This function performs the intensive calculation
+// but only in the range assigned to this worker
 function computeIntensiveTask(start, end) {
   let sum = 0;
   for (let i = start; i < end; i++) {
@@ -399,10 +423,12 @@ function computeIntensiveTask(start, end) {
   return sum;
 }
 
+// Extract the range limits assigned to this worker
 const { start, end } = workerData;
+// Execute the calculation only in this range
 const result = computeIntensiveTask(start, end);
 
-// Send result back to parent thread
+// Send the result back to the main thread
 parentPort.postMessage(result);
 \end{lstlisting}
 \end{macterminal}
@@ -418,7 +444,7 @@ The key is that multiple instances of this code will run simultaneously in diffe
 
 \section{Distributed Computing with Node.js}
 
-Distributed computing expands computational capacity across multiple machines for virtually unlimited scaling.
+Distributed computing expands computational capacity across multiple machines for virtually unlimited scaling. Unlike parallel computing that operates on a single machine, distributed computing allows workload distribution among multiple servers, offering greater scalability and fault tolerance.
 
 \subsection{Message Queue Architecture}
 
@@ -426,37 +452,47 @@ A message queue forms the backbone of distributed systems:
 
 \begin{macterminal}
 \begin{lstlisting}
-// Producer: Distributes tasks via message queue
-const Queue = require('bull');
+// Bull is a popular library for managing queues in Node.js
+// There are other alternatives like RabbitMQ or Kafka
+const Queue = require("bull");
 
-// Create a queue with Redis as the message broker
-const workQueue = new Queue('data-processing', {
-  redis: { host: 'redis-server', port: 6379 }
+const workQueue = new Queue("data-processing", {
+  redis: { host: "localhost", port: 6379 },
 });
 
 async function distributeWork(dataset, chunkSize = 1000) {
-  // Split dataset into chunks
+  // Split the dataset into smaller chunks
   const chunks = [];
   for (let i = 0; i < dataset.length; i += chunkSize) {
     chunks.push(dataset.slice(i, i + chunkSize));
   }
-  
+
   console.log(`Distributing ${chunks.length} tasks`);
-  
-  // Add each chunk as a job to the queue
+
+  // Create a job in the queue for each data chunk
   const jobPromises = chunks.map((chunk, index) => {
-    return workQueue.add('process-chunk', {
-      chunkId: index,
-      data: chunk,
-      timestamp: Date.now()
-    }, {
-      attempts: 3  // Retry logic
-    });
+    return workQueue.add(
+      "process-chunk",
+      {
+        chunkId: index,
+        data: chunk,
+        timestamp: Date.now(),
+      },
+      {
+        attempts: 3,  // Automatic retry if the job fails
+      }
+    );
   });
-  
+
   await Promise.all(jobPromises);
-  console.log('All tasks queued for processing');
+  console.log("All tasks queued for processing");
 }
+
+// Simulate a large dataset
+// This could be any data source, like a database or an API
+const mockData = Array.from({ length: 10000 }, (_, i) => ({ id: i, value: Math.random() }));
+
+distributeWork(mockData, 1000);
 \end{lstlisting}
 \end{macterminal}
 
@@ -473,7 +509,7 @@ This approach allows multiple servers or processes to pick up and process jobs i
 
 \subsection{Worker Process Implementation}
 
-Worker processes run on separate machines:
+Worker processes run on separate machines. To achieve true distributed computing, this code should be executed on different servers with a shared Redis instance configured to be accessible from all machines in the network.
 
 \begin{macterminal}
 \begin{lstlisting}
@@ -482,6 +518,8 @@ const Queue = require('bull');
 const cluster = require('cluster');
 const os = require('os');
 
+// Note: In a real distributed environment, this host would point
+// to a Redis instance accessible from all machines
 const workQueue = new Queue('data-processing', {
   redis: { host: 'redis-server', port: 6379 }
 });
@@ -491,10 +529,12 @@ if (cluster.isMaster) {
   const numCPUs = os.cpus().length;
   console.log(`Setting up ${numCPUs} workers`);
   
+  // Create a worker process for each CPU
   for (let i = 0; i < numCPUs; i++) {
     cluster.fork();
   }
   
+  // Implement fault tolerance by automatically restarting failed workers
   cluster.on('exit', (worker) => {
     console.log(`Worker ${worker.process.pid} died. Restarting...`);
     cluster.fork();
@@ -506,7 +546,7 @@ if (cluster.isMaster) {
   // Process jobs (8 concurrent jobs per worker)
   workQueue.process('process-chunk', 8, async (job) => {
     const { chunkId, data } = job.data;
-    await job.progress(10);
+    await job.progress(10);  // Report initial progress
     
     console.log(`Processing chunk ${chunkId}`);
     const startTime = Date.now();
@@ -520,7 +560,7 @@ if (cluster.isMaster) {
       return { ...item, processed: result };
     });
     
-    await job.progress(100);
+    await job.progress(100);  // Report completion
     const duration = Date.now() - startTime;
     
     return {
@@ -531,6 +571,18 @@ if (cluster.isMaster) {
     };
   });
 }
+// Output
+// Setting up 10 workers
+// Worker 11419 started
+// Worker 11421 started
+// Worker 11426 started
+// Worker 11423 started
+// Worker 11420 started
+// Worker 11422 started
+// Worker 11418 started
+// Worker 11425 started
+// Worker 11427 started
+// Worker 11424 started
 \end{lstlisting}
 \end{macterminal}
 
@@ -570,13 +622,15 @@ class WorkerPool {
     this._initPool();
   }
   
+  // Initialize the worker pool
   _initPool() {
-    // Create worker threads
+    // Create the worker threads
     for (let i = 0; i < this.numWorkers; i++) {
       const worker = new Worker(this.workerScript);
       this.workers.push(worker);
       this.freeWorkers.push(i);
       
+      // Set up message handling
       worker.on('message', (result) => {
         const { taskId, data } = result;
         
@@ -586,13 +640,14 @@ class WorkerPool {
           delete this.tasks[taskId];
         }
         
-        // Add worker back to the pool
+        // Return the worker to the available pool
         this.freeWorkers.push(i);
         this._processQueue();
       });
     }
   }
   
+  // Public API to execute tasks
   executeTask(taskData) {
     return new Promise((resolve, reject) => {
       const taskId = this.taskIdCounter++;
@@ -603,6 +658,7 @@ class WorkerPool {
     });
   }
   
+  // Process task queue if workers are available
   _processQueue() {
     if (this.taskQueue.length > 0 && this.freeWorkers.length > 0) {
       const taskId = this.taskQueue.shift();
@@ -614,6 +670,21 @@ class WorkerPool {
       });
     }
   }
+}
+
+// Example of using the WorkerPool
+async function example() {
+  // Create a pool with a specific worker script
+  const pool = new WorkerPool('./calculation-worker.js');
+  
+  // Execute multiple tasks in parallel
+  const results = await Promise.all([
+    pool.executeTask({ type: 'sum', values: [1, 2, 3, 4, 5] }),
+    pool.executeTask({ type: 'product', values: [2, 3, 4] }),
+    pool.executeTask({ type: 'statistics', values: [10, 20, 30, 40, 50] })
+  ]);
+  
+  console.log(results);
 }
 \end{lstlisting}
 \end{macterminal}
@@ -633,18 +704,51 @@ The WorkerPool is ideal for applications that require frequent parallel operatio
 
 \begin{itemize}
     \item \textbf{\textcolor{accentColor}{Task Granularity:}} Divide work into optimally sized chunks that balance overhead and parallelism.
+    Example: For image processing, divide into blocks of 100-1000 images instead of processing one by one.
     
     \item \textbf{\textcolor{accentColor}{Resource Management:}} Monitor memory and CPU usage to prevent overloading systems.
+    Example: Implement concurrency limits based on available memory and use tools like \texttt{node-memwatch}.
     
     \item \textbf{\textcolor{accentColor}{Error Handling:}} Implement comprehensive error recovery strategies in distributed systems.
+    Example: Combine exponential backoff retries, circuit breakers, and dead-letter queues to manage failures.
     
     \item \textbf{\textcolor{accentColor}{Data Serialization:}} Minimize data transfer between threads and processes for better performance.
+    Example: Transfer only identifiers or references when possible instead of complete objects.
     
     \item \textbf{\textcolor{accentColor}{Backpressure:}} Implement flow control mechanisms to prevent overwhelming workers.
+    Example: Limit the number of tasks that can be in queue or use rate limiting systems.
 \end{itemize}
 
 \section{When To Use Each Approach}
 
+Below is a comparison of the different approaches to help choose the most appropriate technique according to the use case:
+
+\begin{center}
+\small  % o \footnotesize para hacerla aún más pequeña
+\begin{tabular}{|p{3cm}|p{3.5cm}|p{3.5cm}|p{3.5cm}|}
+\hline
+\textcolor{accentColor}{\textbf{Approach}} & \textcolor{primaryColor}{\textbf{Strengths}} & \textcolor{primaryColor}{\textbf{Limitations}} & \textcolor{primaryColor}{\textbf{Use Cases}} \\
+\hline
+\textbf{\textcolor{accentColor}{Worker Threads}} & 
+True parallelism, efficient memory sharing & 
+Limited to a single machine & 
+CPU-intensive tasks (calculations, data processing) \\
+\hline
+\textbf{\textcolor{accentColor}{Cluster}} & 
+Easy to implement, good load balancing & 
+Not optimal for CPU-intensive tasks & 
+Web servers, APIs, I/O-bound applications \\
+\hline
+\textbf{\textcolor{accentColor}{Distributed Queues}} & 
+Horizontal scalability, fault tolerance & 
+Greater complexity, network latency & 
+Massive data processing, scalable systems \\
+\hline
+\end{tabular}
+\end{center}
+
+
+Additional recommendations:
 \begin{itemize}
     \item \textbf{\textcolor{accentColor}{Worker Threads:}} For CPU-intensive operations on a single machine (data processing, calculations).
     
@@ -659,7 +763,7 @@ The WorkerPool is ideal for applications that require frequent parallel operatio
 
 Node.js's parallel and distributed computing capabilities effectively overcome its single-threaded limitations. The techniques presented enable developers to build computationally intensive applications that fully utilize modern multi-core architectures and distributed systems.
 
-As data processing requirements continue to grow, these approaches become increasingly critical for maintaining performance and scalability in modern Node.js applications.
+As data processing requirements continue to grow, these approaches become increasingly critical for maintaining performance and scalability in modern Node.js applications. The choice of the appropriate technique will depend on the type of workload and available resources: Worker Threads for CPU-intensive tasks on a single machine, Cluster for I/O-oriented applications, and distributed queues for systems requiring horizontal scalability.
 
 \section{References}
 
@@ -670,7 +774,11 @@ As data processing requirements continue to grow, these approaches become increa
     
     \item Bull. (2023). \textit{Bull: Premium Queue Package for Node.js}. \href{https://github.com/OptimalBits/bull}{Link}
     
-    \item Kamienowski, J. (2023). \textit{Scaling Node.js Applications: From Single Core to Distributed Computing}. \href{https://blog.appsignal.com/2023/04/19/scaling-nodejs-applications.html}{Link}
+    \item Node.js Foundation. (2024). \textit{Event Loop and Performance}. \href{https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/}{Link}
+    
+    \item Teixeira, P. (2023). \textit{Distributed Systems with Node.js}. O'Reilly Media.
+
+    \item Translated, Edited and written in collaboration with AI.
 \end{itemize}
 
 \section{Explore My Other Posts}
