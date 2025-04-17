@@ -10,4 +10,6 @@ def countdown(n):
 counter = countdown(5)
 print(next(counter))  # 5
 print(next(counter))  # 4
-print(next(counter))  # 3
+print(next(counter))  # 5
+
+
