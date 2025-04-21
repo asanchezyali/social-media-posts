@@ -1,4 +1,3 @@
-# api_server.py
 import asyncio
 import random
 from fastapi import FastAPI
@@ -6,7 +5,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Latency Demo API")
 
-# Configure CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

@@ -295,25 +295,17 @@
 \makeatother
 
 \newcommand{\finalpagecontents}{%
-    \vspace*{4cm}
-    \begin{center}
-        \begin{tikzpicture}
-            % Title text
-            \node[text width=14cm, align=center] at (0,0) {
-                {\fontsize{48}{52}\bfseries\color{primaryColor}Ready to \color{accentColor}Level Up\\\color{primaryColor}Your Python?\par}
-            };
-            
-            % Add vertical space
-            \node at (0,-3) {};
-            
-            % Question text with improved layout
-            \node[text width=14cm, align=center] at (0,-5) {
-                {\fontsize{24}{30}\color{secondaryColor}You've mastered powerful concurrency techniques.\\\vspace{0.5cm}
-                \color{accentColor}Apply these patterns in your next project\\\vspace{0.4cm}
-                \color{primaryColor}and watch your code become faster and more efficient!\par}
-            };
-        \end{tikzpicture}
-    \end{center}
+    \AddToShipoutPicture*{\BackgroundPic}
+    \vspace*{3cm}
+    % Left-aligned elements with EXACT same structure as title page
+    \begin{flushleft}
+    \languagetag{Feedback}\\[0.4cm]
+    {\fontsize{46}{52}\bfseries\color{primaryColor}Found this \color{accentColor}helpful?\par}
+    \vspace{0.3cm}
+    {\fontsize{18}{52}\color{secondaryColor}Save, comment and share\par}  
+    \vspace{0.3cm}
+    {\color{secondaryColor}\today\par}
+    \end{flushleft}
 }
 
 \begin{document}

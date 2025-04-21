@@ -250,25 +250,17 @@
 }
 
 \newcommand{\finalpagecontents}{%
-    \vspace*{4cm}
-    \begin{center}
-        \begin{tikzpicture}
-            % Title text
-            \node[text width=14cm, align=center] at (0,0) {
-                {\fontsize{48}{52}\bfseries\color{primaryColor}Ready to \color{accentColor}Unleash\\\color{primaryColor}Parallel Power?\par}
-            };
-            
-            % Add vertical space
-            \node at (0,-3) {};
-            
-            % Simplified message text with larger font
-            \node[text width=14cm, align=center] at (0,-5) {
-                {\fontsize{24}{30}\color{secondaryColor}You've discovered the power of Node.js Parallelization.\\\vspace{1cm}
-                \color{accentColor}Stay tuned for Part 2...\\\vspace{0.4cm}
-                \color{primaryColor}Where we'll explore advanced patterns\\\vspace{0.2cm}for distributed systems at scale!\par}
-            };
-        \end{tikzpicture}
-    \end{center}
+    \AddToShipoutPicture*{\BackgroundPic}
+    \vspace*{3cm}
+    % Left-aligned elements with EXACT same structure as title page
+    \begin{flushleft}
+    \languagetag{Feedback}\\[0.4cm]
+    {\fontsize{46}{52}\bfseries\color{primaryColor}Found this \color{accentColor}helpful?\par}
+    \vspace{0.3cm}
+    {\fontsize{18}{52}\color{secondaryColor}Save, comment and share\par}  
+    \vspace{0.3cm}
+    {\color{secondaryColor}\today\par}
+    \end{flushleft}
 }
 
 \begin{document}

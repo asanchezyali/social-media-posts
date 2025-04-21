@@ -226,23 +226,17 @@
 }
 
 \newcommand{\finalpagecontents}{%
-    \vspace*{4cm}
-    \begin{center}
-        \begin{tikzpicture}
-            % Title text
-            \node[text width=14cm, align=center] at (0,0) {
-                {\fontsize{48}{52}\bfseries\color{primaryColor}What Do \color{accentColor}You Think?\par}
-            };
-            
-            % Add vertical space
-            \node at (0,-3) {};
-            
-            % Question text
-            \node[text width=14cm, align=center] at (0,-6) {
-                {\fontsize{22}{26}\color{secondaryColor}Which reasoning framework would work best for your specific AI challenges?\par}
-            };
-        \end{tikzpicture}
-    \end{center}
+    \AddToShipoutPicture*{\BackgroundPic}
+    \vspace*{3cm}
+    % Left-aligned elements with EXACT same structure as title page
+    \begin{flushleft}
+    \languagetag{Feedback}\\[0.4cm]
+    {\fontsize{46}{52}\bfseries\color{primaryColor}Found this \color{accentColor}helpful?\par}
+    \vspace{0.3cm}
+    {\fontsize{18}{52}\color{secondaryColor}Save, comment and share\par}  
+    \vspace{0.3cm}
+    {\color{secondaryColor}\today\par}
+    \end{flushleft}
 }
 
 \begin{document}

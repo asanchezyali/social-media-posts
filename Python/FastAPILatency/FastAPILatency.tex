@@ -24,6 +24,10 @@
 \usepackage{hyperref}
 \usepackage{mdframed} % Para marcos más estables
 \usepackage{qrcode} % Paquete para generar códigos QR
+\usepackage{eso-pic}
+\usepackage{float}
+
+\floatplacement{figure}{H}
 
 % Cargar tikz y la biblioteca de cajitas para mdframed
 \usetikzlibrary{calc,shapes,positioning}
@@ -235,6 +239,26 @@
     \end{tikzpicture}
 }
 
+\newcommand{\BackgroundPic}{%
+    \put(0,0){%
+        \begin{tikzpicture}[remember picture, overlay]
+            % Coloca la imagen de fondo que cubra toda la página
+            \node[inner sep=0pt] at (current page.center) {
+                \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio=false]{slides/Futuristic Cybersecurity Analyst.jpeg}
+            };
+            
+            % Agrega una capa semitransparente oscura sobre la imagen
+            % Puedes ajustar el color y la opacidad según necesites
+            \fill[black, opacity=0.7] (current page.south west) rectangle (current page.north east);
+            
+            % Si quieres un degradado oscuro en lugar de un color sólido, usa esto:
+            % \shade[top color=black!80, bottom color=black!40, opacity=0.7] 
+            %    (current page.south west) rectangle (current page.north east);
+        \end{tikzpicture}%
+    }%
+}
+
+
 % Alternativa usando una versión modificada de la URL
 \newcommand{\elegantqr}[2]{
     \qrcode[height=2.5cm]{#1}
@@ -243,22 +267,19 @@
 }
 
 % Definir el título personalizado con alineación exacta para todos los elementos
-\newcommand{\titlepagecontents}{%
-    \vspace*{2cm}
-    % Asegurar que todos los elementos estén alineados a la izquierda
+\newcommand{\finalpagecontents}{%
+    \AddToShipoutPicture*{\BackgroundPic}
+    \vspace*{3cm}
+    % Left-aligned elements with EXACT same structure as title page
     \begin{flushleft}
-    \languagetag{Python}\\[0.4cm]
-    {\fontsize{48}{52}\bfseries\color{primaryColor}FastAPI \color{accentColor}Latency \\\color{accentColor}\& Response Times\par}
+    \languagetag{Feedback}\\[0.4cm]
+    {\fontsize{46}{52}\bfseries\color{primaryColor}Found this \color{accentColor}helpful?\par}
     \vspace{0.3cm}
-    {\fontsize{18}{52}\color{secondaryColor}Understanding Performance Metrics and Optimizing API Speed in Modern Web Applications\par}
+    {\fontsize{18}{52}\color{secondaryColor}Save, comment and share\par}  
     \vspace{0.3cm}
     {\color{secondaryColor}\today\par}
-    \vspace{1.8cm}
-    % El QR se alineará a la izquierda aunque internamente esté centrado
-    \elegantqr{https://github.com/yourusername/fastapi-performance}{Source Code}
     \end{flushleft}
 }
-
 
 % En la página del título, aplicar el contenido sin márgenes adicionales
 \makeatletter
@@ -294,15 +315,13 @@
 
 \begin{document}
 \setlength{\parindent}{0pt}
-
 \begin{titlepage}
-    % Eliminamos todos los espacios adicionales para asegurar la alineación
     \titlepagecontents
 \end{titlepage}
 
 \section{Introduction to API Performance}
 
-In modern web development, speed and efficiency are crucial. When developing APIs or web services with FastAPI, understanding fundamental concepts like latency and response time is essential to ensure our applications are scalable and provide an optimal user experience.
+In modern web development, speed and efficiency are crucial. Understanding fundamental concepts like latency and response time is essential to ensure APIs are scalable and provide an optimal user experience. This article uses FastAPI as a practical example to demonstrate these concepts, but the principles of latency, response time, and percentiles are applicable to all API systems, regardless of the technology used.
 
 \subsection{Latency vs Response Time: Understanding the Difference}
 
@@ -320,15 +339,15 @@ When evaluating API performance, average response time is commonly reported. How
 Using \textbf{\textcolor{accentColor}{percentiles}} provides a more accurate picture:
 
 \begin{itemize}
-    \item \textbf{\textcolor{pythonBlue}{50th Percentile (p50) or Median:}} Half of requests complete in less time, half take longer
-    \item \textbf{\textcolor{pythonBlue}{High Percentiles}} like p95, p99, and p999 (95th, 99th, and 99.9th percentiles): Reveal how bad your outliers are and how they affect a small but significant percentage of users
+    \item \textbf{\textcolor{pythonBlue}{50th Percentile (p50) or Median:}} Half of requests complete in less time, half take longer.
+    \item \textbf{\textcolor{pythonBlue}{High Percentiles}} like p95, p99, and p999: Reveal how bad your outliers are and how they affect a small but significant percentage of users.
 \end{itemize}
 
-High percentiles, also known as "tail latencies," are crucial because they directly affect user experience. For example, Amazon describes response time requirements for internal services in terms of the 99.9th percentile, even though it affects only 1 in 1,000 requests. Why? Because customers with the slowest requests often have the most data in their accounts—they're the most valuable customers.
+High percentiles, also known as "tail latencies," are crucial because they directly affect user experience. For example, Amazon describes response time requirements for internal services in terms of the 99.9th percentile, even though it affects only 1 in 1,000 requests, as these users often have the most valuable accounts.
 
 \section{Performance Monitoring with FastAPI}
 
-Let's build a small service with FastAPI and simulate load to analyze its behavior. Our goal will be to measure and visualize different response time percentiles.
+Let's build a small service with FastAPI and simulate load to analyze its behavior. Our goal is to measure and visualize different response time percentiles.
 
 \subsection{Creating a FastAPI Application}
 
@@ -345,7 +364,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Latency Demo API")
 
-# Configure CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -417,7 +435,6 @@ import time
 import statistics
 import matplotlib.pyplot as plt
 import numpy as np
-import aiohttp
 from collections import defaultdict
 
 class LoadTester:
@@ -439,7 +456,7 @@ class LoadTester:
         try:
             async with session.get(url) as response:
                 await response.json()
-                response_time = (time.time() - start_time) * 1000  # in milliseconds
+                response_time = (time.time() - start_time) * 1000
                 self.results[endpoint].append(response_time)
                 return response_time
         except Exception as e:
@@ -481,7 +498,6 @@ class LoadTester:
         """Generates charts to visualize the results"""
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 14))
         
-        # Percentile bar chart
         endpoints = list(self.results.keys())
         metrics = ["p50", "p90", "p95", "p99"]
         
@@ -499,10 +515,8 @@ class LoadTester:
         ax1.legend()
         ax1.grid(axis='y', linestyle='--', alpha=0.7)
         
-        # Histogram for the variable endpoint
         if "variable" in self.results and self.results["variable"]:
             data = self.results["variable"]
-            # Use logarithmic scale for data
             bins = np.logspace(np.log10(min(data)), np.log10(max(data)), 50)
             ax2.hist(data, bins=bins, alpha=0.7, color='green')
             ax2.set_xscale('log')
@@ -510,7 +524,6 @@ class LoadTester:
             ax2.set_xlabel('Response Time (ms) - logarithmic scale')
             ax2.set_ylabel('Number of Requests')
             
-            # Add vertical lines for percentiles
             percentiles = self.calculate_percentiles("variable")
             for metric, value in [(k, v) for k, v in percentiles.items() 
                                 if k in ["p50", "p90", "p95", "p99"] and v is not None]:
@@ -535,7 +548,6 @@ class LoadTester:
 async def main():
     tester = LoadTester()
     
-    # Generate load for each endpoint
     print("Starting load tests...")
     
     for endpoint in tester.endpoints:
@@ -543,13 +555,61 @@ async def main():
         print(f"Testing endpoint '{endpoint}' with {requests} requests...")
         await tester.generate_load(endpoint, requests, concurrency=50)
     
-    # Print results and generate charts
     tester.print_summary()
     tester.plot_results()
     print("Tests completed. Results saved in 'latency_results.png'")
 
 if __name__ == "__main__":
     asyncio.run(main())
+
+# Output
+# Starting load tests...
+# Testing endpoint 'fast' with 200 requests...
+# Testing endpoint 'medium' with 200 requests...
+# Testing endpoint 'slow' with 200 requests...
+# Testing endpoint 'variable' with 1000 requests...
+
+# === Endpoint: fast (200 requests) ===
+# min: 10.22 ms
+# p50: 22.67 ms
+# p90: 31.31 ms
+# p95: 34.34 ms
+# p99: 37.17 ms
+# max: 38.25 ms
+# mean: 22.79 ms
+# stdev: 6.84 ms
+
+# === Endpoint: medium (200 requests) ===
+# min: 53.42 ms
+# p50: 102.49 ms
+# p90: 143.29 ms
+# p95: 150.27 ms
+# p99: 161.89 ms
+# max: 163.58 ms
+# mean: 103.06 ms
+# stdev: 30.29 ms
+
+# === Endpoint: slow (200 requests) ===
+# min: 206.44 ms
+# p50: 361.78 ms
+# p90: 476.99 ms
+# p95: 489.22 ms
+# p99: 501.95 ms
+# max: 505.02 ms
+# mean: 360.42 ms
+# stdev: 84.46 ms
+
+# === Endpoint: variable (1000 requests) ===
+# min: 11.65 ms
+# p50: 38.14 ms
+# p90: 239.78 ms
+# p95: 297.38 ms
+# p99: 1240.78 ms
+# p999: 1452.90 ms
+# max: 1491.94 ms
+# mean: 103.07 ms
+# stdev: 213.06 ms
+# Tests completed. Results saved in 'latency_results.png'
 \end{lstlisting}
 \end{macterminal}
 
@@ -573,30 +633,51 @@ python load_tester.py
 
 The agent will generate a file called \verb|latency_results.png| with visualizations of the results, and will also print a summary to the console.
 
-\subsection{Visualization of Results}
-
-% Space for including the visualization image
-\begin{center}
-\includegraphics[width=\textwidth]{latency_results.png}
-\end{center}
+{\centering
+\includegraphics[width=0.85\textwidth]{slides/latency_results.png}\par
+}
 
 \section{Analyzing the Results}
 
-The results clearly show why percentiles are more informative than averages:
+The visualizations demonstrate why percentiles provide superior insights for API performance compared to averages:
+
+\subsection{Understanding the Variable Endpoint}
+
+The most revealing insights come from examining the \textbf{\textcolor{accentColor}{variable}} endpoint:
 
 \begin{itemize}
-    \item For the \textbf{\textcolor{accentColor}{variable}} endpoint:
-        \begin{itemize}
-            \item The median (p50) is quite low, showing that most requests are fast
-            \item p95 and p99 reveal the slower requests affecting a small percentage of users
-            \item The average could be distorted by extreme outliers
-        \end{itemize}
-    \item Comparing different endpoints:
-        \begin{itemize}
-            \item We observe how response time distribution varies considerably
-            \item We see the difference between endpoints with predictable vs. variable behavior
-        \end{itemize}
+    \item The \textbf{median (p50)} is only 38.14ms, indicating most users receive fast responses.
+    \item The \textbf{p90} jumps to 239.78ms, revealing that 10\% of requests experience significantly slower performance.
+    \item The \textbf{p95} at 297.38ms shows further degradation for 5\% of requests.
+    \item Most critically, the \textbf{p99} at 1240.78ms demonstrates that 1\% of users experience response times over 32 times slower than the median.
+    \item The mean (103.07ms) obscures this reality, appearing deceptively moderate despite the extreme outliers.
 \end{itemize}
+
+The histogram's logarithmic distribution confirms these observations, showing three distinct clusters corresponding to the programmed response time categories (80\% fast, 15\% medium, 5\% slow).
+
+\subsection{Comparative Analysis Across Endpoints}
+
+Comparing the four endpoints reveals important performance patterns:
+
+\begin{itemize}
+    \item \textbf{Predictable endpoints} (fast, medium, slow) show relatively consistent behavior where p99 is only 1.3-1.4 times greater than p50.
+    \item The \textbf{variable endpoint} exhibits dramatic tail latency, with p99 being 32.5 times higher than p50.
+    \item While the \textbf{mean response time} of the variable endpoint (103.07ms) is nearly identical to the medium endpoint (103.06ms), their performance profiles are entirely different—a fact that would be missed by relying solely on averages.
+\end{itemize}
+
+\subsection{Practical Benefits of Percentile-Based Monitoring}
+
+Using percentiles for performance monitoring offers several concrete advantages:
+
+\begin{itemize}
+    \item \textbf{Detecting Hidden Issues:} The variable endpoint's mean suggests acceptable performance, while percentiles reveal severe degradation affecting a minority of requests.
+    \item \textbf{User-Centric Metrics:} Percentiles directly correspond to user experience—p95 represents what 5\% of your users are experiencing or worse.
+    \item \textbf{Early Warning System:} Changes in high percentiles often precede system-wide degradation and can signal emerging problems before they affect most users.
+    \item \textbf{SLA Alignment:} Service Level Agreements based on percentiles protect all users, while average-based SLAs may hide systematic failures affecting a subset of users.
+    \item \textbf{Infrastructure Sizing:} Understanding tail latency helps properly size infrastructure for peak demands rather than average conditions.
+\end{itemize}
+
+The logarithmic histogram of the variable endpoint particularly emphasizes how response times are not normally distributed—they follow a multi-modal distribution with long tails. This pattern is common in real-world systems due to factors like cache misses, garbage collection pauses, or resource contention.
 
 \section{The Tail Latency Amplification Problem}
 
@@ -609,7 +690,7 @@ Imagine that your frontend application needs to make several calls to these endp
     \end{center}
 \end{itemize}
 
-This means that although only 5\% of individual calls are slow, approximately 23\% of page loads will experience delays. This phenomenon is known as "tail latency amplification" or "tail at scale."
+This means that although only 5\% of individual calls are slow, approximately 23\% of page loads will experience delays. This phenomenon is known as "tail latency amplification."
 
 \section{Conclusion}
 
@@ -617,50 +698,41 @@ When developing and monitoring APIs, it's critical to:
 
 \begin{itemize}
     \item \textbf{\textcolor{pythonBlue}{Measure Percentiles, Not Just Averages:}} High percentiles reveal problems affecting real users that might go unnoticed in means.
-    
     \item \textbf{\textcolor{pythonBlue}{Understand the Complete Distribution:}} Visualize response time histograms to better understand system behavior.
-    
-    \item \textbf{\textcolor{pythonBlue}{Consider Tail Latency Amplification:}} If your frontend or client makes multiple API calls to complete a user action, optimizing high percentiles is essential.
-    
-    \item \textbf{\textcolor{pythonBlue}{Establish SLOs and SLAs Based on Percentiles:}} For example, "p99 must be less than 300ms" is a more meaningful metric than "average time must be less than 100ms."
+    \item \textbf{\textcolor{pythonBlue}{Consider Tail Latency Amplification:}} Optimizing high percentiles is essential for multi-call user actions.
+    \item \textbf{\textcolor{pythonBlue}{Establish SLOs and SLAs Based on Percentiles:}} For example, "p99 must be less than 300ms" is more meaningful than "average time must be less than 100ms."
 \end{itemize}
 
-Modern applications must be designed and optimized with these principles in mind to provide consistent, high-quality experiences to all users, not just the average user.
+Modern applications must be designed with these principles to provide consistent, high-quality experiences to all users. Future posts will explore techniques like priority queues, circuit breakers, and caching to mitigate tail latency amplification.
 
-In a future post, we'll explore techniques for optimizing these high percentiles, including implementing priority queues, circuit breakers, and caching strategies to mitigate tail latency amplification.
+\section{References}
+
+\begin{itemize}
+    \item Sentry. (2024). \textit{What’s the difference between API Latency and API Response Time?}. \href{https://blog.sentry.io/whats-the-difference-between-api-latency-and-api-response-time/#:~:text=API%20latency%20is%20the%20time,request%20and%20return%20the%20result.}{Link}
+    \item Catchpoint. \textit{API Performance Monitoring—Key Metrics and Best Practices}. \href{https://www.catchpoint.com/api-monitoring-tools/api-performance-monitoring}{Link}
+    \item FastAPI Documentation. \textit{Benchmarks}. \href{https://fastapi.tiangolo.com/benchmarks/}{Link}
+    \item DeCandia, G., et al. (2007). \textit{Dynamo: Amazon’s Highly Available Key-value Store}. ACM SIGOPS Operating Systems Review, 41(6), 205-220.
+    \item Kleppmann, M. (2017). \textit{Designing Data-Intensive Applications: The Big Ideas Behind Reliable, Scalable, and Maintainable Systems}. O'Reilly Media, Inc.
+    \item This article was translated, edited and written in collaboration with AI. If you find any inconsistencies or have suggestions for improvement, please don't hesitate to open an issue in our GitHub repository at \href{https://github.com/asanchezyali/social-media-posts}{github} or reach out directly.
+\end{itemize}
 
 \section{Explore My Other Posts}
 \vspace{10pt}
 \begin{tikzpicture}
-  % Section background
   \fill[color=terminalBg, rounded corners=5pt] (0,0) rectangle (\textwidth,-5);
-  
-  % Calculate width available for text
   \pgfmathsetmacro{\availableWidth}{\textwidth-4cm}
-  
-  % Left column content
   \begin{scope}
-    % Section title
     \node[text=accentColor, font=\Large\bfseries, anchor=north west] at (0.5cm,-0.5cm) {Enjoyed This Content?};
-    
-    % Subtitle
     \node[text=primaryColor, font=\normalsize, anchor=north west] at (0.5cm,-1.2cm) {Don't miss my previous post about:};
-    
-    % Python post title
     \node[text=secondaryColor, font=\large\bfseries, anchor=north west, text width=\availableWidth] at (0.5cm,-1.9cm) {\color{accentColor}Python Generators: \color{primaryColor}Elegant, Memory-Efficient Iterations};
-    
-    % Brief description
     \node[text=secondaryColor, font=\small, text width=\availableWidth, anchor=north west] at (0.5cm,-3.1cm) {
       Discover how Python Generators can help you process large datasets efficiently,
       create elegant data pipelines, and write cleaner code with minimal memory footprint.
     };
   \end{scope}
-  
-  % QR Code on the right
   \node[anchor=center] at ({\textwidth-1.5cm}, {-2.5cm}) {
-    \qrcode[height=2.5cm]{https://github.com/yourusername/api-performance-blog}
+    \qrcode[height=2.5cm]{https://www.linkedin.com/feed/update/urn:li:activity:7318256898057621504/}
   };
-  
 \end{tikzpicture}
 \vspace{5pt}
 
@@ -669,3 +741,4 @@ In a future post, we'll explore techniques for optimizing these high percentiles
 \finalpagecontents
 
 \end{document}
+
