@@ -1,0 +1,496 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[letterpaper, margin=1in, bottom=2.5in, top=2.2in]{geometry}
+\usepackage{fancyhdr}
+\setlength{\headheight}{15pt}
+\setlength{\footskip}{72pt}
+
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{anyfontsize}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{sourcesanspro}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{fontawesome5}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{mdframed}
+\usepackage{qrcode} % Añadir paquete para generar códigos QR
+\usetikzlibrary{calc,shapes,positioning}
+\usepackage{eso-pic}
+
+\AtBeginDocument{\color{primaryColor}}
+
+% Colors updated with JavaScript brand colors
+\definecolor{bgColor}{RGB}{13, 17, 23}  % Dark background similar to JS docs
+\definecolor{primaryColor}{RGB}{255, 255, 255}  % White text for better contrast
+\definecolor{accentColor}{RGB}{255, 220, 60}  % Brighter JavaScript Yellow for better contrast
+\definecolor{jsSecondary}{RGB}{180, 180, 180}  % Light gray as secondary color for better contrast
+\definecolor{secondaryColor}{RGB}{230, 235, 240}  % Almost white gray for better contrast
+\definecolor{terminalBg}{RGB}{22, 22, 22}  % Terminal background
+\definecolor{terminalFrame}{RGB}{40, 40, 40}  % Terminal frame
+\definecolor{lineNumberColor}{RGB}{100, 100, 100}  % Line number color
+\definecolor{dividerColor}{RGB}{120, 130, 150}  % Brighter divider color for better visibility
+
+% Colores para código 
+\definecolor{codeTextColor}{RGB}{255, 255, 255}  % Blanco puro para el texto básico
+\definecolor{codeKeywordColor}{RGB}{97, 175, 239}  % Azul claro para palabras clave
+\definecolor{codeCommentColor}{RGB}{121, 192, 120}  % Verde para comentarios
+\definecolor{codeStringColor}{RGB}{255, 220, 60}  % Amarillo JS más brillante para strings
+\definecolor{codeMethodColor}{RGB}{255, 160, 122}  % Naranja claro para métodos
+\definecolor{codeFunctionColor}{RGB}{230, 180, 80}  % Tono amarillo-dorado para funciones
+\definecolor{codeNumberColor}{RGB}{180, 230, 180}  % Verde claro para números
+
+\pagecolor{bgColor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=accentColor,
+    filecolor=accentColor,
+    urlcolor=accentColor,
+}
+
+% Definir lenguaje JavaScript para listings
+\lstdefinelanguage{JavaScript}{
+  keywords={break, case, catch, continue, debugger, default, delete, do, else, false, finally, for, function, if, in, instanceof, new, null, return, switch, this, throw, true, try, typeof, var, void, while, with, let, const, class, export, import, yield, async, await},
+  sensitive=true,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]"
+}
+
+% Configuración para listings con JavaScript como lenguaje predeterminado
+\lstset{
+  language=JavaScript,
+  basicstyle=\ttfamily\bfseries\color{codeTextColor},
+  backgroundcolor=\color{terminalBg},
+  commentstyle=\color{codeCommentColor},
+  keywordstyle=\color{codeKeywordColor},
+  stringstyle=\color{codeStringColor},
+  numberstyle=\color{lineNumberColor},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=2,
+  showstringspaces=false,
+  frame=none,
+  xleftmargin=15pt,
+  xrightmargin=0pt,
+  aboveskip=5pt,
+  belowskip=5pt,
+  numbers=left,
+  numbersep=8pt,
+  extendedchars=true,
+  keepspaces=true,
+  columns=flexible,
+  lineskip=2pt,
+  emph={[2]require,createReadStream,createWriteStream,pipe,on,once,createGzip,pipeline,Transform,Readable,Writable,Duplex},
+  emphstyle={[2]\color{codeFunctionColor}}
+}
+
+\newenvironment{macterminal}{%
+    \begin{mdframed}[
+        linecolor=terminalFrame,
+        backgroundcolor=terminalBg,
+        roundcorner=5pt,
+        skipabove=5pt,
+        skipbelow=5pt,
+        linewidth=1pt,
+        innertopmargin=5pt,
+        frametitle={%
+            \tikz[baseline=(current bounding box.east), outer sep=0pt]{
+                \fill[red!80!black] (0,0) circle (5pt);
+                \fill[yellow!80!black] (0.7,0) circle (5pt);
+                \fill[green!70!black] (1.4,0) circle (5pt);
+            }
+        },
+        frametitlealignment=\raggedright,
+        frametitleaboveskip=8pt,
+        frametitlebelowskip=0pt,
+    ]
+}{%
+    \end{mdframed}%
+}
+
+\newcommand{\verspace}{\vspace{5pt}}
+
+\titleformat{\section}
+  {\LARGE\bfseries\color{primaryColor}}
+  {\thesection. }
+  {0pt}
+  {}
+  []
+
+\titleformat{\subsection}
+  {\Large\bfseries\color{accentColor}}
+  {\thesubsection. }
+  {0pt}
+  {}
+  []
+
+\titleformat{\subsubsection}
+  {\large\bfseries\color{primaryColor}}
+  {\thesubsubsection. }
+  {0pt}
+  {}
+  []
+
+\titlespacing*{\section}{0pt}{18pt}{8pt}
+\titlespacing*{\subsection}{0pt}{12pt}{5pt}
+\titlespacing*{\subsubsection}{0pt}{8pt}{3pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+
+\fancyhead[L]{
+    \begin{tikzpicture}[remember picture, overlay]
+        \fill[accentColor, rounded corners=3pt] (0,0) rectangle (2.2cm,0.7cm);
+        \node[text=bgColor, font=\bfseries] at (1.1cm,0.35cm) {NODE.JS};
+        \fill[secondaryColor] (2.35cm,0.1cm) rectangle (2.40cm,0.6cm);
+        \node[text=primaryColor, font=\bfseries, anchor=west] at (2.35cm,0.35cm) {STREAMS};
+    \end{tikzpicture}
+}
+
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.2pt}
+\renewcommand{\footruleskip}{1cm}
+
+\fancyfoot[C]{
+    \vspace*{0.1cm}
+    \noindent
+    \begin{minipage}{\textwidth}
+        \begin{flushleft}
+            % Foto de perfil
+            \raisebox{0.7cm}{
+            \begin{tikzpicture}[baseline]
+                \path[fill=bgColor] (0,0) circle (0.6cm);
+                \clip (0,0) circle (0.6cm);
+                \node at (0,0) {
+                    \includegraphics[width=1.2cm,height=1.2cm]{slides/profile-image.jpeg}
+                };
+            \end{tikzpicture}
+            }
+            % Información de perfil
+            \begin{minipage}[b]{0.5\textwidth}
+                {\large\bfseries\color{primaryColor}Alejandro Sánchez Yalí}
+                \par\vspace{1pt}
+                {\small\color{secondaryColor}Software Developer | AI \& Blockchain Enthusiast}
+                \par\vspace{1pt}
+                {\small\color{accentColor}\faGlobe\hspace{5pt}\color{secondaryColor}www.asanchezyali.com}
+            \end{minipage}
+        \end{flushleft}
+        \vspace{6pt}
+    \end{minipage}
+}
+
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \renewcommand{\headrulewidth}{0pt}
+    \renewcommand{\footrulewidth}{0pt}
+}
+
+\renewcommand{\labelitemi}{\textcolor{accentColor}{$\bullet$}}
+\renewcommand{\labelitemii}{\textcolor{secondaryColor}{$\circ$}}
+
+\usepackage{relsize}
+\AtBeginDocument{\relsize{1}}
+
+\newcommand{\languagetag}[1]{
+    \begin{tikzpicture}[baseline]
+        \node[fill=accentColor, text=bgColor, rounded corners=5pt, inner sep=7pt] {
+            {\normalsize\textbf{#1}}
+        };
+    \end{tikzpicture}
+}
+
+\newcommand{\BackgroundPic}{%
+    \put(0,0){%
+        \begin{tikzpicture}[remember picture, overlay]
+            % Coloca la imagen de fondo que cubra toda la página
+            \node[inner sep=0pt] at (current page.center) {
+                \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio=false]{slides/Intense Focus at Gaming Event.jpeg}
+            };
+            
+            % Agrega una capa semitransparente oscura sobre la imagen
+            % Puedes ajustar el color y la opacidad según necesites
+            \fill[black, opacity=0.7] (current page.south west) rectangle (current page.north east);
+            
+            % Si quieres un degradado oscuro en lugar de un color sólido, usa esto:
+            % \shade[top color=black!80, bottom color=black!40, opacity=0.7] 
+            %    (current page.south west) rectangle (current page.north east);
+        \end{tikzpicture}%
+    }%
+}
+
+% Comando para QR elegante (para la página de título)
+\newcommand{\elegantqr}[2]{
+    \qrcode[height=2.5cm]{#1}
+    \\[0.1cm]
+    {\hspace{0.2cm}\color{primaryColor}\small #2\par}
+}
+
+\newcommand{\titlepagecontents}{%
+    \AddToShipoutPicture*{\BackgroundPic}
+    \vspace*{2cm}
+    \begin{flushleft}
+    \languagetag{JavaScript}\\[0.4cm] % Use JS tag
+    {\fontsize{38}{52}\bfseries\color{primaryColor}Understanding \color{accentColor}JavaScript\\\color{accentColor}Promises\par}
+    \vspace{0.3cm}
+    {\fontsize{18}{52}\color{secondaryColor}Handling Asynchronous Operations Like a Pro \\ Part 1/3\par}
+    \vspace{0.3cm}
+    {\color{secondaryColor}\today\par}
+    \vspace{1.8cm}
+    \elegantqr{https://github.com/asanchezyali/social-media-posts/tree/main/JavaScript/Promises}{Source Code}
+    \end{flushleft}
+}
+
+\newcommand{\finalpagecontents}{%
+    \AddToShipoutPicture*{\BackgroundPic}
+    \vspace*{3cm}
+    % Left-aligned elements with EXACT same structure as title page
+    \begin{flushleft}
+    \languagetag{Feedback}\\[0.4cm]
+    {\fontsize{46}{52}\bfseries\color{primaryColor}Found this \color{accentColor}helpful?\par}
+    \vspace{0.3cm}
+    {\fontsize{18}{52}\color{secondaryColor}Save, comment and share\par}  
+    \vspace{0.3cm}
+    {\color{secondaryColor}\today\par}
+    \end{flushleft}
+}
+
+\begin{document}
+\setlength{\parindent}{0pt}
+\begin{titlepage}
+    \titlepagecontents
+\end{titlepage}
+
+\section{What's the Deal with Promises?}
+
+Asynchronous operations are fundamental in modern JavaScript, enabling tasks like fetching data, reading files, or handling user interactions without blocking the main thread. However, managing the flow and potential errors of these operations can be complex. This is where \textbf{\textcolor{accentColor}{Promises}} provide a robust solution.
+
+\subsection{Why Promises?}
+
+Consider an operation that takes time to complete, such as requesting data from an API. A synchronous approach would halt script execution until the data arrives, leading to unresponsive applications. Promises offer a way to handle such asynchronous tasks effectively.
+
+They act as placeholders for a future value, representing the eventual result of an asynchronous operation. Instead of blocking, the operation is initiated, and the promise object is returned immediately. This allows the rest of the script to continue running.
+
+Promises improve upon older asynchronous patterns like callbacks by providing:
+
+\begin{itemize}
+    \item A clearer, more manageable structure for handling results or errors.
+    \item Better composability for chaining multiple asynchronous operations.
+    \item A standardized way to manage asynchronous flow, reducing complexity (often referred to as "callback hell").
+\end{itemize}
+
+A Promise exists in one of three states:
+\begin{itemize}
+    \item \textbf{\textcolor{codeKeywordColor}{Pending:}} The initial state; the asynchronous operation has not yet completed.
+    \item \textbf{\textcolor{codeCommentColor}{Fulfilled (Resolved):}} The operation completed successfully, and the promise holds the resulting value.
+    \item \textbf{\textcolor{codeMethodColor}{Rejected:}} The operation failed, and the promise holds the reason (typically an error object).
+\end{itemize}
+
+Once a promise transitions from pending to either fulfilled or rejected, it becomes \textbf{settled}, and its state and value (or reason) become immutable.
+
+\section{Creating Your First Promise}
+
+Let's make a simple promise. We'll simulate an async task using \texttt{\textcolor{accentColor}{setTimeout}}.
+
+\textbf{How to Run:}
+\begin{itemize}
+    \item Save the code below as \verb|01_creating_promise.js|.
+    \item Open your terminal and run: \verb|node 01_creating_promise.js|
+    \item Or, paste the code directly into your browser's developer console.
+\end{itemize}
+\begin{macterminal}
+\begin{lstlisting}
+// --- 01_creating_promise.js ---
+console.log("Creating a promise...");
+
+// A promise takes a function (the 'executor') with two arguments: resolve and reject.
+const myFirstPromise = new Promise((resolve, reject) => {
+  console.log("Executor function started (simulating async work)...");
+  const success = Math.random() > 0.5; // Simulate success or failure randomly
+
+  // Simulate an asynchronous operation (like fetching data) using setTimeout
+  setTimeout(() => {
+    if (success) {
+      const data = { message: "Yay! Data fetched successfully!" };
+      console.log("Async work finished: Resolving the promise.");
+      resolve(data); // If successful, call resolve with the result
+    } else {
+      const error = new Error("Oops! Something went wrong.");
+      console.log("Async work finished: Rejecting the promise.");
+      reject(error); // If failed, call reject with an error
+    }
+  }, 2000); // Simulate a 2-second delay
+});
+
+console.log("Promise created. It's now 'pending'.");
+
+// The mechanism for handling the promise's settlement (resolution or rejection) is explored next.
+\end{lstlisting}
+\end{macterminal}
+
+When you run this:
+\begin{itemize}
+    \item The \textcolor{accentColor}{new Promise(...)} creates the promise.
+    \item The executor function \textcolor{accentColor}{(resolve, reject) => \{\...\}} runs immediately.
+    \item \textcolor{accentColor}{setTimeout} schedules the success/failure logic to run after 2 seconds.
+    \item The code continues, logging "Promise created...". The promise is \textbf{pending}.
+    \item After 2 seconds, \texttt{\textcolor{accentColor}{setTimeout}}'s callback runs, calling either \texttt{\textcolor{accentColor}{resolve}} (making the promise fulfilled) or \texttt{\textcolor{accentColor}{reject}} (making it rejected).
+\end{itemize}
+
+But how do we actually *use* the result or handle the error?
+
+\section{Handling Promises: \textcolor{accentColor}{.then()}, \textcolor{accentColor}{.catch()}, \textcolor{accentColor}{.finally()}}
+
+Okay, we made a promise. Now, how do we react when it settles (fulfills or rejects)? We use special methods attached to the promise:
+
+\begin{itemize}
+    \item \texttt{\textbf{\textcolor{accentColor}{.then(onFulfilled, onRejected)}}}: Attaches callbacks for when the promise is fulfilled (first argument) or rejected (second argument - less common, usually use \texttt{\textcolor{accentColor}{.catch()}}).
+    \item \texttt{\textbf{\textcolor{accentColor}{.catch(onRejected)}}}: Attaches a callback specifically for when the promise is rejected. It's like a \texttt{\textcolor{accentColor}{try...catch}} block for promises.
+    \item \texttt{\textbf{\textcolor{accentColor}{.finally(onFinally)}}}: Attaches a callback that runs \textit{always}, whether the promise was fulfilled or rejected. Great for cleanup tasks (like hiding a loading spinner).
+\end{itemize}
+
+Let's handle the promise we created earlier:
+
+\textbf{How to Run:}
+\begin{itemize}
+    \item Save the code below as \verb|02_then_catch_finally.js|.
+    \item Open your terminal and run: \verb|node 02_then_catch_finally.js|
+    \item Or, paste the code directly into your browser's developer console.
+\end{itemize}
+\begin{macterminal}
+\begin{lstlisting}
+// --- 02_then_catch_finally.js ---
+console.log("Creating a promise...");
+
+const myDataPromise = new Promise((resolve, reject) => {
+  console.log("Executor: Simulating fetching data...");
+  const success = Math.random() > 0.3; // Higher chance of success
+
+  setTimeout(() => {
+    if (success) {
+      const userData = { id: 123, name: "Alex", email: "alex@example.com" };
+      console.log("Executor: Data fetched! Resolving...");
+      resolve(userData);
+    } else {
+      const error = new Error("Network Error: Could not fetch user data.");
+      console.log("Executor: Failed to fetch data. Rejecting...");
+      reject(error);
+    }
+  }, 1500); // Simulate 1.5 seconds delay
+});
+
+console.log("Promise created. Waiting for it to settle...");
+
+// --- Handling the Promise ---
+
+myDataPromise
+  .then((data) => {
+    // Runs ONLY if resolved
+    console.log("\n.then() block executed:");
+    console.log("Received data:", data);
+    console.log(`Welcome, ${data.name}!`);
+    return data.id; // Can pass data to the next .then()
+  })
+  .catch((error) => {
+    // Runs ONLY if rejected
+    console.error("\n.catch() block executed:");
+    console.error("An error occurred:", error.message);
+  })
+  .finally(() => {
+    // Runs ALWAYS
+    console.log("\n.finally() block executed:");
+    console.log("Promise settled. Cleanup time!");
+  });
+
+console.log("\nPromise handler attached. Code continues...");
+\end{lstlisting}
+\end{macterminal}
+
+Key takeaways:
+\begin{itemize}
+    \item Handlers (\texttt{\textcolor{accentColor}{.then}}, \texttt{\textcolor{accentColor}{.catch}}, \texttt{\textcolor{accentColor}{.finally}}) are attached to the promise object to react to its settlement.
+    \item These handlers execute asynchronously when the promise settles, not immediately upon attachment.
+    \item \texttt{\textcolor{accentColor}{.then()}} receives the resolved value as its argument.
+    \item \texttt{\textcolor{accentColor}{.catch()}} receives the rejection reason (usually an Error object) as its argument.
+    \item \texttt{\textcolor{accentColor}{.finally()}} receives no arguments and executes regardless of the outcome.
+\end{itemize}
+
+This forms the foundation of promise-based asynchronous programming. Their true power becomes more apparent when chaining multiple operations, which will be covered subsequently.
+
+\section{Conclusiones sobre Promesas JavaScript}
+
+En esta primera parte de nuestra exploración sobre Promesas en JavaScript, hemos aprendido:
+
+\begin{itemize}
+    \item \textbf{\textcolor{accentColor}{Fundamentos:}} Las promesas son objetos que representan el resultado eventual de una operación asincrónica, permitiendo un código más limpio y estructurado que los callbacks tradicionales.
+    
+    \item \textbf{\textcolor{accentColor}{Estados:}} Una promesa puede estar en uno de tres estados: pendiente, cumplida o rechazada. Una vez que una promesa se establece (cumplida o rechazada), su estado y valor se vuelven inmutables.
+    
+    \item \textbf{\textcolor{accentColor}{Manejo de resultados:}} Los métodos \texttt{\textcolor{accentColor}{.then()}}, \texttt{\textcolor{accentColor}{.catch()}} y \texttt{\textcolor{accentColor}{.finally()}} proporcionan una interfaz clara para manejar tanto los resultados exitosos como los errores de operaciones asincrónicas.
+    
+    \item \textbf{\textcolor{accentColor}{Asincronía organizada:}} Las promesas mantienen el código legible incluso cuando trabajamos con operaciones que no se completan inmediatamente, facilitando la gestión del flujo de ejecución asincrónico.
+\end{itemize}
+
+Las promesas son fundamentales en el desarrollo JavaScript moderno y forman la base para características más avanzadas como \texttt{\textcolor{accentColor}{async/await}}. En la segunda parte, exploraremos el encadenamiento de promesas, métodos como \texttt{\textcolor{accentColor}{Promise.all()}} y \texttt{\textcolor{accentColor}{Promise.race()}}, y patrones avanzados que desbloquean todo el potencial de la programación asincrónica en JavaScript.
+
+\section{References}
+
+\begin{itemize}
+    \item MDN Web Docs. (2025). \textit{Using promises}. \href{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises}{Link}
+    
+    \item MDN Web Docs. (2025). \textit{Promise}. \href{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise}{Link}
+    
+    \item ECMA International. (2026). \textit{ECMAScript 2026 Language Specification: Promise Objects}. \href{https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-promise-objects}{Link}
+    
+    \item javascript.info. (2025). \textit{Promise}. \href{https://javascript.info/promise-basics}{Link}
+    
+    \item Parker, D. (2015). \textit{JavaScript with Promises: Managing Asynchronous Code}. O'Reilly Media.
+
+    \item This article was translated, edited and written in collaboration with AI. If you find any inconsistencies or have suggestions for improvement, please don't hesitate to open an issue in our GitHub repository at \href{https://github.com/asanchezyali/social-media-posts}{github} or reach out directly.
+\end{itemize}
+
+\section{Explore My Other Posts}
+\vspace{10pt}
+\begin{tikzpicture}
+  % Section background - increased height slightly to ensure all content fits
+  \fill[color=terminalBg, rounded corners=5pt] (0,0) rectangle (\textwidth,-5);
+  
+  % Calculate width available for text (total width minus QR code width minus margins)
+  \pgfmathsetmacro{\availableWidth}{\textwidth-4cm}
+  
+  % Left column content
+  \begin{scope}
+    % Section title
+    \node[text=accentColor, font=\Large\bfseries, anchor=north west] at (0.5cm,-0.5cm) {Enjoyed This Content?};
+    
+    % Subtitle
+    \node[text=primaryColor, font=\normalsize, anchor=north west] at (0.5cm,-1.2cm) {Don't miss my previous post about:};
+    
+    % Node.js Streams Part 1 title - with highlighted style and limited width
+    \node[text=secondaryColor, font=\large\bfseries, anchor=north west, text width=\availableWidth] at (0.5cm,-1.9cm) {\color{accentColor}Node.js Streams: \color{primaryColor}Part 2: Types \& Advanced Operations};
+    
+    % Brief description of the post - with limited width and adjusted position
+    \node[text=jsSecondary, font=\normalsize, text width=\availableWidth, anchor=north west] at (0.5cm,-3.1cm) {
+      Learn the fundamentals of Node.js Streams and discover how they can dramatically reduce memory usage when processing large files.
+    };
+  \end{scope}
+  
+  % QR Code on the right - vertically centered
+  \node[anchor=center] at ({\textwidth-1.5cm}, {-2.5cm}) {
+    \qrcode[height=2.2cm]{https://www.linkedin.com/feed/update/urn:li:activity:7312444909154623489/}
+  };
+  
+\end{tikzpicture}
+\vspace{5pt}
+
+\clearpage
+\thispagestyle{empty}
+\finalpagecontents
+
+\end{document}
