@@ -262,24 +262,19 @@
     {\hspace{0.2cm}\color{primaryColor}\small #2\par}
 }
 
-% Definir el título personalizado con alineación exacta para todos los elementos
-\newcommand{\titlepagecontents}{%
+\newcommand{\finalpagecontents}{%
     \AddToShipoutPicture*{\BackgroundPic}
     \vspace*{3cm}
-    % Asegurar que todos los elementos estén alineados a la izquierda
+    % Left-aligned elements with EXACT same structure as title page
     \begin{flushleft}
-    \languagetag{Python}\\[0.4cm]
-    {\fontsize{48}{52}\bfseries\color{primaryColor}Python \color{accentColor}Generators\par}
+    \languagetag{Feedback}\\[0.4cm]
+    {\fontsize{46}{52}\bfseries\color{primaryColor}Found this \color{accentColor}helpful?\par}
     \vspace{0.3cm}
-    {\fontsize{18}{52}\color{secondaryColor}Elegant, Memory-Efficient Iterations A Powerful Python Feature\par}
+    {\fontsize{18}{52}\color{secondaryColor}Save, comment and share\par}  
     \vspace{0.3cm}
     {\color{secondaryColor}\today\par}
-    \vspace{2cm}
-    % El QR se alineará a la izquierda aunque internamente esté centrado
-    \elegantqr{https://github.com/asanchezyali/social-media-posts/tree/main/Python/Generators}{Source Code}
     \end{flushleft}
 }
-
 
 % En la página del título, aplicar el contenido sin márgenes adicionales
 \makeatletter
