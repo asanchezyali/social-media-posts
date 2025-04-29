@@ -190,7 +190,7 @@
                 \clip (0,0) circle (0.8cm);
                 \node at (0,0) {
                     % Placeholder for profile image
-                    \includegraphics[width=1.6cm,height=1.6cm]{slides/profile-image.jpeg}
+                    \includegraphics[width=1.6cm,height=1.6cm]{../../Images/profile-image.jpeg}
                 };
             \end{tikzpicture}
             }
@@ -241,16 +241,11 @@
         \begin{tikzpicture}[remember picture, overlay]
             % Coloca la imagen de fondo que cubra toda la página
             \node[inner sep=0pt] at (current page.center) {
-                \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio=false]{slides/Coding in Cyberpunk Style.jpeg}
+                \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio=false]{../../Images/Coding in Cyberpunk Style.jpeg}
             };
             
             % Agrega una capa semitransparente oscura sobre la imagen
-            % Puedes ajustar el color y la opacidad según necesites
             \fill[black, opacity=0.7] (current page.south west) rectangle (current page.north east);
-            
-            % Si quieres un degradado oscuro en lugar de un color sólido, usa esto:
-            % \shade[top color=black!80, bottom color=black!40, opacity=0.7] 
-            %    (current page.south west) rectangle (current page.north east);
         \end{tikzpicture}%
     }%
 }
@@ -262,49 +257,35 @@
     {\hspace{0.2cm}\color{primaryColor}\small #2\par}
 }
 
-\newcommand{\finalpagecontents}{%
+\makeatother
+
+\newcommand{\titlepagecontents}{%
+    \thispagestyle{empty}
     \AddToShipoutPicture*{\BackgroundPic}
     \vspace*{3cm}
-    % Left-aligned elements with EXACT same structure as title page
+    % Left-aligned elements
     \begin{flushleft}
-    \languagetag{Feedback}\\[0.4cm]
-    {\fontsize{46}{52}\bfseries\color{primaryColor}Found this \color{accentColor}helpful?\par}
+    \languagetag{Python}\\[0.4cm]
+    {\fontsize{46}{52}\bfseries\color{primaryColor}Python \color{accentColor}Generators\par}
     \vspace{0.3cm}
-    {\fontsize{18}{52}\color{secondaryColor}Save, comment and share\par}  
+    {\fontsize{18}{52}\color{secondaryColor}Efficient Iteration and Memory Management\par}  
     \vspace{0.3cm}
     {\color{secondaryColor}\today\par}
     \end{flushleft}
 }
 
-% En la página del título, aplicar el contenido sin márgenes adicionales
-\makeatletter
-\renewcommand{\maketitle}{%
-    \begin{titlepage}
-    \setlength{\parindent}{0pt}
-    \setlength{\leftskip}{0pt}
-    \titlepagecontents
-    \end{titlepage}
-}
-\makeatother
-
-% También necesitamos corregir la definición para la página final
 \newcommand{\finalpagecontents}{%
-    \vspace*{4cm}
+    \thispagestyle{empty}
+    \AddToShipoutPicture*{\BackgroundPic}
+    \vspace*{3cm}
     \begin{center}
-        \begin{tikzpicture}
-            % Title text
-            \node[text width=14cm, align=center] at (0,0) {
-                {\fontsize{48}{52}\bfseries\color{primaryColor}Generators: \color{accentColor}The Future of Iteration\par}
-            };
-            
-            % Add vertical space
-            \node at (0,-2) {};
-            
-            % Question text
-            \node[text width=14cm, align=center] at (0,-4) {
-                {\fontsize{22}{26}\color{secondaryColor}How will you optimize your code with generators?\par}
-            };
-        \end{tikzpicture}
+        {\fontsize{36}{42}\bfseries\color{primaryColor}Thank You!\par}
+        \vspace{1cm}
+        {\fontsize{18}{24}\color{secondaryColor}For reading this article\par}
+        \vspace{0.5cm}
+        {\color{secondaryColor}\today\par}
+        \vspace{2cm}
+        \elegantqr{https://github.com/asanchezyali/ai-reasoning-frameworks}{Scan for more content}
     \end{center}
 }
 
@@ -313,7 +294,6 @@
 % Eliminamos el redundante \color{primaryColor} aquí
 
 \begin{titlepage}
-    % Eliminamos todos los espacios adicionales para asegurar la alineación
     \titlepagecontents
 \end{titlepage}
 

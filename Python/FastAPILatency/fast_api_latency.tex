@@ -194,7 +194,7 @@
                 \clip (0,0) circle (0.8cm);
                 \node at (0,0) {
                     % Placeholder for profile image
-                    \includegraphics[width=1.6cm,height=1.6cm]{slides/profile-image.jpeg}
+                    \includegraphics[width=1.6cm,height=1.6cm]{../../Images/profile-image.jpeg}
                 };
             \end{tikzpicture}
             }
@@ -239,25 +239,20 @@
     \end{tikzpicture}
 }
 
+% Luego, define un comando para colocar la imagen de fondo en la primera página
 \newcommand{\BackgroundPic}{%
     \put(0,0){%
         \begin{tikzpicture}[remember picture, overlay]
             % Coloca la imagen de fondo que cubra toda la página
             \node[inner sep=0pt] at (current page.center) {
-                \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio=false]{slides/Futuristic Cybersecurity Analyst.jpeg}
+                \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio=false]{../../Images/Futuristic Cybersecurity Analyst.jpeg}
             };
             
             % Agrega una capa semitransparente oscura sobre la imagen
-            % Puedes ajustar el color y la opacidad según necesites
             \fill[black, opacity=0.7] (current page.south west) rectangle (current page.north east);
-            
-            % Si quieres un degradado oscuro en lugar de un color sólido, usa esto:
-            % \shade[top color=black!80, bottom color=black!40, opacity=0.7] 
-            %    (current page.south west) rectangle (current page.north east);
         \end{tikzpicture}%
     }%
 }
-
 
 % Alternativa usando una versión modificada de la URL
 \newcommand{\elegantqr}[2]{
@@ -267,17 +262,20 @@
 }
 
 % Definir el título personalizado con alineación exacta para todos los elementos
-\newcommand{\finalpagecontents}{%
+\newcommand{\titlepagecontents}{%
     \AddToShipoutPicture*{\BackgroundPic}
-    \vspace*{3cm}
-    % Left-aligned elements with EXACT same structure as title page
+    \vspace*{2cm}
+    % Asegurar que todos los elementos estén alineados a la izquierda
     \begin{flushleft}
-    \languagetag{Feedback}\\[0.4cm]
-    {\fontsize{46}{52}\bfseries\color{primaryColor}Found this \color{accentColor}helpful?\par}
+    \languagetag{Python}\\[0.4cm]
+    {\fontsize{48}{52}\bfseries\color{primaryColor}FastAPI \color{accentColor}Latency\par}
     \vspace{0.3cm}
-    {\fontsize{18}{52}\color{secondaryColor}Save, comment and share\par}  
+    {\fontsize{18}{52}\color{secondaryColor}Understanding and Optimizing Response Times\par}
     \vspace{0.3cm}
     {\color{secondaryColor}\today\par}
+    \vspace{2cm}
+    % El QR se alineará a la izquierda aunque internamente esté centrado
+    \elegantqr{https://github.com/asanchezyali/social-media-posts/tree/main/Python/FastAPILatency}{Source Code}
     \end{flushleft}
 }
 
@@ -292,30 +290,26 @@
 }
 \makeatother
 
-% También necesitamos corregir la definición para la página final
 \newcommand{\finalpagecontents}{%
-    \vspace*{4cm}
-    \begin{center}
-        \begin{tikzpicture}
-            % Title text
-            \node[text width=14cm, align=center] at (0,0) {
-                {\fontsize{48}{52}\bfseries\color{primaryColor}Ready to \color{accentColor}Optimize\\\color{primaryColor}Your APIs?\par}
-            };
-            
-            % Add vertical space
-            \node at (0,-2) {};
-            
-            % Question text
-            \node[text width=14cm, align=center] at (0,-4) {
-                {\fontsize{22}{26}\color{secondaryColor}You've learned how to measure and analyze response times.\\\vspace{0.5cm}Try implementing percentile monitoring in your next project\\\vspace{0.5cm}and watch your applications deliver a better experience for all users!\par}
-            };
-        \end{tikzpicture}
-    \end{center}
+    \AddToShipoutPicture*{\BackgroundPic}
+    \vspace*{3cm}
+    % Left-aligned elements with EXACT same structure as title page
+    \begin{flushleft}
+    \languagetag{Feedback}\\[0.4cm]
+    {\fontsize{46}{52}\bfseries\color{primaryColor}Found this \color{accentColor}helpful?\par}
+    \vspace{0.3cm}
+    {\fontsize{18}{52}\color{secondaryColor}Save, comment and share\par}  
+    \vspace{0.3cm}
+    {\color{secondaryColor}\today\par}
+    \end{flushleft}
 }
 
 \begin{document}
 \setlength{\parindent}{0pt}
+\color{primaryColor} % Explicitly set text color to white for the entire document
+
 \begin{titlepage}
+    % Eliminamos todos los espacios adicionales para asegurar la alineación
     \titlepagecontents
 \end{titlepage}
 
@@ -634,7 +628,7 @@ python load_tester.py
 The agent will generate a file called \verb|latency_results.png| with visualizations of the results, and will also print a summary to the console.
 
 {\centering
-\includegraphics[width=0.85\textwidth]{slides/latency_results.png}\par
+\includegraphics[width=0.85\textwidth]{../../Images/latency_results.png}\par
 }
 
 \section{Analyzing the Results}
@@ -708,10 +702,10 @@ Modern applications must be designed with these principles to provide consistent
 \section{References}
 
 \begin{itemize}
-    \item Sentry. (2024). \textit{What’s the difference between API Latency and API Response Time?}. \href{https://blog.sentry.io/whats-the-difference-between-api-latency-and-api-response-time/#:~:text=API%20latency%20is%20the%20time,request%20and%20return%20the%20result.}{Link}
+    \item Sentry. (2024). \textit{What's the difference between API Latency and API Response Time?}. \href{https://blog.sentry.io/whats-the-difference-between-api-latency-and-api-response-time/#:~:text=API%20latency%20is%20the%20time,request%20and%20return%20the%20result.}{Link}
     \item Catchpoint. \textit{API Performance Monitoring—Key Metrics and Best Practices}. \href{https://www.catchpoint.com/api-monitoring-tools/api-performance-monitoring}{Link}
     \item FastAPI Documentation. \textit{Benchmarks}. \href{https://fastapi.tiangolo.com/benchmarks/}{Link}
-    \item DeCandia, G., et al. (2007). \textit{Dynamo: Amazon’s Highly Available Key-value Store}. ACM SIGOPS Operating Systems Review, 41(6), 205-220.
+    \item DeCandia, G., et al. (2007). \textit{Dynamo: Amazon's Highly Available Key-value Store}. ACM SIGOPS Operating Systems Review, 41(6), 205-220.
     \item Kleppmann, M. (2017). \textit{Designing Data-Intensive Applications: The Big Ideas Behind Reliable, Scalable, and Maintainable Systems}. O'Reilly Media, Inc.
     \item This article was translated, edited and written in collaboration with AI. If you find any inconsistencies or have suggestions for improvement, please don't hesitate to open an issue in our GitHub repository at \href{https://github.com/asanchezyali/social-media-posts}{github} or reach out directly.
 \end{itemize}

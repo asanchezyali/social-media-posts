@@ -20,6 +20,7 @@
 \usepackage{mdframed}
 \usepackage{qrcode} % Añadir paquete para generar códigos QR
 \usetikzlibrary{calc,shapes,positioning}
+\usepackage{eso-pic}
 
 \AtBeginDocument{\color{primaryColor}}
 
@@ -168,7 +169,7 @@
                 \path[fill=bgColor] (0,0) circle (0.6cm);
                 \clip (0,0) circle (0.6cm);
                 \node at (0,0) {
-                    \includegraphics[width=1.2cm,height=1.2cm]{profile-image.jpeg}
+                    \includegraphics[width=1.2cm,height=1.2cm]{../../Images/profile-image.jpeg}
                 };
             \end{tikzpicture}
             }
@@ -212,7 +213,22 @@
     {\hspace{0.2cm}\color{primaryColor}\small #2\par}
 }
 
+\newcommand{\BackgroundPic}{%
+    \put(0,0){%
+        \begin{tikzpicture}[remember picture, overlay]
+            % Place the background image covering the entire page
+            \node[inner sep=0pt] at (current page.center) {
+                \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio=false]{../../Images/Intense Focus at Gaming Event.jpeg}
+            };
+            
+            % Add a semi-transparent dark layer over the image
+            \fill[black, opacity=0.7] (current page.south west) rectangle (current page.north east);
+        \end{tikzpicture}%
+    }%
+}
+
 \newcommand{\titlepagecontents}{%
+    \AddToShipoutPicture*{\BackgroundPic}
     \vspace*{3cm}
     % Asegurar que todos los elementos estén alineados a la izquierda
     \begin{flushleft}

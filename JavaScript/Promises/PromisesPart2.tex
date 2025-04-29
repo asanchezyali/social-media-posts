@@ -18,7 +18,7 @@
 \usepackage{setspace}
 \usepackage{hyperref}
 \usepackage{mdframed}
-\usepackage{qrcode} % Add package to generate QR codes
+\usepackage{qrcode} % Añadir paquete para generar códigos QR
 \usetikzlibrary{calc,shapes,positioning}
 \usepackage{eso-pic}
 
@@ -35,14 +35,14 @@
 \definecolor{lineNumberColor}{RGB}{100, 100, 100}  % Line number color
 \definecolor{dividerColor}{RGB}{120, 130, 150}  % Brighter divider color for better visibility
 
-% Colors for code 
-\definecolor{codeTextColor}{RGB}{255, 255, 255}  % Pure white for basic text
-\definecolor{codeKeywordColor}{RGB}{97, 175, 239}  % Light blue for keywords
-\definecolor{codeCommentColor}{RGB}{121, 192, 120}  % Green for comments
-\definecolor{codeStringColor}{RGB}{255, 220, 60}  % Brighter JS yellow for strings
-\definecolor{codeMethodColor}{RGB}{255, 160, 122}  % Light orange for methods
-\definecolor{codeFunctionColor}{RGB}{230, 180, 80}  % Yellow-gold tone for functions
-\definecolor{codeNumberColor}{RGB}{180, 230, 180}  % Light green for numbers
+% Colores para código
+\definecolor{codeTextColor}{RGB}{255, 255, 255}  % Blanco puro para el texto básico
+\definecolor{codeKeywordColor}{RGB}{97, 175, 239}  % Azul claro para palabras clave
+\definecolor{codeCommentColor}{RGB}{121, 192, 120}  % Verde para comentarios
+\definecolor{codeStringColor}{RGB}{255, 220, 60}  % Amarillo JS más brillante para strings
+\definecolor{codeMethodColor}{RGB}{255, 160, 122}  % Naranja claro para métodos
+\definecolor{codeFunctionColor}{RGB}{230, 180, 80}  % Tono amarillo-dorado para funciones
+\definecolor{codeNumberColor}{RGB}{180, 230, 180}  % Verde claro para números
 
 \pagecolor{bgColor}
 
@@ -53,9 +53,9 @@
     urlcolor=accentColor,
 }
 
-% Define JavaScript language for listings
+% Definir lenguaje JavaScript para listings
 \lstdefinelanguage{JavaScript}{
-  keywords={break, case, catch, continue, debugger, default, delete, do, else, false, finally, for, function, if, in, instanceof, new, null, return, switch, this, throw, true, try, typeof, var, void, while, with, let, const, class, export, import, yield, async, await},
+  keywords={break, case, catch, continue, debugger, default, delete, do, else, false, finally, for, function, if, in, instanceof, new, null, return, switch, this, throw, true, try, typeof, var, void, while, with, let, const, class, export, import, yield, async, await, Promise, resolve, reject, then, catch, finally, all, race, allSettled, any}, % Added Promise keywords
   sensitive=true,
   comment=[l]{//},
   morecomment=[s]{/*}{*/},
@@ -63,7 +63,7 @@
   morestring=[b]"
 }
 
-% Configuration for listings with JavaScript as the default language
+% Configuración para listings con JavaScript como lenguaje predeterminado
 \lstset{
   language=JavaScript,
   basicstyle=\ttfamily\bfseries\color{codeTextColor},
@@ -87,7 +87,7 @@
   keepspaces=true,
   columns=flexible,
   lineskip=2pt,
-  emph={[2]require,createReadStream,createWriteStream,pipe,on,once,createGzip,pipeline,Transform,Readable,Writable,Duplex},
+  emph={[2]require,createReadStream,createWriteStream,pipe,on,once,createGzip,pipeline,Transform,Readable,Writable,Duplex, setTimeout, console, Error, Math, JSON}, % Added common JS built-ins
   emphstyle={[2]\color{codeFunctionColor}}
 }
 
@@ -169,7 +169,7 @@
                 \path[fill=bgColor] (0,0) circle (0.6cm);
                 \clip (0,0) circle (0.6cm);
                 \node at (0,0) {
-                    \includegraphics[width=1.2cm,height=1.2cm]{slides/profile-image.jpeg}
+                    \includegraphics[width=1.2cm,height=1.2cm]{../../Images/profile-image.jpeg}
                 };
             \end{tikzpicture}
             }
@@ -211,7 +211,7 @@
         \begin{tikzpicture}[remember picture, overlay]
             % Place the background image covering the entire page
             \node[inner sep=0pt] at (current page.center) {
-                \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio=false]{slides/Intense Focus at Gaming Event.jpeg}
+                \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio=false]{../../Images/Intense Focus at Gaming Event.jpeg}
             };
             
             % Add a semi-transparent dark layer over the image
@@ -311,7 +311,7 @@ function getUserProfile(userId) {
         id: userId,
         name: 'Alejandro',
         role: 'Developer',
-        city: 'Medellín'
+        city: 'Medellin'
       });
     }, 1000);
   });
@@ -668,14 +668,14 @@ function loadImageFromCDN(cdnName, reliability = 1.0) {
       const success = Math.random() <= reliability;
       
       if (success) {
-        console.log(`✅ ${cdnName}: Image loaded successfully`);
+        console.log(`[SUCCESS] ${cdnName}: Image loaded successfully`);
         resolve({
           cdn: cdnName,
           url: `https://${cdnName.toLowerCase()}.example.com/image.jpg`,
           loadTime: Math.floor(Date.now() - startTime) + 'ms'
         });
       } else {
-        console.log(`❌ ${cdnName}: Error loading image`);
+        console.log(`[ERROR] ${cdnName}: Error loading image`);
         reject(new Error(`Error loading from ${cdnName}`));
       }
     }, 1000 + Math.random() * 2000); // 1-3 seconds
@@ -692,14 +692,14 @@ Promise.any([
   loadImageFromCDN('BackupCDN', 0.9)    // 90% reliability
 ])
   .then(result => {
-    console.log(`\n📸 Image loaded successfully!`);
+    console.log(`\n[IMAGE] Image loaded successfully!`);
     console.log(`Source: ${result.cdn}`);
     console.log(`URL: ${result.url}`);
     console.log(`Load time: ${result.loadTime}`);
   })
   .catch(error => {
     // AggregateError is a new type that groups all errors when all promises fail
-    console.error('\n❌ No CDN could load the image');
+    console.error('\n[ERROR] No CDN could load the image');
     console.error(`Errors found: ${error.errors.length}`);
     error.errors.forEach((err, i) => {
       console.error(`  ${i + 1}. ${err.message}`);

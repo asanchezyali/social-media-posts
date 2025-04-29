@@ -18,7 +18,8 @@
 \usepackage{setspace}
 \usepackage{hyperref}
 \usepackage{mdframed}
-\usepackage{qrcode} % Added QR code package
+\usepackage{qrcode}
+\usepackage{eso-pic}
 \usetikzlibrary{calc,shapes,positioning}
 
 \AtBeginDocument{\color{primaryColor}}
@@ -155,14 +156,6 @@
 
 \renewcommand{\headrulewidth}{0pt}
 
-\renewcommand{\footrule}{
-  \vspace{0.5cm}
-  \noindent\makebox[\linewidth]{\color{dividerColor}\rule{\linewidth}{0.2pt}}
-  \vspace{0.5cm}
-}
-\renewcommand{\footrulewidth}{0.2pt}
-\renewcommand{\footruleskip}{1cm}
-
 \fancyfoot[C]{
     \vspace*{0.1cm}
     \noindent
@@ -173,7 +166,7 @@
                 \path[fill=bgColor] (0,0) circle (0.6cm);
                 \clip (0,0) circle (0.6cm);
                 \node at (0,0) {
-                    \includegraphics[width=1.2cm,height=1.2cm]{profile-image.jpeg}
+                    \includegraphics[width=1.2cm,height=1.2cm]{../../Images/profile-image.jpeg}
                 };
             \end{tikzpicture}
             }
@@ -209,9 +202,24 @@
     \end{tikzpicture}
 }
 
+% Background image setup
+\newcommand{\BackgroundPic}{%
+    \put(0,0){%
+        \begin{tikzpicture}[remember picture, overlay]
+            % Coloca la imagen de fondo que cubra toda la página
+            \node[inner sep=0pt] at (current page.center) {
+                \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio=false]{../../Images/Glowing Neon Abstract.jpeg}
+            };
+            
+            % Agrega una capa semitransparente oscura sobre la imagen
+            \fill[black, opacity=0.7] (current page.south west) rectangle (current page.north east);
+        \end{tikzpicture}%
+    }%
+}
+
 \newcommand{\titlepagecontents}{%
+    \AddToShipoutPicture*{\BackgroundPic}
     \vspace*{2cm}
-    % Formatted similar to the Python generators document
     \begin{flushleft}
     \noindent\languagetag{Artificial Intelligence}\\[0.4cm]
     \noindent{\fontsize{48}{52}\bfseries\color{primaryColor}Reasoning \color{accentColor}Frameworks\par}
@@ -220,7 +228,6 @@
     \vspace{0.3cm}
     \noindent{\color{secondaryColor}\today\par}
     \vspace{2cm}
-    % Added QR code
     \elegantqr{https://github.com/asanchezyali/ai-reasoning-frameworks}{Source Code}
     \end{flushleft}
 }
@@ -228,7 +235,6 @@
 \newcommand{\finalpagecontents}{%
     \AddToShipoutPicture*{\BackgroundPic}
     \vspace*{3cm}
-    % Left-aligned elements with EXACT same structure as title page
     \begin{flushleft}
     \languagetag{Feedback}\\[0.4cm]
     {\fontsize{46}{52}\bfseries\color{primaryColor}Found this \color{accentColor}helpful?\par}
@@ -240,6 +246,7 @@
 }
 
 \begin{document}
+\setlength{\parindent}{0pt}
 \color{primaryColor}
 
 \begin{titlepage}

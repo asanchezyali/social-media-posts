@@ -191,7 +191,7 @@
                 \clip (0,0) circle (0.8cm);
                 \node at (0,0) {
                     % Placeholder for profile image
-                    \includegraphics[width=1.6cm,height=1.6cm]{slides/profile-image.jpeg}
+                    \includegraphics[width=1.6cm,height=1.6cm]{Images/profile-image.jpeg}
                 };
             \end{tikzpicture}
             }
@@ -243,7 +243,7 @@
         \begin{tikzpicture}[remember picture, overlay]
             % Coloca la imagen de fondo que cubra toda la página
             \node[inner sep=0pt] at (current page.center) {
-                \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio=false]{slides/Coder_at_Night_in_the_City.jpeg}
+                \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio=false]{Images/Coder_at_Night_in_the_City.jpeg}
             };
             
             % Agrega una capa semitransparente oscura sobre la imagen
@@ -266,20 +266,22 @@
 }
 
 % Definir el título personalizado con alineación exacta para todos los elementos
-\newcommand{\finalpagecontents}{%
+\newcommand{\titlepagecontents}{%
     \AddToShipoutPicture*{\BackgroundPic}
-    \vspace*{3cm}
-    % Left-aligned elements with EXACT same structure as title page
+    \vspace*{2cm}
+    % Asegurar que todos los elementos estén alineados a la izquierda
     \begin{flushleft}
-    \languagetag{Feedback}\\[0.4cm]
-    {\fontsize{46}{52}\bfseries\color{primaryColor}Found this \color{accentColor}helpful?\par}
+    \languagetag{Python}\\[0.4cm]
+    {\fontsize{48}{52}\bfseries\color{primaryColor}Python \color{accentColor}Concurrency\par}
     \vspace{0.3cm}
-    {\fontsize{18}{52}\color{secondaryColor}Save, comment and share\par}  
+    {\fontsize{18}{52}\color{secondaryColor}Part 2: Asyncio and HTTP Operations\par}
     \vspace{0.3cm}
     {\color{secondaryColor}\today\par}
+    \vspace{2cm}
+    % El QR se alineará a la izquierda aunque internamente esté centrado
+    \elegantqr{https://github.com/asanchezyali/social-media-posts/tree/main/Python/Concurrency}{Source Code}
     \end{flushleft}
 }
-
 
 % En la página del título, aplicar el contenido sin márgenes adicionales
 \makeatletter
@@ -293,26 +295,17 @@
 \makeatother
 
 \newcommand{\finalpagecontents}{%
-    \vspace*{4cm}
-    \begin{center}
-        \begin{tikzpicture}
-            % Title text
-            \node[text width=14cm, align=center] at (0,0) {
-                {\fontsize{48}{52}\bfseries\color{primaryColor}Don't miss\\\color{accentColor}Part 3\par}
-            };
-            
-            % Add vertical space
-            \node at (0,-3) {};
-            
-            % Question text
-            \node[text width=14cm, align=center] at (0,-5) {
-                {\fontsize{24}{30}\color{secondaryColor}In the final part of our series, we'll explore\\\vspace{0.5cm}
-                \color{accentColor}advanced patterns and hybrid approaches\\\vspace{0.4cm}
-                \color{primaryColor}to take your Python concurrency skills to the next level!\par}
-                
-            };
-        \end{tikzpicture}
-    \end{center}
+    \AddToShipoutPicture*{\BackgroundPic}
+    \vspace*{3cm}
+    % Left-aligned elements with EXACT same structure as title page
+    \begin{flushleft}
+    \languagetag{Feedback}\\[0.4cm]
+    {\fontsize{46}{52}\bfseries\color{primaryColor}Found this \color{accentColor}helpful?\par}
+    \vspace{0.3cm}
+    {\fontsize{18}{52}\color{secondaryColor}Save, comment and share\par}  
+    \vspace{0.3cm}
+    {\color{secondaryColor}\today\par}
+    \end{flushleft}
 }
 
 \begin{document}

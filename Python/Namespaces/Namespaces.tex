@@ -193,7 +193,7 @@
                 \clip (0,0) circle (0.8cm);
                 \node at (0,0) {
                     % Placeholder for profile image
-                    \includegraphics[width=1.6cm,height=1.6cm]{slides/profile-image.jpeg}
+                    \includegraphics[width=1.6cm,height=1.6cm]{../../Images/profile-image.jpeg}
                 };
             \end{tikzpicture}
             }
@@ -243,16 +243,11 @@
         \begin{tikzpicture}[remember picture, overlay]
             % Coloca la imagen de fondo que cubra toda la página
             \node[inner sep=0pt] at (current page.center) {
-                \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio=false]{slides/python-code-bg.jpeg}
+                \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio=false]{../../Images/Coding in Cyberpunk Style.jpeg}
             };
             
             % Agrega una capa semitransparente oscura sobre la imagen
-            % Puedes ajustar el color y la opacidad según necesites
             \fill[black, opacity=0.7] (current page.south west) rectangle (current page.north east);
-            
-            % Si quieres un degradado oscuro en lugar de un color sólido, usa esto:
-            % \shade[top color=black!80, bottom color=black!40, opacity=0.7] 
-            %    (current page.south west) rectangle (current page.north east);
         \end{tikzpicture}%
     }%
 }
@@ -502,7 +497,7 @@ import datetime as dt
 
 print("Module namespaces:")
 print(f"math.pi = {math.pi}")
-print(f"sin(30°) = {math.sin(math.radians(30))}")
+print(f"sin(30$^\circ$) = {math.sin(math.radians(30))}")
 
 print(f"\nrandom.random() = {random.random()}")
 print(f"random choice from list = {random.choice(['apple', 'banana', 'cherry'])}")

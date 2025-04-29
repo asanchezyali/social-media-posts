@@ -24,6 +24,7 @@
 \usepackage{hyperref}
 \usepackage{mdframed} % Para marcos más estables
 \usepackage{qrcode} % Paquete para generar códigos QR
+\usepackage{eso-pic} % For background image
 
 % Cargar tikz y la biblioteca de cajitas para mdframed
 \usetikzlibrary{calc,shapes,positioning}
@@ -176,14 +177,6 @@
 % Línea de encabezado
 \renewcommand{\headrulewidth}{0pt}
 
-% Línea divisoria más sutil
-\renewcommand{\footrule}{
-  \vspace{0.5cm}
-  \noindent\makebox[\linewidth]{\color{dividerColor}\rule{\linewidth}{0.2pt}}
-  \vspace{0.5cm}
-}
-\renewcommand{\footrulewidth}{0.2pt}
-\renewcommand{\footruleskip}{1cm}
 
 % Configure footer with profile info
 \fancyfoot[C]{
@@ -198,7 +191,7 @@
                 \clip (0,0) circle (0.8cm);
                 \node at (0,0) {
                     % Placeholder for profile image
-                    \includegraphics[width=1.6cm,height=1.6cm]{profile-image.jpeg}
+                    \includegraphics[width=1.6cm,height=1.6cm]{../../Images/profile-image.jpeg}
                 };
             \end{tikzpicture}
             }
@@ -250,40 +243,38 @@
     {\hspace{0.2cm}\color{primaryColor}\small #2\par}
 }
 
-% Definir el título personalizado con alineación exacta para todos los elementos
+% Background image setup
+\newcommand{\BackgroundPic}{%
+    \put(0,0){%
+        \begin{tikzpicture}[remember picture, overlay]
+            % Place the background image to cover the whole page
+            \node[inner sep=0pt] at (current page.center) {
+                \includegraphics[width=\paperwidth,height=\paperheight]{../../Images/Glowing Neon Abstract.jpeg}
+            };
+            % Add a semi-transparent dark overlay
+            \fill[black, opacity=0.7] (current page.south west) rectangle (current page.north east);
+        \end{tikzpicture}%
+    }%
+}
+
 \newcommand{\titlepagecontents}{%
-    \vspace*{3cm}
-    % Asegurar que todos los elementos estén alineados a la izquierda
+    \AddToShipoutPicture*{\BackgroundPic}
+    \vspace*{2cm}
     \begin{flushleft}
-    \languagetag{Python}\\[0.4cm]
-    {\fontsize{48}{52}\bfseries\color{primaryColor}Python \color{accentColor}Context\\\color{accentColor}Managers\par}
+    \noindent\languagetag{Python}\\[0.4cm]
+    \noindent{\fontsize{48}{52}\bfseries\color{primaryColor}Context \color{accentColor}Managers\par}
     \vspace{0.3cm}
-    {\fontsize{18}{52}\color{secondaryColor}Elegant Resource Management with the «{\color{accentColor}with}» Statement\par}
+    \noindent{\fontsize{18}{52}\color{secondaryColor}Efficient Resource Management in Python\par}
     \vspace{0.3cm}
-    {\color{secondaryColor}\today\par}
+    \noindent{\color{secondaryColor}\today\par}
     \vspace{2cm}
-    % El QR se alineará a la izquierda aunque internamente esté centrado
     \elegantqr{https://github.com/asanchezyali/social-media-posts/tree/main/Python/ContextManagers}{Source Code}
     \end{flushleft}
 }
 
-
-% En la página del título, aplicar el contenido sin márgenes adicionales
-\makeatletter
-\renewcommand{\maketitle}{%
-    \begin{titlepage}
-    \setlength{\parindent}{0pt}
-    \setlength{\leftskip}{0pt}
-    \titlepagecontents
-    \end{titlepage}
-}
-\makeatother
-
-% También necesitamos corregir la definición para la página final
 \newcommand{\finalpagecontents}{%
     \AddToShipoutPicture*{\BackgroundPic}
     \vspace*{3cm}
-    % Left-aligned elements with EXACT same structure as title page
     \begin{flushleft}
     \languagetag{Feedback}\\[0.4cm]
     {\fontsize{46}{52}\bfseries\color{primaryColor}Found this \color{accentColor}helpful?\par}

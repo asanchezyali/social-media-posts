@@ -24,6 +24,7 @@
 \usepackage{hyperref}
 \usepackage{mdframed} % Para marcos más estables
 \usepackage{qrcode} % Paquete para generar códigos QR
+\usepackage{eso-pic} % For background image
 
 % Cargar tikz y la biblioteca de cajitas para mdframed
 \usetikzlibrary{calc,shapes,positioning}
@@ -198,7 +199,7 @@
                 \clip (0,0) circle (0.8cm);
                 \node at (0,0) {
                     % Placeholder for profile image
-                    \includegraphics[width=1.6cm,height=1.6cm]{profile-image.jpeg}
+                    \includegraphics[width=1.6cm,height=1.6cm]{../../Images/profile-image.jpeg}
                 };
             \end{tikzpicture}
             }
@@ -250,40 +251,38 @@
     {\hspace{0.2cm}\color{primaryColor}\small #2\par}
 }
 
-% Definir el título personalizado con alineación exacta para todos los elementos
+% Background image setup
+\newcommand{\BackgroundPic}{%
+    \put(0,0){%
+        \begin{tikzpicture}[remember picture, overlay]
+            % Place the background image to cover the whole page
+            \node[inner sep=0pt] at (current page.center) {
+                \includegraphics[width=\paperwidth,height=\paperheight]{../../Images/Glowing Neon Abstract.jpeg}
+            };
+            % Add a semi-transparent dark overlay
+            \fill[black, opacity=0.7] (current page.south west) rectangle (current page.north east);
+        \end{tikzpicture}%
+    }%
+}
+
 \newcommand{\titlepagecontents}{%
-    \vspace*{3cm}
-    % Asegurar que todos los elementos estén alineados a la izquierda
+    \AddToShipoutPicture*{\BackgroundPic}
+    \vspace*{2cm}
     \begin{flushleft}
-    \languagetag{Python}\\[0.4cm]
-    {\fontsize{48}{52}\bfseries\color{primaryColor}Python \color{accentColor}Decorators\par}
+    \noindent\languagetag{Python}\\[0.4cm]
+    \noindent{\fontsize{48}{52}\bfseries\color{primaryColor}Python \color{accentColor}Decorators\par}
     \vspace{0.3cm}
-    {\fontsize{18}{52}\color{secondaryColor}Enhancing Functions with Elegant Metaprogramming\par}
+    \noindent{\fontsize{18}{52}\color{secondaryColor}Enhancing Functions with Elegant Wrappers\par}
     \vspace{0.3cm}
-    {\color{secondaryColor}\today\par}
+    \noindent{\color{secondaryColor}\today\par}
     \vspace{2cm}
-    % El QR se alineará a la izquierda aunque internamente esté centrado
     \elegantqr{https://github.com/asanchezyali/social-media-posts/tree/main/Python/Decorators}{Source Code}
     \end{flushleft}
 }
 
-
-% En la página del título, aplicar el contenido sin márgenes adicionales
-\makeatletter
-\renewcommand{\maketitle}{%
-    \begin{titlepage}
-    \setlength{\parindent}{0pt}
-    \setlength{\leftskip}{0pt}
-    \titlepagecontents
-    \end{titlepage}
-}
-\makeatother
-
-% También necesitamos corregir la definición para la página final
 \newcommand{\finalpagecontents}{%
     \AddToShipoutPicture*{\BackgroundPic}
     \vspace*{3cm}
-    % Left-aligned elements with EXACT same structure as title page
     \begin{flushleft}
     \languagetag{Feedback}\\[0.4cm]
     {\fontsize{46}{52}\bfseries\color{primaryColor}Found this \color{accentColor}helpful?\par}
@@ -305,7 +304,9 @@
 
 \section{Introduction to Python Decorators}
 
-Python decorators are a powerful feature that allow developers to modify or enhance functions and classes without changing their core implementation. In essence, decorators are a design pattern that lets you "wrap" one function with another function to extend its behavior.
+Python decorators are a powerful feature that allow developers to modify or enhance functions and classes without
+changing their core implementation. In essence, decorators are a design pattern that lets you "wrap" one function with
+another function to extend its behavior.
 
 \subsection{What Are Decorators?}
 
