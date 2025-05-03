@@ -18,7 +18,7 @@
 \usepackage{setspace}
 \usepackage{hyperref}
 \usepackage{mdframed}
-\usepackage{qrcode} % Añadir paquete para generar códigos QR
+\usepackage{qrcode} % Add package to generate QR codes
 \usetikzlibrary{calc,shapes,positioning}
 \usepackage{eso-pic}
 
@@ -35,14 +35,14 @@
 \definecolor{lineNumberColor}{RGB}{100, 100, 100}  % Line number color
 \definecolor{dividerColor}{RGB}{120, 130, 150}  % Brighter divider color for better visibility
 
-% Colores para código 
-\definecolor{codeTextColor}{RGB}{255, 255, 255}  % Blanco puro para el texto básico
-\definecolor{codeKeywordColor}{RGB}{97, 175, 239}  % Azul claro para palabras clave
-\definecolor{codeCommentColor}{RGB}{121, 192, 120}  % Verde para comentarios
-\definecolor{codeStringColor}{RGB}{255, 220, 60}  % Amarillo JS más brillante para strings
-\definecolor{codeMethodColor}{RGB}{255, 160, 122}  % Naranja claro para métodos
-\definecolor{codeFunctionColor}{RGB}{230, 180, 80}  % Tono amarillo-dorado para funciones
-\definecolor{codeNumberColor}{RGB}{180, 230, 180}  % Verde claro para números
+% Colors for code
+\definecolor{codeTextColor}{RGB}{255, 255, 255}  % Pure white for basic text
+\definecolor{codeKeywordColor}{RGB}{97, 175, 239}  % Light blue for keywords
+\definecolor{codeCommentColor}{RGB}{121, 192, 120}  % Green for comments
+\definecolor{codeStringColor}{RGB}{255, 220, 60}  % Brighter JS yellow for strings
+\definecolor{codeMethodColor}{RGB}{255, 160, 122}  % Light orange for methods
+\definecolor{codeFunctionColor}{RGB}{230, 180, 80}  % Yellow-gold tone for functions
+\definecolor{codeNumberColor}{RGB}{180, 230, 180}  % Light green for numbers
 
 \pagecolor{bgColor}
 
@@ -53,7 +53,7 @@
     urlcolor=accentColor,
 }
 
-% Definir lenguaje JavaScript para listings
+% Define JavaScript language for listings
 \lstdefinelanguage{JavaScript}{
   keywords={break, case, catch, continue, debugger, default, delete, do, else, false, finally, for, function, if, in, instanceof, new, null, return, switch, this, throw, true, try, typeof, var, void, while, with, let, const, class, export, import, yield, async, await},
   sensitive=true,
@@ -63,7 +63,7 @@
   morestring=[b]"
 }
 
-% Configuración para listings con JavaScript como lenguaje predeterminado
+% Configuration for listings with JavaScript as the default language
 \lstset{
   language=JavaScript,
   basicstyle=\ttfamily\bfseries\color{codeTextColor},
@@ -163,7 +163,7 @@
     \noindent
     \begin{minipage}{\textwidth}
         \begin{flushleft}
-            % Foto de perfil
+            % Profile photo
             \raisebox{0.7cm}{
             \begin{tikzpicture}[baseline]
                 \path[fill=bgColor] (0,0) circle (0.6cm);
@@ -173,7 +173,7 @@
                 };
             \end{tikzpicture}
             }
-            % Información de perfil
+            % Profile information
             \begin{minipage}[b]{0.5\textwidth}
                 {\large\bfseries\color{primaryColor}Alejandro Sánchez Yalí}
                 \par\vspace{1pt}
@@ -209,23 +209,23 @@
 \newcommand{\BackgroundPic}{%
     \put(0,0){%
         \begin{tikzpicture}[remember picture, overlay]
-            % Coloca la imagen de fondo que cubra toda la página
+            % Place the background image covering the entire page
             \node[inner sep=0pt] at (current page.center) {
                 \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio=false]{../../Images/Intense Focus at Gaming Event.jpeg}
             };
             
-            % Agrega una capa semitransparente oscura sobre la imagen
-            % Puedes ajustar el color y la opacidad según necesites
+            % Add a semi-transparent dark layer over the image
+            % You can adjust the color and opacity as needed
             \fill[black, opacity=0.7] (current page.south west) rectangle (current page.north east);
             
-            % Si quieres un degradado oscuro en lugar de un color sólido, usa esto:
+            % If you want a dark gradient instead of a solid color, use this:
             % \shade[top color=black!80, bottom color=black!40, opacity=0.7] 
             %    (current page.south west) rectangle (current page.north east);
         \end{tikzpicture}%
     }%
 }
 
-% Comando para QR elegante (para la página de título)
+% Command for elegant QR (for the title page)
 \newcommand{\elegantqr}[2]{
     \qrcode[height=2.5cm]{#1}
     \\[0.1cm]
@@ -423,21 +423,21 @@ Key takeaways:
 
 This forms the foundation of promise-based asynchronous programming. Their true power becomes more apparent when chaining multiple operations, which will be covered subsequently.
 
-\section{Conclusiones sobre Promesas JavaScript}
+\section{Conclusions about JavaScript Promises}
 
-En esta primera parte de nuestra exploración sobre Promesas en JavaScript, hemos aprendido:
+In this first part of our exploration of Promises in JavaScript, we have learned:
 
 \begin{itemize}
-    \item \textbf{\textcolor{accentColor}{Fundamentos:}} Las promesas son objetos que representan el resultado eventual de una operación asincrónica, permitiendo un código más limpio y estructurado que los callbacks tradicionales.
+    \item \textbf{\textcolor{accentColor}{Fundamentals:}} Promises are objects that represent the eventual result of an asynchronous operation, allowing for cleaner and more structured code than traditional callbacks.
     
-    \item \textbf{\textcolor{accentColor}{Estados:}} Una promesa puede estar en uno de tres estados: pendiente, cumplida o rechazada. Una vez que una promesa se establece (cumplida o rechazada), su estado y valor se vuelven inmutables.
+    \item \textbf{\textcolor{accentColor}{States:}} A promise can be in one of three states: pending, fulfilled, or rejected. Once a promise is settled (fulfilled or rejected), its state and value become immutable.
     
-    \item \textbf{\textcolor{accentColor}{Manejo de resultados:}} Los métodos \texttt{\textcolor{accentColor}{.then()}}, \texttt{\textcolor{accentColor}{.catch()}} y \texttt{\textcolor{accentColor}{.finally()}} proporcionan una interfaz clara para manejar tanto los resultados exitosos como los errores de operaciones asincrónicas.
+    \item \textbf{\textcolor{accentColor}{Result Handling:}} The \texttt{\textcolor{accentColor}{.then()}}, \texttt{\textcolor{accentColor}{.catch()}} and \texttt{\textcolor{accentColor}{.finally()}} methods provide a clear interface for handling both successful results and errors from asynchronous operations.
     
-    \item \textbf{\textcolor{accentColor}{Asincronía organizada:}} Las promesas mantienen el código legible incluso cuando trabajamos con operaciones que no se completan inmediatamente, facilitando la gestión del flujo de ejecución asincrónico.
+    \item \textbf{\textcolor{accentColor}{Organized Asynchrony:}} Promises keep code readable even when working with operations that don't complete immediately, making it easier to manage asynchronous execution flow.
 \end{itemize}
 
-Las promesas son fundamentales en el desarrollo JavaScript moderno y forman la base para características más avanzadas como \texttt{\textcolor{accentColor}{async/await}}. En la segunda parte, exploraremos el encadenamiento de promesas, métodos como \texttt{\textcolor{accentColor}{Promise.all()}} y \texttt{\textcolor{accentColor}{Promise.race()}}, y patrones avanzados que desbloquean todo el potencial de la programación asincrónica en JavaScript.
+Promises are fundamental to modern JavaScript development and form the foundation for more advanced features like \texttt{\textcolor{accentColor}{async/await}}. In part two, we'll explore promise chaining, methods like \texttt{\textcolor{accentColor}{Promise.all()}} and \texttt{\textcolor{accentColor}{Promise.race()}}, and advanced patterns that unlock the full potential of asynchronous programming in JavaScript.
 
 \section{References}
 

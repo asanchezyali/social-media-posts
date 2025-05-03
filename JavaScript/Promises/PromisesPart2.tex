@@ -18,7 +18,7 @@
 \usepackage{setspace}
 \usepackage{hyperref}
 \usepackage{mdframed}
-\usepackage{qrcode} % Añadir paquete para generar códigos QR
+\usepackage{qrcode} % Add package to generate QR codes
 \usetikzlibrary{calc,shapes,positioning}
 \usepackage{eso-pic}
 
@@ -35,14 +35,14 @@
 \definecolor{lineNumberColor}{RGB}{100, 100, 100}  % Line number color
 \definecolor{dividerColor}{RGB}{120, 130, 150}  % Brighter divider color for better visibility
 
-% Colores para código
-\definecolor{codeTextColor}{RGB}{255, 255, 255}  % Blanco puro para el texto básico
-\definecolor{codeKeywordColor}{RGB}{97, 175, 239}  % Azul claro para palabras clave
-\definecolor{codeCommentColor}{RGB}{121, 192, 120}  % Verde para comentarios
-\definecolor{codeStringColor}{RGB}{255, 220, 60}  % Amarillo JS más brillante para strings
-\definecolor{codeMethodColor}{RGB}{255, 160, 122}  % Naranja claro para métodos
-\definecolor{codeFunctionColor}{RGB}{230, 180, 80}  % Tono amarillo-dorado para funciones
-\definecolor{codeNumberColor}{RGB}{180, 230, 180}  % Verde claro para números
+% Colors for code
+\definecolor{codeTextColor}{RGB}{255, 255, 255}  % Pure white for basic text
+\definecolor{codeKeywordColor}{RGB}{97, 175, 239}  % Light blue for keywords
+\definecolor{codeCommentColor}{RGB}{121, 192, 120}  % Green for comments
+\definecolor{codeStringColor}{RGB}{255, 220, 60}  % Brighter JS yellow for strings
+\definecolor{codeMethodColor}{RGB}{255, 160, 122}  % Light orange for methods
+\definecolor{codeFunctionColor}{RGB}{230, 180, 80}  % Yellow-gold tone for functions
+\definecolor{codeNumberColor}{RGB}{180, 230, 180}  % Light green for numbers
 
 \pagecolor{bgColor}
 
@@ -53,9 +53,9 @@
     urlcolor=accentColor,
 }
 
-% Definir lenguaje JavaScript para listings
+% Define JavaScript language for listings
 \lstdefinelanguage{JavaScript}{
-  keywords={break, case, catch, continue, debugger, default, delete, do, else, false, finally, for, function, if, in, instanceof, new, null, return, switch, this, throw, true, try, typeof, var, void, while, with, let, const, class, export, import, yield, async, await, Promise, resolve, reject, then, catch, finally, all, race, allSettled, any}, % Added Promise keywords
+  keywords={break, case, catch, continue, debugger, default, delete, do, else, false, finally, for, function, if, in, instanceof, new, null, return, switch, this, throw, true, try, typeof, var, void, while, with, let, const, class, export, import, yield, async, await, Promise, resolve, reject, then, catch, finally, all, race, allSettled, any},
   sensitive=true,
   comment=[l]{//},
   morecomment=[s]{/*}{*/},
@@ -63,7 +63,7 @@
   morestring=[b]"
 }
 
-% Configuración para listings con JavaScript como lenguaje predeterminado
+% Configuration for listings with JavaScript as default language
 \lstset{
   language=JavaScript,
   basicstyle=\ttfamily\bfseries\color{codeTextColor},
@@ -745,13 +745,13 @@ In the next part, we'll explore how promises integrate with modern \texttt{\text
     
     \item MDN Web Docs. (2025). \textit{Promise methods}. \href{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise#Static_methods}{Link}
     
-    \item ECMA International. (2026). \textit{ECMAScript 2026 Language Specification: Promise Objects}. \href{https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-promise-objects}{Link}
+    \item ECMA International. (2025). \textit{ECMAScript 2026 Language Specification: Promise Objects}. \href{https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-promise-objects}{Link}
     
     \item Archibald, J. (2023). \textit{JavaScript Promises: An Introduction}. Google Developers. \href{https://web.dev/articles/promises}{Link}
     
     \item Simpson, K. (2023). \textit{You Don't Know JS Yet: Async \& Performance (2nd Edition)}. O'Reilly Media.
 
-    \item This article was translated, edited, and written in collaboration with AI. If you find any inconsistencies or have suggestions for improvement, please don't hesitate to open an issue in our GitHub repository at \href{https://github.com/asanchezyali/social-media-posts}{github} or reach out directly.
+    \item This article was translated, edited, and written in collaboration with AI. If you find any inconsistencies or have suggestions for improvement, please don't hesitate to open an issue in our \href{https://github.com/asanchezyali/social-media-posts}{GitHub} repository or reach out directly.
 \end{itemize}
 
 \section{Explore My Other Posts}
@@ -772,7 +772,8 @@ In the next part, we'll explore how promises integrate with modern \texttt{\text
     \node[text=primaryColor, font=\normalsize, anchor=north west] at (0.5cm,-1.2cm) {Don't miss my previous post about:};
     
     % Node.js Streams Part 1 title - with highlighted style and limited width
-    \node[text=secondaryColor, font=\large\bfseries, anchor=north west, text width=\availableWidth] at (0.5cm,-1.9cm) {\color{accentColor}JavaScript Promises: \color{primaryColor}Part 1: Fundamentals};
+\node[text=secondaryColor, font=\large\bfseries, anchor=north west, text width=\availableWidth] at (0.5cm,-1.9cm)
+{\color{accentColor}Understanding JavaScript Promises: \color{primaryColor} Part 1/3};
     
     % Brief description of the post - with limited width and adjusted position
     \node[text=jsSecondary, font=\normalsize, text width=\availableWidth, anchor=north west] at (0.5cm,-3.1cm) {

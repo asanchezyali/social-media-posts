@@ -1,3 +1,4 @@
+# --- 01_basic_namespaces.py ---
 """
 Basic Namespaces in Python
 
@@ -18,23 +19,24 @@ print("\nGlobal namespace example:")
 print(f"x = {x}, type: {type(x)}, id: {id(x)}")
 print(f"y = {y}, type: {type(y)}, id: {id(y)}")
 
-# Local namespace in a function
+# Local namespace in a function with proper global variable handling
 def example_function():
+    # Declare x as global before using it
+    global x
     z = 20  # Local variable
     print("\nLocal namespace inside function:")
     print(f"z = {z}, type: {type(z)}, id: {id(z)}")
     
-    # We can access global variables from inside a function
+    # Now we can safely access and modify the global x
     print(f"x from global namespace: {x}")
-    
-    # But if we create a local variable with the same name,
-    # it shadows the global variable
-    x = 30  # This creates a new local variable
-    print(f"Local x = {x}, type: {type(x)}, id: {id(x)}")
+    x = 30  # This modifies the global x
+    print(f"Modified global x: {x}")
 
 # Call the function
+print("\nBefore function call:")
+print(f"Global x is: {x}")
+
 example_function()
 
-# x in the global namespace is not affected
 print("\nAfter function call:")
-print(f"Global x is still: {x}")
+print(f"Global x is now: {x}")  # Will show the modified value

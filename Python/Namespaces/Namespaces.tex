@@ -1,65 +1,55 @@
 \documentclass[12pt,letterpaper]{article}
 \usepackage[utf8]{inputenc}
-
-% Ajustamos los márgenes para corregir las advertencias de fancyhdr
-\usepackage[letterpaper, margin=1in, bottom=3in, top=2.2in]{geometry}
-
-% Cargamos primero el paquete fancyhdr
+\usepackage[letterpaper, margin=1in, bottom=2.5in, top=2.2in]{geometry}
 \usepackage{fancyhdr}
-% Corregimos los parámetros headheight y footskip
-\setlength{\headheight}{15pt} % Al menos 14.49998pt según la advertencia
-\setlength{\footskip}{72pt}   % Al menos 71.60547pt según la advertencia
+\setlength{\headheight}{15pt}
+\setlength{\footskip}{72pt}
 
 \usepackage{xcolor}
 \usepackage{amsmath}
 \usepackage{anyfontsize}
 \usepackage{graphicx}
-\usepackage{tikz} % Necesario para los elementos gráficos
-\usepackage{listings} % Para resaltado de sintaxis
+\usepackage{tikz}
+\usepackage{listings}
 \usepackage{sourcesanspro}
 \renewcommand{\familydefault}{\sfdefault}
 \usepackage{fontawesome5}
 \usepackage{titlesec}
 \usepackage{setspace}
 \usepackage{hyperref}
-\usepackage{mdframed} % Para marcos más estables
-\usepackage{qrcode} % Paquete para generar códigos QR
-\usepackage{eso-pic}
-\usepackage{float}
-
-\floatplacement{figure}{H}
-
-% Cargar tikz y la biblioteca de cajitas para mdframed
+\usepackage{mdframed}
+\usepackage{qrcode}
 \usetikzlibrary{calc,shapes,positioning}
+\usepackage{eso-pic}
 
-% IMPORTANT: Force the text color to be white for the entire document
+% Command for inline code highlighting
+\newcommand{\code}[1]{\texttt{\textcolor{accentColor}{#1}}}
+
 \AtBeginDocument{\color{primaryColor}}
 
-% Colors updated with better contrast
-\definecolor{myblue}{cmyk}{1.0,0.8,0.05,0.20}
-\definecolor{bgColor}{RGB}{15, 22, 36}  % Very dark blue, almost black background
-\definecolor{primaryColor}{RGB}{255, 255, 255}  % White text - full white for better contrast
-\definecolor{accentColor}{RGB}{255, 212, 59}  % Python Yellow
-\definecolor{pythonBlue}{RGB}{120, 180, 255}  % Azul Python más claro para mejor contraste
-\definecolor{secondaryColor}{RGB}{220, 230, 240}  % Lighter blue-gray for better contrast
-\definecolor{terminalBg}{RGB}{22, 22, 22}  % Terminal background remains dark
-\definecolor{terminalFrame}{RGB}{40, 40, 40}  % Terminal frame slightly darker
-\definecolor{lineNumberColor}{RGB}{100, 100, 100}  % Color más sutil para los números de línea
-\definecolor{dividerColor}{RGB}{60, 70, 90}  % Color más sutil para la línea divisoria
+% Colors for Python theme
+\definecolor{bgColor}{RGB}{13, 17, 23}  % Dark background
+\definecolor{primaryColor}{RGB}{255, 255, 255}  % White text
+\definecolor{accentColor}{RGB}{68, 171, 255}  % Python blue for main accent
+\definecolor{accentColor2}{RGB}{200, 160, 35}  % Mustard yellow for highlighting concepts
+\definecolor{pythonSecondary}{RGB}{180, 180, 180}  % Light gray
+\definecolor{secondaryColor}{RGB}{230, 235, 240}  % Almost white gray
+\definecolor{terminalBg}{RGB}{22, 22, 22}  % Terminal background
+\definecolor{terminalFrame}{RGB}{40, 40, 40}  % Terminal frame
+\definecolor{lineNumberColor}{RGB}{100, 100, 100}  % Line number color
+\definecolor{dividerColor}{RGB}{120, 130, 150}  % Divider color
 
-% Colores mejorados para el código con mayor contraste
-\definecolor{codeTextColor}{RGB}{255, 255, 255}  % Blanco puro para el texto básico
-\definecolor{codeKeywordColor}{RGB}{135, 206, 250}  % Azul cielo para palabras clave
-\definecolor{codeCommentColor}{RGB}{144, 238, 144}  % Verde claro para comentarios
-\definecolor{codeStringColor}{RGB}{255, 215, 135}  % Amarillo para strings
-\definecolor{codeMethodColor}{RGB}{255, 160, 122}  % Naranja claro para métodos
-\definecolor{codeFunctionColor}{RGB}{255, 215, 0}  % Dorado para funciones
-\definecolor{codeNumberColor}{RGB}{255, 255, 150}  % Amarillo claro para números
+% Code colors
+\definecolor{codeTextColor}{RGB}{255, 255, 255}  % Basic text
+\definecolor{codeKeywordColor}{RGB}{68, 171, 255}  % Keywords in Python blue
+\definecolor{codeCommentColor}{RGB}{98, 150, 85}  % Comments 
+\definecolor{codeStringColor}{RGB}{200, 160, 35}  % Strings in mustard yellow
+\definecolor{codeClassColor}{RGB}{78, 201, 176}  % Classes
+\definecolor{codeFunctionColor}{RGB}{200, 160, 35}  % Functions in mustard yellow
+\definecolor{codeNumberColor}{RGB}{181, 206, 168}  % Numbers
 
-% Set page background color
 \pagecolor{bgColor}
 
-% Hyperref configuration
 \hypersetup{
     colorlinks=true,
     linkcolor=accentColor,
@@ -67,15 +57,24 @@
     urlcolor=accentColor,
 }
 
-% Configuración básica para listings que evita problemas con saltos de página
+% Define Python language for listings
+\lstdefinelanguage{Python}{
+  keywords={and, as, assert, break, class, continue, def, del, elif, else, except, finally, for, from, global, if, import, in, is, lambda, nonlocal, not, or, pass, raise, return, try, while, with, yield, async, await},
+  sensitive=true,
+  comment=[l]{\#},
+  morestring=[b]',
+  morestring=[b]"
+}
+
+% Listings configuration
 \lstset{
   language=Python,
-  basicstyle=\normalsize\ttfamily\bfseries\color{codeTextColor}, % Tamaño reducido, en blanco y negrita
+  basicstyle=\ttfamily\bfseries\color{codeTextColor},
   backgroundcolor=\color{terminalBg},
   commentstyle=\color{codeCommentColor},
   keywordstyle=\color{codeKeywordColor},
   stringstyle=\color{codeStringColor},
-  numberstyle=\color{lineNumberColor}, % Números de línea más sutiles
+  numberstyle=\color{lineNumberColor},
   breaklines=true,
   breakatwhitespace=true,
   tabsize=4,
@@ -83,34 +82,27 @@
   frame=none,
   xleftmargin=15pt,
   xrightmargin=0pt,
-  aboveskip=10pt,
-  belowskip=10pt,
+  aboveskip=5pt,
+  belowskip=5pt,
   numbers=left,
   numbersep=8pt,
   extendedchars=true,
   keepspaces=true,
   columns=flexible,
-  lineskip=6pt, % Espacio entre líneas ligeramente reducido
-  % Keywords de Python (palabras reservadas)
-  morekeywords={self, yield, lambda, with, as, from, True, False, None, import, in, for, 
-                if, elif, else, while, return, def, class, try, except, finally, raise, 
-                break, continue, global, nonlocal, pass, assert, del, yield from},
-  % Funciones incorporadas resaltadas de manera distinta
-  emph={[2]print,range,sum,int,str,float,list,dict,set,tuple,next,len,type,map,filter,
-         reduce,zip,enumerate,sorted,reversed,min,max,open,any,all},
+  lineskip=2pt,
+  emph={[2]print,len,type,id,dict,list,tuple,set,str,int,float,bool,None,True,False},
   emphstyle={[2]\color{codeFunctionColor}}
 }
 
-% TERMINAL ESTILO MAC MEJORADA CON BOTONES A LA IZQUIERDA Y MENOS ESPACIO SUPERIOR
 \newenvironment{macterminal}{%
     \begin{mdframed}[
         linecolor=terminalFrame,
         backgroundcolor=terminalBg,
         roundcorner=5pt,
-        skipabove=10pt,
-        skipbelow=10pt,
+        skipabove=5pt,
+        skipbelow=5pt,
         linewidth=1pt,
-        innertopmargin=10pt, % Reducido
+        innertopmargin=5pt,
         frametitle={%
             \tikz[baseline=(current bounding box.east), outer sep=0pt]{
                 \fill[red!80!black] (0,0) circle (5pt);
@@ -118,181 +110,142 @@
                 \fill[green!70!black] (1.4,0) circle (5pt);
             }
         },
-        frametitlealignment=\raggedright, % Alineado a la izquierda
-        frametitleaboveskip=8pt, % Espacio entre el título y el borde superior
-        frametitlebelowskip=0pt, % Reducir el espacio entre el título y el contenido
+        frametitlealignment=\raggedright,
+        frametitleaboveskip=8pt,
+        frametitlebelowskip=0pt,
     ]
-    % No necesitamos más espacio vertical aquí
 }{%
     \end{mdframed}%
 }
 
-% Utilities
-\newcommand{\verspace}{\vspace{10pt}}
+\newcommand{\verspace}{\vspace{5pt}}
+\newcommand{\languagetag}[1]{
+    \begin{tikzpicture}[baseline]
+        \node[fill=accentColor, text=primaryColor, rounded corners=5pt, inner sep=7pt] {
+            {\normalsize\textbf{#1}}
+        };
+    \end{tikzpicture}
+}
 
-% Section styling - Esquema más elegante y mejorado contraste
+% Title formatting
 \titleformat{\section}
-  {\LARGE\bfseries\color{primaryColor}} % Secciones principales en blanco para mejor contraste y más grandes
+  {\LARGE\bfseries\color{primaryColor}}
   {\thesection. }
   {0pt}
   {}
   []
 
 \titleformat{\subsection}
-  {\Large\bfseries\color{accentColor}} % Subsecciones en amarillo Python y más grandes
+  {\Large\bfseries\color{accentColor}}
   {\thesubsection. }
   {0pt}
   {}
   []
 
 \titleformat{\subsubsection}
-  {\large\bfseries\color{pythonBlue}} % Subsubsecciones en azul Python más claro y más grandes
+  {\large\bfseries\color{accentColor2}}
   {\thesubsubsection. }
   {0pt}
   {}
   []
 
-% Spacing for sections
-\titlespacing*{\section}{0pt}{20pt}{10pt}
-\titlespacing*{\subsection}{0pt}{15pt}{7pt}
-\titlespacing*{\subsubsection}{0pt}{10pt}{5pt}
+\titlespacing*{\section}{0pt}{18pt}{8pt}
+\titlespacing*{\subsection}{0pt}{12pt}{5pt}
+\titlespacing*{\subsubsection}{0pt}{8pt}{3pt}
 
-% Configure header and footer
+% Header and footer setup
 \pagestyle{fancy}
 \fancyhf{}
 
-% Crear un encabezado elegante para todas las páginas (excepto la portada)
 \fancyhead[L]{
     \begin{tikzpicture}[remember picture, overlay]
-        % Rectángulo de fondo para la sección Python
-        \fill[pythonBlue, rounded corners=3pt] (0,0) rectangle (2.2cm,0.7cm);
-        % Texto Python
+        \fill[accentColor, rounded corners=3pt] (0,0) rectangle (2.2cm,0.7cm);
         \node[text=primaryColor, font=\bfseries] at (1.1cm,0.35cm) {PYTHON};
-        
-        % Pequeño separador
-        \fill[secondaryColor] (2.35cm,0.1cm) rectangle (2.40cm,0.6cm);
-        
-        % Texto Namespaces con el color de acento
-        \node[text=accentColor, font=\bfseries, anchor=west] at (2.35cm,0.35cm) {NAMESPACES};
+        \fill[primaryColor] (2.35cm,0.1cm) rectangle (2.40cm,0.6cm);
+        \node[text=primaryColor, font=\bfseries, anchor=west] at (2.35cm,0.35cm) {NAMESPACES};
     \end{tikzpicture}
 }
 
-% Línea de encabezado
 \renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.2pt}
+\renewcommand{\footruleskip}{1cm}
 
-% Configure footer with profile info
 \fancyfoot[C]{
-    \vspace*{0.2cm}
+    \vspace*{0.1cm}
     \noindent
     \begin{minipage}{\textwidth}
         \begin{flushleft}
-            % Profile image placeholder with TikZ
+            % Profile photo
             \raisebox{0.7cm}{
             \begin{tikzpicture}[baseline]
-                \path[fill=bgColor] (0,0) circle (0.8cm);
-                \clip (0,0) circle (0.8cm);
+                \path[fill=bgColor] (0,0) circle (0.6cm);
+                \clip (0,0) circle (0.6cm);
                 \node at (0,0) {
-                    % Placeholder for profile image
-                    \includegraphics[width=1.6cm,height=1.6cm]{../../Images/profile-image.jpeg}
+                    \includegraphics[width=1.2cm,height=1.2cm]{../../Images/profile-image.jpeg}
                 };
             \end{tikzpicture}
             }
-            \begin{minipage}[b]{0.8\textwidth}
-                % Name
+            % Profile information
+            \begin{minipage}[b]{0.5\textwidth}
                 {\large\bfseries\color{primaryColor}Alejandro Sánchez Yalí}
-                
-                % Professional description
                 \par\vspace{1pt}
                 {\small\color{secondaryColor}Software Developer | AI \& Blockchain Enthusiast}
-                
-                % Contact
                 \par\vspace{1pt}
-                {\small\color{accentColor}\faGlobe\hspace{5pt}\color{secondaryColor}www.asanchezyali.com}
+                {\small\color{accentColor2}\faGlobe\hspace{5pt}\color{secondaryColor}www.asanchezyali.com}
             \end{minipage}
         \end{flushleft}
-        \vspace{8pt} % Space at bottom
+        \vspace{6pt}
     \end{minipage}
 }
 
-% Estilo para la portada (sin encabezado ni pie de página)
 \fancypagestyle{plain}{
     \fancyhf{}
     \renewcommand{\headrulewidth}{0pt}
     \renewcommand{\footrulewidth}{0pt}
 }
 
-% Bullet styling for lists
-\renewcommand{\labelitemi}{\textcolor{accentColor}{$\bullet$}} % Primer nivel de viñetas en amarillo (mejor contraste)
-\renewcommand{\labelitemii}{\textcolor{pythonBlue}{$\circ$}} % Segundo nivel de viñetas en azul
+\renewcommand{\labelitemi}{\textcolor{accentColor}{$\bullet$}}
+\renewcommand{\labelitemii}{\textcolor{accentColor2}{$\circ$}}
 
-% Aumentar globalmente el tamaño de texto un 20%
 \usepackage{relsize}
-\AtBeginDocument{\relsize{1}} % Incrementa la fuente en aproximadamente un 20%
-
-% Comando simplificado para la etiqueta Python
-\newcommand{\languagetag}[1]{
-    \begin{tikzpicture}[baseline]
-        \node[fill=pythonBlue, text=primaryColor, rounded corners=5pt, inner sep=7pt] {
-            {\normalsize\textbf{#1}}
-        };
-    \end{tikzpicture}
-}
+\AtBeginDocument{\relsize{1}}
 
 \newcommand{\BackgroundPic}{%
     \put(0,0){%
         \begin{tikzpicture}[remember picture, overlay]
-            % Coloca la imagen de fondo que cubra toda la página
             \node[inner sep=0pt] at (current page.center) {
-                \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio=false]{../../Images/Coding in Cyberpunk Style.jpeg}
+\includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio=false]{../../Images/Arcade Gamer in Action.jpeg}
             };
-            
-            % Agrega una capa semitransparente oscura sobre la imagen
             \fill[black, opacity=0.7] (current page.south west) rectangle (current page.north east);
         \end{tikzpicture}%
     }%
 }
 
-
-% Alternativa usando una versión modificada de la URL
+% Command for elegant QR
 \newcommand{\elegantqr}[2]{
     \qrcode[height=2.5cm]{#1}
     \\[0.1cm]
     {\hspace{0.2cm}\color{primaryColor}\small #2\par}
 }
 
-% Definir el título personalizado con alineación exacta para todos los elementos
 \newcommand{\titlepagecontents}{%
     \AddToShipoutPicture*{\BackgroundPic}
     \vspace*{2cm}
-    % Asegurar que todos los elementos estén alineados a la izquierda
     \begin{flushleft}
     \languagetag{Python}\\[0.4cm]
     {\fontsize{38}{52}\bfseries\color{primaryColor}Understanding \color{accentColor}Python\\\color{accentColor}Namespaces\par}
     \vspace{0.3cm}
-    {\fontsize{18}{52}\color{secondaryColor}How Scope and Variable Resolution Work Under the Hood\par}
+    {\fontsize{18}{52}\color{secondaryColor}A Deep Dive into Python's Name Resolution\par}
     \vspace{0.3cm}
     {\color{secondaryColor}\today\par}
     \vspace{1.8cm}
-    % El QR se alineará a la izquierda aunque internamente esté centrado
     \elegantqr{https://github.com/asanchezyali/social-media-posts/tree/main/Python/Namespaces}{Source Code}
     \end{flushleft}
 }
 
-% En la página del título, aplicar el contenido sin márgenes adicionales
-\makeatletter
-\renewcommand{\maketitle}{%
-    \begin{titlepage}
-    \setlength{\parindent}{0pt}
-    \setlength{\leftskip}{0pt}
-    \titlepagecontents
-    \end{titlepage}
-}
-\makeatother
-
 \newcommand{\finalpagecontents}{%
     \AddToShipoutPicture*{\BackgroundPic}
     \vspace*{3cm}
-    % Left-aligned elements with EXACT same structure as title page
     \begin{flushleft}
     \languagetag{Feedback}\\[0.4cm]
     {\fontsize{46}{52}\bfseries\color{primaryColor}Found this \color{accentColor}helpful?\par}
@@ -309,44 +262,47 @@
     \titlepagecontents
 \end{titlepage}
 
-\section{Introduction to Python Namespaces}
+\section{Understanding Python Namespaces}
 
-In Python, a namespace is a crucial concept that provides the context in which names (such as variables, functions, classes) are stored and retrieved. Namespaces are implemented as dictionaries that map names to objects, allowing Python to organize and access names efficiently. Understanding namespaces is key to writing maintainable Python code, resolving scope issues, and avoiding name collisions.
-
-\subsection{What Are Namespaces?}
-
-A \textbf{\textcolor{accentColor}{namespace}} is a mapping from names to objects. Essentially, it defines which objects can be referred to by which names in a particular context.
+In Python, a namespace is a container that holds a mapping of names to objects. Think of it as a dictionary where variable names are the keys and the objects they refer to are the values. Understanding namespaces is crucial because they:
 
 \begin{itemize}
-    \item Names in Python refer to objects—whether variables, functions, classes, or modules
-    \item Different namespaces can use the same name to refer to different objects
-    \item Namespaces are created at different times and have different lifetimes
-    \item Python uses namespaces to prevent naming conflicts and organize code effectively
+    \item Prevent naming conflicts by organizing names into hierarchical spaces
+    \item Define the scope and lifetime of variables
+    \item Help manage the visibility and accessibility of variables
 \end{itemize}
 
-In real-world terms, namespaces are similar to how we address people by names. Within one family, "Mom" refers to a specific person, while in another family "Mom" refers to a different person. Each family creates its own "namespace" for names like "Mom", "Dad", etc.
+\section{Types of Namespaces}
 
-\subsection{Types of Namespaces in Python}
-
-Python organizes code using several namespaces, each with different scope and lifetime:
+Python has several types of namespaces with different lifetimes:
 
 \begin{itemize}
-    \item \textbf{\textcolor{pythonBlue}{Built-in Namespace:}} Contains built-in functions and exceptions like \texttt{print()}, \texttt{len()}, and \texttt{TypeError}.
-    \item \textbf{\textcolor{pythonBlue}{Global Namespace:}} Created when a module is loaded and lasts until the interpreter terminates.
-    \item \textbf{\textcolor{pythonBlue}{Local Namespace:}} Created when a function is called and deleted when the function returns or raises an exception.
-    \item \textbf{\textcolor{pythonBlue}{Enclosing Namespace:}} Exists in nested functions, where inner functions have access to names in outer functions.
+    \item \textbf{Built-in Namespace:} Contains built-in functions and exceptions
+    \item \textbf{Global Namespace:} Module-level variables and functions
+    \item \textbf{Local Namespace:} Names inside functions
+    \item \textbf{Enclosing Namespace:} Names in outer functions (for nested functions)
 \end{itemize}
 
-\section{Namespace Examples}
-
-Let's explore namespaces through practical examples.
+Let's explore each type with practical examples:
 
 \subsection{Basic Namespace Example}
 
-The following example demonstrates the fundamental concept of different namespaces in Python:
+\textbf{How to Run:}
+\begin{itemize}
+    \item Save the code as \verb|01_basic_namespaces.py|
+    \item Run: \verb|python3 01_basic_namespaces.py|
+\end{itemize}
 
 \begin{macterminal}
 \begin{lstlisting}
+# --- 01_basic_namespaces.py ---
+"""
+Basic Namespaces in Python
+
+This file demonstrates the fundamental concept of namespaces in Python.
+A namespace is a mapping from names to objects.
+"""
+
 # The built-in namespace contains functions like print, len, etc.
 print("Built-in namespace example:")
 print(f"Type of len function: {type(len)}")
@@ -360,426 +316,378 @@ print("\nGlobal namespace example:")
 print(f"x = {x}, type: {type(x)}, id: {id(x)}")
 print(f"y = {y}, type: {type(y)}, id: {id(y)}")
 
-# Local namespace in a function
+# Local namespace in a function with proper global variable handling
 def example_function():
+    # Declare x as global before using it
+    global x
     z = 20  # Local variable
     print("\nLocal namespace inside function:")
     print(f"z = {z}, type: {type(z)}, id: {id(z)}")
     
-    # We can access global variables from inside a function
+    # Now we can safely access and modify the global x
     print(f"x from global namespace: {x}")
-    
-    # But if we create a local variable with the same name,
-    # it shadows the global variable
-    x = 30  # This creates a new local variable
-    print(f"Local x = {x}, type: {type(x)}, id: {id(x)}")
+    x = 30  # This modifies the global x
+    print(f"Modified global x: {x}")
 
 # Call the function
+print("\nBefore function call:")
+print(f"Global x is: {x}")
+
 example_function()
 
-# x in the global namespace is not affected
 print("\nAfter function call:")
-print(f"Global x is still: {x}")
+print(f"Global x is now: {x}")  # Will show the modified value
 \end{lstlisting}
 \end{macterminal}
 
-This example demonstrates three key namespaces:
+Key points about this example:
 \begin{itemize}
-    \item The \textbf{built-in namespace} containing Python's built-in functions
-    \item The \textbf{global namespace} with variables defined at the module level
-    \item A \textbf{local namespace} created when the function is called
+    \item Built-in functions like \texttt{len} live in the built-in namespace
+    \item Variables defined at module level (\code{x} and \code{y}) are in the global namespace
+    \item Variables defined inside functions (\code{z}) are in the local namespace
+    \item The \code{global} keyword allows modifying global variables from inside functions
 \end{itemize}
 
-Notice how the local variable \texttt{x} inside the function is completely separate from the global variable \texttt{x}. Each exists in its own namespace, which is why modifying the local \texttt{x} doesn't affect the global \texttt{x}.
+\subsection{Nested Scopes and the nonlocal Keyword}
 
-\subsection{Name Resolution with LEGB Rule}
+Let's explore how Python handles nested function scopes and the usage of the \texttt{nonlocal} keyword:
 
-Python uses the LEGB rule to determine which object a name refers to:
-
-\begin{macterminal}
-\begin{lstlisting}
-# Global variable
-x = "global x"
-
-def outer_function():
-    # Enclosing variable (from inner_function's perspective)
-    x = "enclosing x"
-    
-    def inner_function():
-        # Local variable
-        x = "local x"
-        print(f"Local x in inner_function: {x}")
-        
-    # Call the inner function
-    inner_function()
-    print(f"Enclosing x in outer_function: {x}")
-
-# Call the outer function
-outer_function()
-print(f"Global x: {x}")
-\end{lstlisting}
-\end{macterminal}
-
-This demonstrates name resolution through:
+\textbf{How to Run:}
 \begin{itemize}
-    \item \textbf{L} - Local: First, Python looks in the local namespace
-    \item \textbf{E} - Enclosing: If not found, it searches in the enclosing function's namespace
-    \item \textbf{G} - Global: If still not found, it searches the global namespace
-    \item \textbf{B} - Built-in: Finally, it looks in the built-in namespace
+    \item Save the code as \verb|02_nested_scopes.py|
+    \item Run: \verb|python3 02_nested_scopes.py|
 \end{itemize}
 
-\section{Modifying Variables in Different Namespaces}
-
-Python provides keywords to modify variables in outer namespaces.
-
-\subsection{Using \texttt{global} to Modify Global Variables}
-
-The \texttt{global} keyword allows functions to modify variables in the global namespace:
-
 \begin{macterminal}
 \begin{lstlisting}
-x = "global x"
+# --- 02_nested_scopes.py ---
+"""
+Nested Scopes and the nonlocal Keyword
 
-# Without global keyword
-def function_one():
-    x = "local x"  # Creates a new local variable
-    print(f"Inside function_one: {x}")
+This file demonstrates how Python handles nested function scopes
+and the usage of the 'nonlocal' keyword for modifying variables
+in outer (but not global) scopes.
+"""
 
-# With global keyword
-def function_two():
-    global x
-    x = "modified global x"  # Modifies the global variable
-    print(f"Inside function_two: {x}")
+def scope_test():
+    def do_local():
+        spam = "local spam"  # Creates a new local variable
 
-print(f"Before function calls: {x}")
-function_one()
-print(f"After function_one: {x}")  # Unchanged
-function_two()
-print(f"After function_two: {x}")  # Changed
-\end{lstlisting}
-\end{macterminal}
+    def do_nonlocal():
+        nonlocal spam        # Refers to spam in scope_test
+        spam = "nonlocal spam"
 
-\subsection{Using \texttt{nonlocal} for Enclosing Variables}
+    def do_global():
+        global spam         # Refers to global spam
+        spam = "global spam"
 
-The \texttt{nonlocal} keyword allows nested functions to modify variables in enclosing functions:
-
-\begin{macterminal}
-\begin{lstlisting}
-def outer():
-    y = "outer y"
+    # Initialize spam in scope_test's scope
+    spam = "test spam"
+    print("Initial value:", spam)
     
-    def inner():
-        nonlocal y  # This allows us to modify the enclosing variable
-        y = "modified by inner()"
-        print(f"Inside inner(): {y}")
+    do_local()
+    print("After local assignment:", spam)
     
-    print(f"Before calling inner(): {y}")
-    inner()
-    print(f"After calling inner(): {y}")  # Changed
+    do_nonlocal()
+    print("After nonlocal assignment:", spam)
+    
+    do_global()
+    print("After global assignment:", spam)
 
-outer()
+print("Starting scope test\n")
+scope_test()
+print("\nIn global scope:", spam)  # Will print the global spam value
 \end{lstlisting}
 \end{macterminal}
 
-\section{Module Namespaces and Imports}
-
-Each Python module has its own global namespace, which is why the same name can be used in different modules without conflict.
-
-\begin{macterminal}
-\begin{lstlisting}
-# Each module has its own namespace
-import math
-import random
-import datetime as dt
-
-# Different modules can have variables or functions with the same name
-# without conflicts, because they exist in separate namespaces
-
-print("Module namespaces:")
-print(f"math.pi = {math.pi}")
-print(f"sin(30$^\circ$) = {math.sin(math.radians(30))}")
-
-print(f"\nrandom.random() = {random.random()}")
-print(f"random choice from list = {random.choice(['apple', 'banana', 'cherry'])}")
-
-# Using an aliased import
-current_time = dt.datetime.now()
-print(f"\nCurrent time: {current_time}")
-
-# Importing specific items to the local namespace
-from math import sqrt, pow
-print(f"\nImported directly: sqrt(16) = {sqrt(16)}")
-print(f"Imported directly: pow(2, 3) = {pow(2, 3)}")
-\end{lstlisting}
-\end{macterminal}
-
-Python's import system is closely tied to namespaces:
+This example demonstrates:
 \begin{itemize}
-    \item \texttt{import module}: Keeps names in the module's namespace
-    \item \texttt{from module import name}: Brings specific names into the current namespace
-    \item \texttt{from module import *}: Brings all names into the current namespace (generally not recommended)
-    \item \texttt{import module as alias}: Creates a new name in the current namespace that refers to the module
+    \item Local assignments do not affect variables in outer scopes
+    \item \code{nonlocal} allows modifying variables in the nearest enclosing scope
+    \item \code{global} allows modifying variables in the global scope
+    \item Each function has its own local namespace
 \end{itemize}
 
-\section{Namespace Collisions and How to Avoid Them}
+\subsection{Class and Instance Namespaces}
 
-Name collisions occur when the same name is used to refer to different objects in overlapping namespaces. Let's look at common issues and solutions:
+Python also has special namespaces for classes and instances. Let's explore how they work:
 
-\subsection{Collisions with Built-ins}
-
-One common mistake is reusing names of built-in functions:
-
-\begin{macterminal}
-\begin{lstlisting}
-# Define a variable with the same name as a built-in function
-list = [1, 2, 3, 4, 5]
-print(f"Our list variable: {list}")
-
-# Now trying to use the built-in list function will fail
-try:
-    new_list = list("abcde")  # This will fail
-    print(f"New list: {new_list}")
-except TypeError as e:
-    print(f"Error: {e}")
-
-# Restore the built-in
-del list
-new_list = list("abcde")  # Now it works
-print(f"After restoring built-in: {new_list}")
-\end{lstlisting}
-\end{macterminal}
-
-\subsection{Import Collisions}
-
-When importing from different modules, name collisions can occur:
-
-\begin{macterminal}
-\begin{lstlisting}
-# First scenario - same name from different modules
-from math import floor
-print(f"math.floor(3.7) = {floor(3.7)}")
-
-# If we import a different function with the same name, it overwrites the first one
-from statistics import floor
-print(f"statistics.floor(3.7) = {floor(3.7)}")  # This is now statistics.floor
-
-# Solution: Use aliases or full module imports
-import math
-import statistics
-print(f"Using full modules - math.floor(3.7) = {math.floor(3.7)}")
-print(f"Using full modules - statistics.floor(3.7) = {statistics.floor(3.7)}")
-\end{lstlisting}
-\end{macterminal}
-
-\section{Class and Instance Namespaces}
-
-Classes introduce their own namespaces, and each instance has its own namespace for instance variables.
-
-\begin{macterminal}
-\begin{lstlisting}
-class Person:
-    species = "Homo sapiens"  # Class variable
-    
-    def __init__(self, name, age):
-        self.name = name  # Instance variable
-        self.age = age    # Instance variable
-    
-    def greet(self):
-        # Local variable within the method
-        message = f"Hello, my name is {self.name}"
-        return message
-
-# Create two instances
-alice = Person("Alice", 30)
-bob = Person("Bob", 25)
-
-# Class variables are shared
-print(f"Person.species: {Person.species}")
-print(f"alice.species: {alice.species}")
-print(f"bob.species: {bob.species}")
-
-# Instance variables are unique to each instance
-print(f"alice.name: {alice.name}")
-print(f"bob.name: {bob.name}")
-\end{lstlisting}
-\end{macterminal}
-
-This demonstrates:
+\textbf{How to Run:}
 \begin{itemize}
-    \item \textbf{Class namespace:} Shared by all instances (e.g., \texttt{species})
-    \item \textbf{Instance namespace:} Unique to each instance (e.g., \texttt{name} and \texttt{age})
-    \item \textbf{Method namespace:} Local namespace created when a method is called
+    \item Save the code as \verb|03_class_namespaces.py|
+    \item Run: \verb|python3 03_class_namespaces.py|
 \end{itemize}
 
-\section{Inspecting Namespaces}
+\begin{macterminal}
+\begin{lstlisting}
+# --- 03_class_namespaces.py ---
+"""
+Class and Instance Namespaces
 
-Python provides several tools for inspecting namespaces at runtime.
+This file demonstrates how Python handles namespaces in classes,
+showing the difference between class variables (shared by all instances)
+and instance variables (unique to each instance).
+"""
+
+class Dog:
+    # Class variable - shared by all instances
+    species = "Canis familiaris"
+    
+    # Class variable containing a mutable object (for demonstration)
+    tricks = []  # Shared by all dogs!
+    
+    def __init__(self, name):
+        # Instance variables - unique to each instance
+        self.name = name
+        self.individual_tricks = []  # Better - each dog has its own list
+    
+    def add_shared_trick(self, trick):
+        # Modifies the class variable (affects all dogs)
+        Dog.tricks.append(trick)
+    
+    def add_individual_trick(self, trick):
+        # Modifies the instance variable (affects only this dog)
+        self.individual_tricks.append(trick)
+
+# Create two dogs
+print("Creating two dogs...\n")
+fido = Dog("Fido")
+buddy = Dog("Buddy")
+
+# Demonstrate class variable sharing
+print("Class variable demonstration:")
+print(f"Fido's species: {fido.species}")
+print(f"Buddy's species: {buddy.species}")
+
+# Change the class variable
+Dog.species = "Canis lupus familiaris"
+print("\nAfter changing class variable:")
+print(f"Fido's species: {fido.species}")
+print(f"Buddy's species: {buddy.species}")
+
+# Demonstrate instance variable independence
+print("\nInstance variable demonstration:")
+print(f"Fido's name: {fido.name}")
+print(f"Buddy's name: {buddy.name}")
+
+# Demonstrate the difference with mutable objects
+print("\nShared tricks list (class variable):")
+fido.add_shared_trick("roll over")
+print(f"Fido's tricks: {Dog.tricks}")
+print(f"Buddy's tricks: {buddy.tricks}  # Same list!")
+
+print("\nIndividual tricks lists (instance variables):")
+fido.add_individual_trick("play dead")
+buddy.add_individual_trick("fetch")
+print(f"Fido's individual tricks: {fido.individual_tricks}")
+print(f"Buddy's individual tricks: {buddy.individual_tricks}")
+
+# Demonstrate attribute lookup order
+print("\nAttribute lookup demonstration:")
+buddy.species = "Changed for buddy"  # Creates a new instance variable
+print(f"Fido's species (from class): {fido.species}")
+print(f"Buddy's species (from instance): {buddy.species}")
+print(f"Class species attribute: {Dog.species}")
+\end{lstlisting}
+\end{macterminal}
+
+Key points about class and instance namespaces:
+\begin{itemize}
+    \item Class variables are shared among all instances
+    \item Instance variables are unique to each instance
+    \item Be cautious with mutable class variables
+    \item Python looks up attributes first in the instance namespace, then in the class namespace
+\end{itemize}
+
+\section{Advanced Namespace Concepts: Closures and Annotations}
+
+Python's namespace system becomes even more powerful when working with closures and type annotations. These advanced features demonstrate the flexibility and sophistication of Python's scoping rules.
+
+\subsection{Function Closures and Free Variables}
+
+A closure occurs when a nested function references variables from its enclosing scope. The inner function "closes over" the variables it needs, preserving them even after the outer function returns.
+
+\textbf{How to Run:}
+\begin{itemize}
+    \item Save the code as \verb|04_closures_annotations.py|
+    \item Run: \verb|python3 04_closures_annotations.py|
+\end{itemize}
 
 \begin{macterminal}
 \begin{lstlisting}
-# Get all variables in the global namespace
-global_vars = globals()
-print(f"Global namespace has {len(globals())} items")
+# --- 04_closures_annotations.py ---
+"""
+Function Closures and Annotation Scopes
 
-# Get all local variables in a function
-def show_locals():
-    x = 10
-    y = 20
-    local_vars = locals()
-    print(f"Local namespace has {len(local_vars)} items")
-    print(f"Local variables: {list(local_vars.keys())}")
+This file demonstrates Python's closure mechanism and how annotations
+are handled in different scopes. It shows how free variables are
+captured and how annotations are evaluated.
+"""
+from typing import Callable, List
 
-show_locals()
+def make_counter(start: int = 0) -> Callable[[], int]:
+    """Creates a counter function with its own private state."""
+    count = start
+    
+    def counter() -> int:
+        nonlocal count
+        current = count
+        count += 1
+        return current
+    
+    return counter
 
-# Inspect module namespace
-import math
-print(f"\nMath module has {len(dir(math))} attributes")
-print(f"Some math constants: {[name for name in dir(math) if name.isupper()]}")
+def make_multiplier(factor: float) -> Callable[[float], float]:
+    """Creates a function that multiplies its input by a stored factor."""
+    # 'factor' is a free variable captured by the closure
+    def multiplier(x: float) -> float:
+        return x * factor
+    
+    return multiplier
 
-# Inspect class namespace
-class MyClass:
-    class_var = "Class variable"
-    def method(self):
+# Demonstrate closure behavior
+print("Closure demonstration:")
+counter1 = make_counter(5)
+counter2 = make_counter(10)
+
+print(f"Counter 1: {counter1()}, {counter1()}, {counter1()}")
+print(f"Counter 2: {counter2()}, {counter2()}, {counter2()}")
+
+# Demonstrate multiple closures with the same free variable
+print("\nMultiplier demonstration:")
+double = make_multiplier(2)
+triple = make_multiplier(3)
+
+print(f"Double 5: {double(5)}")
+print(f"Triple 5: {triple(5)}")
+
+# Demonstrate late binding behavior
+def create_functions() -> List[Callable[[], int]]:
+    """Demonstrates late binding behavior in closures."""
+    functions = []
+    for i in range(3):
+        def func(captured_i=i):  # Use default argument for early binding
+            return captured_i
+        functions.append(func)
+    return functions
+
+print("\nLate binding demonstration:")
+funcs = create_functions()
+for f in funcs:
+    print(f"Function returns: {f()}")
+
+# Demonstrate annotation scopes
+def outer(x: 'TypeVar') -> None:
+    y: 'TypeVar'  # Forward reference in annotation
+    
+    class TypeVar:
         pass
-
-print(f"\nMyClass namespace: {[name for name in dir(MyClass) if not name.startswith('__')]}")
-
-# Inspect instance namespace
-instance = MyClass()
-instance.instance_var = "Instance variable"
-print(f"Instance __dict__: {instance.__dict__}")
-\end{lstlisting}
-\end{macterminal}
-
-These tools are invaluable for debugging namespace issues and understanding code behavior.
-
-\section{Common Namespace Pitfalls}
-
-\subsection{UnboundLocalError}
-
-A common error occurs when trying to modify a global variable without the \texttt{global} keyword:
-
-\begin{macterminal}
-\begin{lstlisting}
-x = 10
-
-def problematic_function():
-    try:
-        print(x)  # Try to access global x
-        x += 1    # Try to modify it (creates a local variable)
-    except UnboundLocalError as e:
-        print(f"Error: {e}")
-        print("Python sees the assignment and treats x as local,")
-        print("but x is not defined before it's used")
-
-problematic_function()
-
-# Solution: Use global keyword
-def correct_function():
-    global x
-    print(f"Global x: {x}")
-    x += 1
-    print(f"After modification: {x}")
-
-correct_function()
-\end{lstlisting}
-\end{macterminal}
-
-\subsection{Variable Shadowing}
-
-When local variables have the same name as global or enclosing variables, shadowing occurs:
-
-\begin{macterminal}
-\begin{lstlisting}
-value = "global"
-
-def outer():
-    value = "enclosing"
     
-    def inner():
-        value = "local"
-        print(f"Inner value: {value}")
-    
-    inner()
-    print(f"Outer value: {value}")
+    y = TypeVar()  # This refers to the local TypeVar class
+    print(f"Type of y: {type(y).__name__}")
 
-outer()
-print(f"Global value: {value}")
+print("\nAnnotation scope demonstration:")
+outer(None)  # The 'TypeVar' in the annotation is treated as a string
 \end{lstlisting}
 \end{macterminal}
 
-This is not necessarily an error, but it can lead to confusion if not well understood.
-
-\section{Best Practices for Working with Namespaces}
-
-To leverage namespaces effectively and avoid common issues:
+This example demonstrates several advanced concepts:
 
 \begin{itemize}
-    \item \textbf{\textcolor{pythonBlue}{Avoid global variables}} when possible. Use function parameters and return values instead.
-    \item \textbf{\textcolor{pythonBlue}{Don't override built-in names}} like \texttt{list}, \texttt{dict}, \texttt{sum}, etc.
-    \item \textbf{\textcolor{pythonBlue}{Prefer explicit imports}} (\texttt{import module}) over \texttt{from module import *}.
-    \item \textbf{\textcolor{pythonBlue}{Use unique, descriptive names}} to reduce the chance of collisions.
-    \item \textbf{\textcolor{pythonBlue}{Utilize encapsulation}} with classes to organize related functionality and data.
-    \item \textbf{\textcolor{pythonBlue}{Keep the global namespace clean}} by encapsulating code in functions and classes.
-    \item \textbf{\textcolor{pythonBlue}{Be cautious}} when using \texttt{global} and \texttt{nonlocal}. They can make code harder to understand.
+    \item Each function call creates a new instance of the local variables
+    \item Closures can "remember" values from the enclosing scope  
+    \item The \code{nonlocal} keyword is needed to modify enclosed variables
+    \item Type annotations in closures follow special scoping rules
 \end{itemize}
 
-\section{Namespaces in Real-world Applications}
+\subsection{Key Insights About Closures}
 
-Understanding namespaces is important for several real-world programming scenarios:
+When working with closures in Python:
 
 \begin{itemize}
-    \item \textbf{Creating modules and packages} that can be imported without name conflicts
-    \item \textbf{Writing maintainable code} with appropriate variable scoping
-    \item \textbf{Debugging issues} related to variable scope and visibility
-    \item \textbf{Understanding frameworks} like Django that use namespaces for template variables
-    \item \textbf{Managing dependencies} in large applications
-    \item \textbf{Creating domain-specific languages} or embedded syntaxes
+    \item Each function call creates a new instance of the local variables
+    \item Closures can "remember" values from the enclosing scope
+    \item The \code{nonlocal} keyword is needed to modify enclosed variables
+    \item Type annotations in closures follow special scoping rules
 \end{itemize}
 
-\section{Conclusion}
+\subsection{Best Practices with Closures}
 
-Python's namespace system is a fundamental feature that provides organization, scope isolation, and name resolution in the language. By understanding how namespaces work, you can write more organized, maintainable, and error-resistant code.
+When using closures in your code:
 
-The concept allows Python to separate names in different contexts, preventing conflicts and making large-scale application development possible. Whether you're writing simple scripts or complex frameworks, a solid grasp of namespaces will help you create better Python code.
-
-Remember these key points:
 \begin{itemize}
-    \item Namespaces provide context for names in Python
-    \item The LEGB rule determines how Python resolves names
-    \item Different types of namespaces have different lifetimes and accessibility
-    \item Python provides tools to inspect and manipulate namespaces at runtime
-    \item Understanding namespaces helps avoid common pitfalls like name collisions and scope issues
+    \item Use closures to create functions with private state
+    \item Be careful with mutable free variables
+    \item Consider using default arguments for early binding when needed
+    \item Document the closure's behavior and any captured variables
+\end{itemize}
+
+\section{Name Resolution Rules: LEGB}
+
+Python follows the LEGB rule when looking up names:
+
+\begin{itemize}
+    \item \textbf{Local}: Names declared inside the current function
+    \item \textbf{Enclosing}: Names in enclosing functions
+    \item \textbf{Global}: Names declared at module level
+    \item \textbf{Built-in}: Names in the built-in module
+\end{itemize}
+
+Python searches these namespaces in this order until it finds the name or raises a \code{NameError}.
+
+\section{Best Practices}
+
+When working with namespaces in Python:
+
+\begin{itemize}
+    \item Use \code{global} sparingly - it can make code harder to understand
+    \item Prefer passing values as arguments and returning results
+    \item Be careful with mutable class variables
+    \item Use clear and descriptive names to avoid confusion
+    \item Document when you need to use \code{global} or \code{nonlocal}
 \end{itemize}
 
 \section{References}
 
 \begin{itemize}
-    \item Python Documentation. (2023). \textit{Python Execution Model}. \href{https://docs.python.org/3/reference/executionmodel.html}{Link}
-    \item Ramalho, L. (2021). \textit{Fluent Python, 2nd Edition}. O'Reilly Media.
-    \item Beazley, D. (2009). \textit{Python Essential Reference, 4th Edition}. Addison-Wesley.
-    \item Python PEP 227. (2001). \textit{Statically Nested Scopes}. \href{https://www.python.org/dev/peps/pep-0227/}{Link}
-    \item Barry, P. (2016). \textit{Head First Python, 2nd Edition}. O'Reilly Media.
-    \item This article was translated, edited and written in collaboration with AI. If you find any inconsistencies or have suggestions for improvement, please don't hesitate to open an issue in our GitHub repository at \href{https://github.com/asanchezyali/social-media-posts}{github} or reach out directly.
+    \item Python Documentation. (2025). \textit{Python Scopes and Namespaces}.
+    \href{https://docs.python.org/3/tutorial/classes.html#python-scopes-and-namespaces}{Link}
+    
+    \item Python Documentation. (2025). \textit{The global statement}. 
+    \href{https://docs.python.org/3/reference/simple_stmts.html#the-global-statement}{Link}
+    
+    \item Python Documentation. (2025). \textit{The nonlocal statement}. 
+    \href{https://docs.python.org/3/reference/simple_stmts.html#the-nonlocal-statement}{Link}
+    
+    \item Lutz, M. (2023). \textit{Learning Python, 6th Edition}. O'Reilly Media.
+    
+    \item This article was edited and written in collaboration with AI. If you find any inconsistencies or have suggestions for improvement, please don't hesitate to open an issue in our \href{https://github.com/asanchezyali/social-media-posts}{GitHub} repository or reach out directly.
 \end{itemize}
 
-\section{Explore My Other Posts}
+\section{Explore More Python Concepts}
 \vspace{10pt}
 \begin{tikzpicture}
-  \fill[color=terminalBg, rounded corners=5pt] (0,0) rectangle (\textwidth,-5);
-  \pgfmathsetmacro{\availableWidth}{\textwidth-4cm}
-  \begin{scope}
-    \node[text=accentColor, font=\Large\bfseries, anchor=north west] at (0.5cm,-0.5cm) {Enjoyed This Content?};
-    \node[text=primaryColor, font=\normalsize, anchor=north west] at (0.5cm,-1.2cm) {Don't miss my previous post about:};
-    \node[text=secondaryColor, font=\large\bfseries, anchor=north west, text width=\availableWidth] at (0.5cm,-1.9cm) {\color{accentColor}API Latency: \color{primaryColor}Understanding Response Times in Modern Web Applications};
-    \node[text=secondaryColor, font=\small, text width=\availableWidth, anchor=north west] at (0.5cm,-3.1cm) {
-      Learn how to measure and analyze API response times using percentiles instead of averages,
-      and discover techniques to provide a more consistent experience for all your users.
+    \fill[color=terminalBg, rounded corners=5pt] (0,0) rectangle (\textwidth,-5);
+    
+    \pgfmathsetmacro{\availableWidth}{\textwidth-4cm}
+    
+    \begin{scope}
+        \node[text=accentColor, font=\Large\bfseries, anchor=north west] at (0.5cm,-0.5cm) {Enjoyed This Content?};
+        
+        \node[text=primaryColor, font=\normalsize, anchor=north west] at (0.5cm,-1.2cm) {Don't miss my other Python articles:};
+        
+        \node[text=secondaryColor, font=\large\bfseries, anchor=north west, text width=\availableWidth] at (0.5cm,-1.9cm)
+            {\color{accentColor}Python Decorators: \color{primaryColor}A Comprehensive Guide};
+        
+        \node[text=pythonSecondary, font=\normalsize, text width=\availableWidth, anchor=north west] at (0.5cm,-3.1cm) {
+            Learn how to write and use decorators in Python to enhance your functions and classes with additional functionality.
+        };
+    \end{scope}
+    
+    \node[anchor=center] at ({\textwidth-1.5cm}, {-2.5cm}) {
+        \qrcode[height=2.2cm]{https://www.linkedin.com/posts/asanchezyali_python-decorators-activity-7304916650070364160-xWFL?utm_source=share&utm_medium=member_desktop&rcm=ACoAACfC_XIB4R901-Rs4Cep7e9KjyGl5ZhS47o}
     };
-  \end{scope}
-  \node[anchor=center] at ({\textwidth-1.5cm}, {-2.5cm}) {
-    \qrcode[height=2.5cm]{https://github.com/asanchezyali/social-media-posts/tree/main/Python/FastAPILatency}
-  };
+    
 \end{tikzpicture}
 \vspace{5pt}
 
