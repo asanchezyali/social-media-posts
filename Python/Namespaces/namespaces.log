@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.8.26)  2 MAY 2025 22:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.8.26)  10 MAY 2025 18:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **namespaces.tex
 (./namespaces.tex
 LaTeX2e <2022-11-01> patch level 1
-L3 programming layer <2023-02-22>
+L3 programming layer <2023-02-22> (../Headers/Headers.tex
 (/usr/local/texlive/2023/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2022/07/02 v1.4n Standard LaTeX document class
 (/usr/local/texlive/2023/texmf-dist/tex/latex/base/size12.clo
@@ -1032,9 +1032,9 @@ Package hyperref Info: Option `colorlinks' set `true' on input line 58.
 
 (/usr/local/texlive/2023/texmf-dist/tex/latex/relsize/relsize.sty
 Package: relsize 2013/03/29 ver 4.1
-)
+))
 LaTeX Font Info:    Trying to load font information for T1+SourceSansPro-TLF on
- input line 259.
+ input line 42.
 
 (/usr/local/texlive/2023/texmf-dist/tex/latex/sourcesanspro/T1SourceSansPro-TLF
 .fd
@@ -1042,43 +1042,44 @@ File: T1SourceSansPro-TLF.fd 2020/01/19 (autoinst) Font definitions for T1/Sour
 ceSansPro-TLF.
 )
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/m/n' aliased to
-(Font)              `T1/SourceSansPro-TLF/regular/n' on input line 259.
+(Font)              `T1/SourceSansPro-TLF/regular/n' on input line 42.
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/regular/n' will be
-(Font)              scaled to size 12.0pt on input line 259.
+(Font)              scaled to size 12.0pt on input line 42.
  (./namespaces.aux
 <Reading QR code for "https://github.com/asanchezyali/social-media-posts/tree/m
 ain/Python/Namespaces" at level 5-M from aux file.>
 
-<Reading QR code for "https://www.linkedin.com/feed/" at level 3-Q from aux fil
-e.>
+<Reading QR code for "https://www.linkedin.com/posts/asanchezyali_python-decora
+tors-activity-7304916650070364160-xWFL?utm_source=share&utm_medium=member_deskt
+op&rcm=ACoAACfC_XIB4R901-Rs4Cep7e9KjyGl5ZhS47o" at level 10-M from aux file.>
 )
 \openout1 = `namespaces.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 259.
-LaTeX Font Info:    ... okay on input line 259.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 259.
-LaTeX Font Info:    ... okay on input line 259.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 259.
-LaTeX Font Info:    ... okay on input line 259.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 259.
-LaTeX Font Info:    ... okay on input line 259.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 259.
-LaTeX Font Info:    ... okay on input line 259.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 259.
-LaTeX Font Info:    ... okay on input line 259.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 259.
-LaTeX Font Info:    ... okay on input line 259.
-LaTeX Font Info:    Checking defaults for LY1/ptm/m/n on input line 259.
-LaTeX Font Info:    Trying to load font information for LY1+ptm on input line 2
-59.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for LY1/ptm/m/n on input line 42.
+LaTeX Font Info:    Trying to load font information for LY1+ptm on input line 4
+2.
  (/usr/local/texlive/2023/texmf-dist/tex/latex/ly1/ly1ptm.fd
 File: ly1ptm.fd 2001/02/01 font definitions for LY1/ptm using Berry names.
 )
-LaTeX Font Info:    ... okay on input line 259.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 259.
-LaTeX Font Info:    ... okay on input line 259.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 259.
-LaTeX Font Info:    ... okay on input line 259.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1137,24 +1138,24 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 \c@lstlisting=\count352
-Package hyperref Info: Link coloring ON on input line 259.
+Package hyperref Info: Link coloring ON on input line 42.
 
 (./namespaces.out) (./namespaces.out)
 \@outlinefile=\write4
 \openout4 = `namespaces.out'.
 
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/m/n' aliased to
-(Font)              `T1/SourceSansPro-TLF/regular/n' on input line 259.
+(Font)              `T1/SourceSansPro-TLF/regular/n' on input line 42.
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/regular/n' will be
-(Font)              scaled to size 14.4pt on input line 259.
+(Font)              scaled to size 14.4pt on input line 42.
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/b/n' aliased to
-(Font)              `T1/SourceSansPro-TLF/bold/n' on input line 262.
+(Font)              `T1/SourceSansPro-TLF/bold/n' on input line 45.
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/bold/n' will be
-(Font)              scaled to size 12.0pt on input line 262.
+(Font)              scaled to size 12.0pt on input line 45.
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/b/n' aliased to
-(Font)              `T1/SourceSansPro-TLF/bold/n' on input line 262.
+(Font)              `T1/SourceSansPro-TLF/bold/n' on input line 45.
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/bold/n' will be
-(Font)              scaled to size 38.0pt on input line 262.
+(Font)              scaled to size 38.0pt on input line 45.
 
 
 
@@ -1164,14 +1165,14 @@ LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/bold/n' will be
 <Copying the QR code for "https://github.com/asanchezyali/social-media-posts/tr
 ee/main/Python/Namespaces" in version 5-M as previously calculated.>
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/m/n' aliased to
-(Font)              `T1/SourceSansPro-TLF/regular/n' on input line 262.
+(Font)              `T1/SourceSansPro-TLF/regular/n' on input line 45.
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/regular/n' will be
-(Font)              scaled to size 10.95pt on input line 262.
+(Font)              scaled to size 10.95pt on input line 45.
 <../../Images/Arcade Gamer in Action.jpeg, id=60, 907.39pt x 1204.5pt>
 File: ../../Images/Arcade Gamer in Action.jpeg Graphic file (type jpg)
 <use ../../Images/Arcade Gamer in Action.jpeg>
 Package pdftex.def Info: ../../Images/Arcade Gamer in Action.jpeg  used on inpu
-t line 263.
+t line 46.
 (pdftex.def)             Requested size: 614.3033pt x 795.00923pt.
 [1
 
@@ -1179,27 +1180,27 @@ t line 263.
 al/texlive/2023/texmf-dist/fonts/enc/dvips/sourcesanspro/a_emkxm5.enc} <../../I
 mages/Arcade Gamer in Action.jpeg>]
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/m/n' aliased to
-(Font)              `T1/SourceSansPro-TLF/regular/n' on input line 265.
+(Font)              `T1/SourceSansPro-TLF/regular/n' on input line 48.
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/regular/n' will be
-(Font)              scaled to size 20.74pt on input line 265.
+(Font)              scaled to size 20.74pt on input line 48.
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/b/n' aliased to
-(Font)              `T1/SourceSansPro-TLF/bold/n' on input line 265.
+(Font)              `T1/SourceSansPro-TLF/bold/n' on input line 48.
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/bold/n' will be
-(Font)              scaled to size 20.74pt on input line 265.
+(Font)              scaled to size 20.74pt on input line 48.
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/b/n' aliased to
-(Font)              `T1/SourceSansPro-TLF/bold/n' on input line 280.
+(Font)              `T1/SourceSansPro-TLF/bold/n' on input line 63.
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/bold/n' will be
-(Font)              scaled to size 14.4pt on input line 280.
+(Font)              scaled to size 14.4pt on input line 63.
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/m/n' aliased to
-(Font)              `T1/SourceSansPro-TLF/regular/n' on input line 288.
+(Font)              `T1/SourceSansPro-TLF/regular/n' on input line 71.
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/regular/n' will be
-(Font)              scaled to size 17.28pt on input line 288.
+(Font)              scaled to size 17.28pt on input line 71.
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/b/n' aliased to
-(Font)              `T1/SourceSansPro-TLF/bold/n' on input line 288.
+(Font)              `T1/SourceSansPro-TLF/bold/n' on input line 71.
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/bold/n' will be
-(Font)              scaled to size 17.28pt on input line 288.
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 2
-92.
+(Font)              scaled to size 17.28pt on input line 71.
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 7
+5.
 
 (/usr/local/texlive/2023/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2022/07/10 v2.5l Standard LaTeX font definitions
@@ -1207,11 +1208,11 @@ File: t1cmtt.fd 2022/07/10 v2.5l Standard LaTeX font definitions
 <../../Images/profile-image.jpeg, id=68, 1284.8pt x 1284.8pt>
 File: ../../Images/profile-image.jpeg Graphic file (type jpg)
 <use ../../Images/profile-image.jpeg>
-Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 29
-6.
+Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 79
+.
 (pdftex.def)             Requested size: 34.13133pt x 34.13133pt.
 LaTeX Font Info:    Trying to load font information for U+fontawesomefree1 on i
-nput line 296.
+nput line 79.
 
 (/usr/local/texlive/2023/texmf-dist/tex/latex/fontawesome5/ufontawesomefree1.fd
 )
@@ -1219,113 +1220,118 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.296 \begin{macterminal}
-                          [1{/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips
-/fontawesome5/fa5free1.enc} <../../Images/profile-image.jpeg>]
+l.79 \begin{macterminal}
+                         [1{/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/
+fontawesome5/fa5free1.enc} <../../Images/profile-image.jpeg>]
+Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
+nput line 80.
 LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 297.
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 80.
+
+(./codes/01_basic_namespaces.py)
 File: ../../Images/profile-image.jpeg Graphic file (type jpg)
 <use ../../Images/profile-image.jpeg>
-Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 34
-1.
+Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 81
+.
 (pdftex.def)             Requested size: 34.13133pt x 34.13133pt.
  [2{/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc
 }]
 File: ../../Images/profile-image.jpeg Graphic file (type jpg)
 <use ../../Images/profile-image.jpeg>
-Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 34
-1.
+Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 81
+.
 (pdftex.def)             Requested size: 34.13133pt x 34.13133pt.
- [3]
-Package mdframed Info: Not enough space on this page on input line 401.
+ [3] (./codes/02_nested_scopes.py)
+Package mdframed Info: Not enough space on this page on input line 103.
 File: ../../Images/profile-image.jpeg Graphic file (type jpg)
 <use ../../Images/profile-image.jpeg>
-Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 40
-1.
+Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 10
+3.
 (pdftex.def)             Requested size: 34.13133pt x 34.13133pt.
  [4]
-Package mdframed Info: Not enough space on this page on input line 401.
+Package mdframed Info: Not enough space on this page on input line 103.
 File: ../../Images/profile-image.jpeg Graphic file (type jpg)
 <use ../../Images/profile-image.jpeg>
-Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 40
-1.
+Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 10
+3.
 (pdftex.def)             Requested size: 34.13133pt x 34.13133pt.
 
 [5]
 File: ../../Images/profile-image.jpeg Graphic file (type jpg)
 <use ../../Images/profile-image.jpeg>
-Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 40
-7.
+Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 10
+9.
 (pdftex.def)             Requested size: 34.13133pt x 34.13133pt.
- [6]
+ [6] (./codes/03_class_namespaces.py)
 File: ../../Images/profile-image.jpeg Graphic file (type jpg)
 <use ../../Images/profile-image.jpeg>
-Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 49
-2.
+Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 12
+5.
 (pdftex.def)             Requested size: 34.13133pt x 34.13133pt.
  [7]
 File: ../../Images/profile-image.jpeg Graphic file (type jpg)
 <use ../../Images/profile-image.jpeg>
-Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 49
-2.
+Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 12
+5.
 (pdftex.def)             Requested size: 34.13133pt x 34.13133pt.
  [8]
 File: ../../Images/profile-image.jpeg Graphic file (type jpg)
 <use ../../Images/profile-image.jpeg>
-Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 49
-2.
+Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 12
+5.
 (pdftex.def)             Requested size: 34.13133pt x 34.13133pt.
  [9]
 File: ../../Images/profile-image.jpeg Graphic file (type jpg)
 <use ../../Images/profile-image.jpeg>
-Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 49
-2.
+Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 12
+5.
 (pdftex.def)             Requested size: 34.13133pt x 34.13133pt.
  [10]
 File: ../../Images/profile-image.jpeg Graphic file (type jpg)
 <use ../../Images/profile-image.jpeg>
-Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 51
-6.
+Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 14
+9.
 (pdftex.def)             Requested size: 34.13133pt x 34.13133pt.
  [11]
+(./codes/04_closures_annotations.py)
 File: ../../Images/profile-image.jpeg Graphic file (type jpg)
 <use ../../Images/profile-image.jpeg>
-Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 59
-2.
+Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 15
+1.
 (pdftex.def)             Requested size: 34.13133pt x 34.13133pt.
  [12]
 File: ../../Images/profile-image.jpeg Graphic file (type jpg)
 <use ../../Images/profile-image.jpeg>
-Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 59
-2.
+Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 15
+1.
 (pdftex.def)             Requested size: 34.13133pt x 34.13133pt.
  [13]
 File: ../../Images/profile-image.jpeg Graphic file (type jpg)
 <use ../../Images/profile-image.jpeg>
-Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 59
-2.
+Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 15
+1.
 (pdftex.def)             Requested size: 34.13133pt x 34.13133pt.
  [14]
 File: ../../Images/profile-image.jpeg Graphic file (type jpg)
 <use ../../Images/profile-image.jpeg>
-Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 60
-0.
+Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 15
+9.
 (pdftex.def)             Requested size: 34.13133pt x 34.13133pt.
  [15]
 File: ../../Images/profile-image.jpeg Graphic file (type jpg)
 <use ../../Images/profile-image.jpeg>
-Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 63
-2.
+Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 19
+1.
 (pdftex.def)             Requested size: 34.13133pt x 34.13133pt.
  [16]
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/m/it' aliased to
-(Font)              `T1/SourceSansPro-TLF/regular/it' on input line 653.
+(Font)              `T1/SourceSansPro-TLF/regular/it' on input line 212.
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/regular/it' will be
-(Font)              scaled to size 14.4pt on input line 653.
+(Font)              scaled to size 14.4pt on input line 212.
 File: ../../Images/profile-image.jpeg Graphic file (type jpg)
 <use ../../Images/profile-image.jpeg>
-Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 65
-9.
+Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 21
+8.
 (pdftex.def)             Requested size: 34.13133pt x 34.13133pt.
  [17]
 
@@ -1333,49 +1339,25 @@ Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 65
 <QR code requested for "https://www.linkedin.com/posts/asanchezyali_python-deco
 rators-activity-7304916650070364160-xWFL?utm_source=share&utm_medium=member_des
 ktop&rcm=ACoAACfC_XIB4R901-Rs4Cep7e9KjyGl5ZhS47o" in version 0-M.>
-\qr@newforcount=\count353
 
-<Calculating QR code for "https://www.linkedin.com/posts/asanchezyali_python-de
+<Copying the QR code for "https://www.linkedin.com/posts/asanchezyali_python-de
 corators-activity-7304916650070364160-xWFL?utm_source=share&utm_medium=member_d
-esktop&rcm=ACoAACfC_XIB4R901-Rs4Cep7e9KjyGl5ZhS47o" in version 10-M.>
-<Splitting off block 1> <Splitting off block 2> <Splitting off block 3>
-<Splitting off block 4> <Splitting off block 5> <Making error block 1>
-<Making error block 2> <Making error block 3> <Making error block 4>
-<Making error block 5> <Interleaving datablocks of length 43\ and 44:  1, 2,
-3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
-24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42,
-43, 44.> <Interleaving errorblocks of length 26:  1, 2, 3, 4, 5, 6, 7, 8, 9,
-10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
-.><Interleaving complete.> <Writing data... done.>
-<Applying Mask 0... done. Calculating penalty... penalty is 2740>
-<Applying Mask 1... done. Calculating penalty... penalty is 3044>
-<Applying Mask 2... done. Calculating penalty... penalty is 2431>
-<Applying Mask 3... done. Calculating penalty... penalty is 2607>
-<Applying Mask 4... done. Calculating penalty... penalty is 2734>
-<Applying Mask 5... done. Calculating penalty... penalty is 2627>
-<Applying Mask 6... done. Calculating penalty... penalty is 2628>
-<Applying Mask 7... done. Calculating penalty... penalty is 2480>
-<Selected Mask 2>
-<Encoding and writing format string... done.>
-<Encoding and writing version information... done.>
-<Saving QR code to memory... done.>
-<Writing QR code to aux file... done.>
-<Printing matrix... done.>
-
+esktop&rcm=ACoAACfC_XIB4R901-Rs4Cep7e9KjyGl5ZhS47o" in version 10-M as previous
+ly calculated.>
 File: ../../Images/profile-image.jpeg Graphic file (type jpg)
 <use ../../Images/profile-image.jpeg>
-Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 69
-4.
+Package pdftex.def Info: ../../Images/profile-image.jpeg  used on input line 25
+3.
 (pdftex.def)             Requested size: 34.13133pt x 34.13133pt.
 [18]
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/b/n' aliased to
-(Font)              `T1/SourceSansPro-TLF/bold/n' on input line 696.
+(Font)              `T1/SourceSansPro-TLF/bold/n' on input line 255.
 LaTeX Font Info:    Font shape `T1/SourceSansPro-TLF/bold/n' will be
-(Font)              scaled to size 46.0pt on input line 696.
+(Font)              scaled to size 46.0pt on input line 255.
 File: ../../Images/Arcade Gamer in Action.jpeg Graphic file (type jpg)
 <use ../../Images/Arcade Gamer in Action.jpeg>
 Package pdftex.def Info: ../../Images/Arcade Gamer in Action.jpeg  used on inpu
-t line 698.
+t line 257.
 (pdftex.def)             Requested size: 614.3033pt x 795.00923pt.
  [19
 
@@ -1391,13 +1373,13 @@ Package rerunfilecheck Info: File `namespaces.out' has not changed.
 (rerunfilecheck)             Checksum: 9AEFE53967744C0CCBF19E47DE3B7769;2570.
  ) 
 Here is how much of TeX's memory you used:
- 41157 strings out of 476025
- 763278 string characters out of 5790017
+ 31416 strings out of 476025
+ 604298 string characters out of 5790017
  2126388 words of memory out of 5000000
- 60853 multiletter control sequences out of 15000+600000
+ 51094 multiletter control sequences out of 15000+600000
  632710 words of font info for 74 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 201i,19n,569p,3697b,3794s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 89i,19n,83p,3699b,1577s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/fontawesome5/FontAweso
 me5Free-Solid.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/adobe/sources
 anspro/SourceSansPro-Bold.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/a
@@ -1405,7 +1387,7 @@ dobe/sourcesanspro/SourceSansPro-It.pfb></usr/local/texlive/2023/texmf-dist/fon
 ts/type1/adobe/sourcesanspro/SourceSansPro-Regular.pfb></usr/local/texlive/2023
 /texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/
 texmf-dist/fonts/type1/public/cm-super/sftt1440.pfb>
-Output written on namespaces.pdf (20 pages, 579403 bytes).
+Output written on namespaces.pdf (20 pages, 579399 bytes).
 PDF statistics:
  470 PDF objects out of 1000 (max. 8388607)
  429 compressed objects within 5 object streams
