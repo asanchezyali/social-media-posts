@@ -8,14 +8,14 @@ function loadImageFromCDN(cdnName, reliability = 1.0) {
       const success = Math.random() <= reliability;
       
       if (success) {
-        console.log(`✅ ${cdnName}: Image loaded successfully`);
+        console.log(`${cdnName}: Image loaded successfully`);
         resolve({
           cdn: cdnName,
           url: `https://${cdnName.toLowerCase()}.example.com/image.jpg`,
           loadTime: Math.floor(Date.now() - startTime) + 'ms'
         });
       } else {
-        console.log(`❌ ${cdnName}: Error loading image`);
+        console.log(`${cdnName}: Error loading image`);
         reject(new Error(`Error loading from ${cdnName}`));
       }
     }, 1000 + Math.random() * 2000); // 1-3 seconds
@@ -32,14 +32,14 @@ Promise.any([
   loadImageFromCDN('BackupCDN', 0.9)    // 90% reliability
 ])
   .then(result => {
-    console.log(`\n📸 Image loaded successfully!`);
+    console.log(`\nImage loaded successfully!`);
     console.log(`Source: ${result.cdn}`);
     console.log(`URL: ${result.url}`);
     console.log(`Load time: ${result.loadTime}`);
   })
   .catch(error => {
     // AggregateError is a new type that groups all errors when all promises fail
-    console.error('\n❌ No CDN could load the image');
+    console.error('\nNo CDN could load the image');
     console.error(`Errors found: ${error.errors.length}`);
     error.errors.forEach((err, i) => {
       console.error(`  ${i + 1}. ${err.message}`);

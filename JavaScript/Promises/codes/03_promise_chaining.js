@@ -24,7 +24,7 @@ function getUserProfile(userId) {
         id: userId,
         name: 'Alejandro',
         role: 'Developer',
-        city: 'Medellín'
+        city: 'Barcelona'
       });
     }, 1000);
   });
