@@ -1,0 +1,206 @@
+\input{../Headers/Headers.tex}
+
+\newcommand{\BackgroundPic}{%
+    \put(0,0){%
+        \begin{tikzpicture}[remember picture, overlay]
+            \node[inner sep=0pt] at (current page.center) {
+                \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio=false]{../../Images/Futuristic Cybersecurity Analyst}
+            };
+            \fill[black, opacity=0.7] (current page.south west) rectangle (current page.north east);
+        \end{tikzpicture}%
+    }%
+}
+
+\newcommand{\titlepagecontents}{%
+    \AddToShipoutPicture*{\BackgroundPic}
+    \vspace*{2cm}
+    \begin{flushleft}
+    \languagetag{Python}\\[0.4cm]
+    {\fontsize{38}{52}\bfseries\color{primaryColor}Mastering \color{accentColor}Python\\\color{accentColor}Regular Expressions\par}
+    \vspace{0.3cm}
+    {\fontsize{18}{52}\color{secondaryColor}Pattern Matching Made Simple\par}
+    \vspace{0.3cm}
+    {\color{secondaryColor}\today\par}
+    \vspace{1.8cm}
+    \elegantqr{https://github.com/asanchezyali/social-media-posts/tree/main/Python/Regex}{Source Code}
+    \end{flushleft}
+}
+
+\newcommand{\finalpagecontents}{%
+    \AddToShipoutPicture*{\BackgroundPic}
+    \vspace*{3cm}
+    \begin{flushleft}
+    \languagetag{Feedback}\\[0.4cm]
+    {\fontsize{46}{52}\bfseries\color{primaryColor}Found this \color{accentColor}helpful?\par}
+    \vspace{0.3cm}
+    {\fontsize{18}{52}\color{secondaryColor}Save, comment and share\par}  
+    \vspace{0.3cm}
+    {\color{secondaryColor}\today\par}
+    \end{flushleft}
+}
+
+% Update header for Regex
+\fancyhead[L]{
+    \begin{tikzpicture}[remember picture, overlay]
+        \fill[accentColor, rounded corners=3pt] (0,0) rectangle (2.2cm,0.7cm);
+        \node[text=primaryColor, font=\bfseries] at (1.1cm,0.35cm) {PYTHON};
+        \fill[primaryColor] (2.35cm,0.1cm) rectangle (2.40cm,0.6cm);
+        \node[text=primaryColor, font=\bfseries, anchor=west] at (2.35cm,0.35cm) {REGEX};
+    \end{tikzpicture}
+}
+
+\begin{document}
+\setlength{\parindent}{0pt}
+\begin{titlepage}
+    \titlepagecontents
+\end{titlepage}
+
+\section{Introduction to Regular Expressions}
+
+Regular expressions (regex) are powerful tools for pattern matching and text manipulation in Python. They provide a concise and flexible way to:
+
+\begin{itemize}
+    \item Search and match specific patterns in text
+    \item Validate string formats (emails, phone numbers, etc.)
+    \item Extract information from structured text
+    \item Perform complex string replacements
+\end{itemize}
+
+Python's \code{re} module provides comprehensive support for regular expressions, making it an essential tool for text processing tasks.
+
+\section{Basic Pattern Matching}
+
+Let's start with fundamental regex concepts and pattern matching:
+
+\begin{macterminal}
+\lstinputlisting[caption=Basic Pattern Matching]{codes/01_basic_patterns.py}
+\end{macterminal}
+
+Key concepts demonstrated:
+\begin{itemize}
+    \item The \code{r} prefix creates a raw string
+    \item \code{re.search()} finds the first match in text
+    \item \code{re.IGNORECASE} flag makes the search case-insensitive
+    \item \code{re.findall()} returns all matches
+    \item Word boundaries with \code{\textbackslash b}
+\end{itemize}
+
+\section{Common Pattern Validation}
+
+Regular expressions are frequently used to validate common text formats. Here are practical examples:
+
+\begin{macterminal}
+\lstinputlisting[caption=Pattern Validation Examples]{codes/02_pattern_validation.py}
+\end{macterminal}
+
+Important pattern components:
+\begin{itemize}
+    \item \code{\string^} and \code{\string$} anchor the pattern to start/end
+    \item \code{[a-zA-Z0-9]} matches any alphanumeric character
+    \item \code{+} matches one or more occurrences
+    \item \code{*} matches zero or more occurrences
+    \item \code{?} makes a character optional
+    \item \code{\textbackslash d} matches any digit
+    \item \code{\textbackslash w} matches word characters
+\end{itemize}
+
+\section{Advanced Features}
+
+Regular expressions become more powerful with advanced features:
+
+\begin{macterminal}
+\lstinputlisting[caption=Advanced Regex Features]{codes/03_advanced_features.py}
+\end{macterminal}
+
+Advanced concepts covered:
+\begin{itemize}
+    \item Named capture groups with \code{(?P\textless{}name\textgreater{}pattern)}
+    \item \code{re.VERBOSE} flag for readable patterns
+    \item Positive/negative lookahead with \code{(?=\string.\string.\string.)} and \code{(?!\string.\string.\string.)}
+    \item Backreferences with \code{\textbackslash{}1}, \code{\textbackslash{}2}, etc.
+    \item Pattern substitution with \code{re.sub()}
+\end{itemize}
+
+\section{Best Practices}
+
+When working with regular expressions in Python:
+
+\begin{itemize}
+    \item Use raw strings (\code{r"pattern"}) to avoid escaping backslashes
+    \item Start with simple patterns and gradually add complexity
+    \item Test patterns with a variety of inputs
+    \item Use \code{re.VERBOSE} for complex patterns with comments
+    \item Consider performance with large texts
+    \item Document complex patterns
+    \item Use existing patterns for common formats
+\end{itemize}
+
+\section{Common Pitfalls}
+
+Be aware of these common regex pitfalls:
+
+\begin{itemize}
+    \item Catastrophic backtracking with nested quantifiers
+    \item Greedy vs. non-greedy matching
+    \item Unicode handling in patterns
+    \item Over-complicated patterns
+    \item Not escaping special characters
+    \item Incorrect character class usage
+\end{itemize}
+
+\section{Performance Tips}
+
+Optimize your regex usage:
+
+\begin{itemize}
+    \item Compile patterns you use repeatedly with \code{re.compile()}
+    \item Use non-capturing groups \code{(?:\string.\string.\string.)} when possible
+    \item Avoid unnecessary backtracking
+    \item Be specific with character classes
+    \item Consider alternative solutions for complex patterns
+    \item Profile pattern matching on large datasets
+\end{itemize}
+
+\section{References}
+
+\begin{itemize}
+    \item Python Documentation. (2025). \textit{re - Regular expression operations}.
+    \href{https://docs.python.org/3/library/re.html}{Link}
+    
+    \item Goyvaerts, J., \& Levithan, S. (2023). \textit{Regular Expressions Cookbook}. O'Reilly Media.
+    
+    \item This article was edited and written in collaboration with AI. If you find any inconsistencies or have suggestions for improvement, please don't hesitate to open an issue in our \href{https://github.com/asanchezyali/social-media-posts}{GitHub} repository or reach out directly.
+\end{itemize}
+
+\section{Explore More Python Concepts}
+\vspace{10pt}
+\begin{tikzpicture}
+    \fill[color=terminalBg, rounded corners=5pt] (0,0) rectangle (\textwidth,-5);
+    
+    \pgfmathsetmacro{\availableWidth}{\textwidth-4cm}
+    
+    \begin{scope}
+        \node[text=accentColor, font=\Large\bfseries, anchor=north west] at (0.5cm,-0.5cm) {Enjoyed This Content?};
+        
+        \node[text=primaryColor, font=\normalsize, anchor=north west] at (0.5cm,-1.2cm) {Don't miss my other Python articles:};
+        
+        \node[text=secondaryColor, font=\large\bfseries, anchor=north west, text width=\availableWidth] at (0.5cm,-1.9cm)
+            {\color{accentColor}Python Namespaces: \color{primaryColor}A Deep Dive into Name Resolution};
+        
+        \node[text=pythonSecondary, font=\normalsize, text width=\availableWidth, anchor=north west] at (0.5cm,-3.1cm) {
+            Learn how Python organizes and manages variable names, scopes, and namespaces.
+        };
+    \end{scope}
+    
+    \node[anchor=center] at ({\textwidth-1.5cm}, {-2.5cm}) {
+        \qrcode[height=2.2cm]{https://github.com/asanchezyali/social-media-posts/tree/main/Python/Namespaces}
+    };
+    
+\end{tikzpicture}
+\vspace{5pt}
+
+\clearpage
+\thispagestyle{empty}
+\finalpagecontents
+
+\end{document}

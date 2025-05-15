@@ -1,0 +1,23 @@
+Write a technical tutorial on how to use regular expressions (Regex) in Python. The document must be written in English, with a maximum length of 12 pages, and should include 3 to 4 practical and well-explained code examples.
+
+Follow strictly the formatting and style defined in the file Python/Namespaces/Namespaces.tex, and use as reference the available commands listed in Python/Headers/Headers.tex.
+
+Structure the content as follows:
+
+Create a new directory called Regex inside the project.
+
+Inside the Regex directory, create the main tutorial file in LaTeX format, named Regex.tex.
+
+Place all code examples in separate files inside the subdirectory Regex/codes/, and include them properly in the main .tex file using \lstinputlisting.
+
+Important technical restrictions (to avoid LaTeX compilation errors):
+
+Do not use emojis (e.g., 😊, 🚀) or special symbols such as ✓, •, →, …, —, “”, ‘’, etc.
+
+Avoid accented characters (á, é, ñ, etc.) and non-ASCII characters inside code blocks or filenames.
+
+All files must be saved in UTF-8 encoding without BOM.
+
+Use only safe ASCII characters in code (a-z, A-Z, 0-9, and symbols such as (){}[]<>!@#%^&*-=_+:;"',./?|\~`).
+
+The content must be clear, structured, and educational, aimed at readers with basic Python knowledge who want to effectively learn how to use Regex.
