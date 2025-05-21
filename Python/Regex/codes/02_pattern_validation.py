@@ -37,7 +37,7 @@ for phone in phones:
     print(f"{phone}: {validate_pattern(phone_pattern, phone)}")
 
 # URL validation
-url_pattern = r"https?://(?:[\w-]+\.)+[\w-]+(?:/[\w-./?%&=]*)?$"
+url_pattern = r"https?://(?:[\w.-]+\.)+[\w.-]+(?:/[\w./?%&=-]*)?$"
 urls = [
     "https://www.example.com",
     "http://sub.domain.co.uk/path?param=value",
