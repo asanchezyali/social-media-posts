@@ -2,7 +2,9 @@
 Advanced Regular Expression Features
 
 This file demonstrates advanced regex features including groups,
-lookahead/lookbehind assertions, and substitutions.
+lookahead/lookbehind assertions, substitutions, and more.
+
+Try your regex online: regex101.com, pythex.org, regexr.com
 """
 
 import re
@@ -52,7 +54,7 @@ for method, return_type in extract_methods(python_code):
 
 # Example with substitution and backreferences
 def clean_text(text: str) -> str:
-    """Clean text by removing repeated words."""
+    """Clean text by removing repeated words using backreference."""
     pattern = r"\b(\w+)\s+\1\b"  # Pattern for repeated words
     return re.sub(pattern, r"\1", text)
 
@@ -77,3 +79,38 @@ def find_prices(text: str) -> None:
 
 text = "The price is 100 USD, 200 EUR, and 150 GBP"
 find_prices(text)
+
+
+# Greedy vs. non-greedy matching
+html = "<div>content1</div><div>content2</div>"
+greedy = re.findall(r"<div>.*</div>", html)
+non_greedy = re.findall(r"<div>.*?</div>", html)
+print(f"\nGreedy match: {greedy}")
+print(f"Non-greedy match: {non_greedy}")
+
+
+# Non-capturing groups and negative lookahead
+text2 = "foo1 bar1 foo2 bar2"
+pattern_noncap = r"(?:foo|bar)\d"
+pattern_neg_lookahead = r"foo(?!2)\d"
+print(f"\nNon-capturing group matches: {re.findall(pattern_noncap, text2)}")
+print(f"Negative lookahead matches (no foo2): {re.findall(pattern_neg_lookahead, text2)}")
+
+
+# Negative lookbehind (fixed-width)
+text3 = "abc123 xyz123 abc456"
+pattern_neg_lookbehind = r"(?<!abc)123"
+print(f"\nNegative lookbehind matches (not after 'abc'): {re.findall(pattern_neg_lookbehind, text3)}")
+
+
+# Unicode and multiline example
+unicode_text = "Café\nnaïve\nRésumé"
+pattern_unicode = r"^\w+"
+print(f"\nUnicode word matches (MULTILINE): {re.findall(pattern_unicode, unicode_text, re.MULTILINE | re.UNICODE)}")
+
+
+# Error handling example
+try:
+    re.compile(r"(unclosed[")
+except re.error as e:
+    print(f"\nRegex error caught: {e}")

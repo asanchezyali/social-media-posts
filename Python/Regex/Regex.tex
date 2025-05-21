@@ -1,5 +1,8 @@
 \input{../Headers/Headers.tex}
 
+\usepackage[utf8]{inputenc}
+\lstset{inputencoding=utf8}
+
 \newcommand{\BackgroundPic}{%
     \put(0,0){%
         \begin{tikzpicture}[remember picture, overlay]
@@ -68,6 +71,31 @@ Regular expressions (regex) are powerful tools for pattern matching and text man
 
 Python's \code{re} module provides comprehensive support for regular expressions, making it an essential tool for text processing tasks.
 
+% Quick Reference Table for Regex Syntax
+
+\section*{Regex Quick Reference}
+
+\begin{tabular}{ll}
+\textbf{Pattern} & \textbf{Meaning} \\
+\hline
+\texttt{.} & Any character except newline \\
+\texttt{*} & Zero or more repetitions \\
+\texttt{+} & One or more repetitions \\
+\texttt{?} & Zero or one repetition \\
+\texttt{[a-z]} & Any lowercase letter \\
+\texttt{[A-Z]} & Any uppercase letter \\
+\texttt{[0-9]} & Any digit \\
+\texttt{[abc]} & a, b, or c \\
+\texttt{\textbackslash d} & Digit (0-9) \\
+\texttt{\textbackslash w} & Word character (a-z, A-Z, 0-9, \_) \\
+\texttt{\textbackslash s} & Whitespace \\
+\texttt{\^} & Start of string \\
+\texttt{\$} & End of string \\
+\texttt{|} & Alternation (or) \\
+\texttt{()} & Grouping \\
+\texttt{\textbackslash} & Escape special character \\
+\end{tabular}
+
 \section{Basic Pattern Matching}
 
 Let's start with fundamental regex concepts and pattern matching:
@@ -84,6 +112,24 @@ Key concepts demonstrated:
     \item \code{re.findall()} returns all matches
     \item Word boundaries with \code{\textbackslash b}
 \end{itemize}
+
+\section{Visual Examples}
+
+\textbf{Example 1: Simple Match}
+
+\begin{verbatim}
+Pattern: fox
+String:  The quick brown fox jumps over the lazy dog
+Match:   fox
+\end{verbatim}
+
+\textbf{Example 2: Digit Extraction}
+
+\begin{verbatim}
+Pattern: \d+
+String:  Order numbers: 123, 456, 789
+Match:   123, 456, 789
+\end{verbatim}
 
 \section{Common Pattern Validation}
 
@@ -106,19 +152,58 @@ Important pattern components:
 
 \section{Advanced Features}
 
-Regular expressions become more powerful with advanced features:
+Regular expressions support advanced features such as:
 
-\begin{macterminal}
-\lstinputlisting{codes/03_advanced_features.py}
-\end{macterminal}
-
-Advanced concepts covered:
 \begin{itemize}
-    \item Named capture groups with \code{(?P\textless{}name\textgreater{}pattern)}
-    \item \code{re.VERBOSE} flag for readable patterns
-    \item Positive/negative lookahead with \code{(?=\string.\string.\string.)} and \code{(?!\string.\string.\string.)}
-    \item Backreferences with \code{\textbackslash{}1}, \code{\textbackslash{}2}, etc.
-    \item Pattern substitution with \code{re.sub()}
+    \item \textbf{Named capture groups:} \code{(?P<name>pattern)}
+    \item \textbf{Non-capturing groups:} \code{(?:pattern)}
+    \item \textbf{Positive lookahead:} \code{(?=pattern)}
+    \item \textbf{Negative lookahead:} \code{(?!pattern)}
+    \item \textbf{Positive lookbehind:} \code{(?<=pattern)}
+    \item \textbf{Negative lookbehind:} \code{(?<!pattern)}
+    \item \textbf{Greedy vs. non-greedy quantifiers:} \code{*} vs. \code{*?}
+    \item \textbf{Backreferences:} \code{\textbackslash 1}, \code{\textbackslash 2}, etc.
+    \item \textbf{Pattern substitution:} \code{re.sub()}
+\end{itemize}
+
+\textbf{Visual Example: Non-greedy Matching}
+
+\begin{verbatim}
+Pattern: <.*?>
+String:  <tag>content</tag>
+Match:   <tag>, </tag>
+\end{verbatim}
+
+\section{Testing Your Regex}
+
+You can experiment with regular expressions interactively using online tools such as:
+\begin{itemize}
+    \item \href{https://regex101.com/}{regex101.com}
+    \item \href{https://pythex.org/}{pythex.org}
+    \item \href{https://regexr.com/}{regexr.com}
+\end{itemize}
+
+\section{Common Regex Recipes}
+
+\begin{itemize}
+    \item \textbf{Extract emails:} \verb|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}|
+    \item \textbf{Extract URLs:} \verb|https?://[\w.-]+(?:/[\w./?%&=-]*)?|
+    \item \textbf{Extract dates (YYYY-MM-DD):} \verb|\d{4}-\d{2}-\d{2}|
+    \item \textbf{Extract phone numbers:} \verb|\+?1?\d{9,15}|
+\end{itemize}
+
+\section{Error Handling and Useful Flags}
+
+\begin{itemize}
+    \item Use \code{try/except} to catch \code{re.error} exceptions in Python.
+    \item Useful flags:
+    \begin{itemize}
+        \item \code{re.IGNORECASE} (case-insensitive)
+        \item \code{re.MULTILINE} (\verb|^| and \verb|$| match at line breaks)
+        \item \code{re.DOTALL} (dot matches newline)
+        \item \code{re.UNICODE} (Unicode matching)
+        \item \code{re.VERBOSE} (allow comments and whitespace in pattern)
+    \end{itemize}
 \end{itemize}
 
 \section{Best Practices}
