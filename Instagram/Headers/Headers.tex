@@ -1,0 +1,303 @@
+% =====================================================================
+%  yalix  --  grid-paper "study notes" carousel template
+%  Palette: cream & sage-green.  Titles: Playfair Display.
+%  Handwriting: SignPainter (brush).  Left-aligned text, centred equations.
+%  Engine: XeLaTeX (fontspec).  Compile:  xelatex <file>.tex  (run twice)
+% =====================================================================
+
+\documentclass[12pt]{article}
+
+% ---- Instagram portrait 4:5 canvas -----------------------------------
+\usepackage{geometry}
+\geometry{
+    paperwidth=108mm,
+    paperheight=135mm,
+    left=11mm, right=11mm,
+    top=13mm, bottom=16mm,
+    headheight=8mm, headsep=5mm,
+    footskip=9mm,
+}
+
+\usepackage{fontspec}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amssymb}     % \mathbb, etc.
+\usepackage{tikz}
+\usepackage{eso-pic}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{adjustbox}   % auto-shrink over-wide equations to fit the width
+\usepackage{ragged2e}
+\usepackage{needspace}   % keep topic headings with the text that follows
+% Relative path from the post file back to Instagram/ (the template root).
+% A post declares its depth BEFORE \input-ing this file, e.g.
+%   \def\yalixroot{../../}\input{\yalixroot Headers/Headers.tex}
+% so shared assets (fonts, veil.png) resolve at any folder depth. Default
+% assumes the standard series layout Instagram/<Series>/<Post>/ (2 levels).
+\providecommand{\yalixroot}{../../}
+\usepackage{pgfplots}    % native vector plots (matches the brand style)
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{calc,decorations.pathmorphing,arrows.meta,fadings,backgrounds}
+
+% =====================================================================
+%  Palette  --  cream & sage-green  (edit these 6 lines to recolour)
+% =====================================================================
+\definecolor{paperBg}{RGB}{249, 245, 235}   % light warm cream (brighter)
+\definecolor{gridLine}{RGB}{214, 208, 192}  % soft warm grid
+\definecolor{ink}{RGB}{43, 39, 35}           % #2B2723 GENERAL text (titles + body)
+\definecolor{handInk}{RGB}{43, 39, 35}       % handwriting (same as general)
+\definecolor{eqink}{RGB}{28, 107, 91}        % #1C6B5B EQUATIONS (clear teal-green)
+\definecolor{accent}{RGB}{219, 90, 30}       % #DB5A1E HIGHLIGHT (vivid terracotta)
+\definecolor{mauve}{RGB}{138, 154, 126}      % #8A9A7E muted sage (dots)
+\definecolor{hltopic}{RGB}{150, 200, 85}     % green highlighter (section titles)
+
+% =====================================================================
+%  Fonts
+%   - Playfair Display : display serif  (vendored in ../fonts)
+%   - SignPainter      : brush handwriting body  (macOS system)
+% =====================================================================
+\newfontfamily\displayfont[
+    Path = \yalixroot fonts/ , Extension = .otf ,
+    UprightFont    = PlayfairDisplay-Regular ,
+    ItalicFont     = PlayfairDisplay-Italic ,
+    BoldFont       = PlayfairDisplay-Bold ,
+    BoldItalicFont = PlayfairDisplay-BoldItalic ]{PlayfairDisplay}
+
+\newfontfamily\handfont{SignPainter}
+\setmainfont{SignPainter}
+
+% Maths stays in LaTeX's default Latin Modern maths font: clean, legible
+% primes/derivatives (f', f''). It is neutral notation, coloured via eqink below.
+
+\AtBeginDocument{\color{handInk}}
+\pagecolor{paperBg}
+
+% all math in the equation colour (deep pine green)
+\everymath\expandafter{\the\everymath \color{eqink}}
+\everydisplay\expandafter{\the\everydisplay \color{eqink}}
+
+% =====================================================================
+%  Carousel state
+% =====================================================================
+\newcommand{\totalslides}{13}
+\newcommand{\settotalslides}[1]{\renewcommand{\totalslides}{#1}}
+
+% =====================================================================
+%  Grid-paper background (every page)
+% =====================================================================
+\newcommand{\GridBackground}{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \fill[paperBg] (current page.south west) rectangle (current page.north east);
+    \begin{scope}
+      \clip (current page.south west) rectangle (current page.north east);
+      \draw[gridLine!70!paperBg, line width=0.2pt, step=6mm]
+        ($(current page.south west)+(-6mm,-6mm)$) grid
+        ($(current page.north east)+(6mm,6mm)$);
+    \end{scope}
+  \end{tikzpicture}%
+}
+\AddToShipoutPictureBG{\GridBackground}
+
+% =====================================================================
+%  Header: none.   Footer: progress dots only.
+% =====================================================================
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[L]{}\fancyhead[R]{}
+
+\newcommand{\carouseldots}{%
+  \begin{tikzpicture}[baseline]
+    \foreach \i in {1,...,\totalslides}{%
+      \ifnum\i=\value{page}
+        \fill[ink] (0.40*\i,0) circle (1.7pt);
+      \else
+        \fill[mauve!80] (0.40*\i,0) circle (1.4pt);
+      \fi}
+  \end{tikzpicture}}
+% hand-drawn "swipe" arrow, pen-style (curved shaft + two head strokes)
+\newcommand{\penarrow}{%
+  \begin{tikzpicture}[baseline]
+    \draw[mauve, line width=1pt, line cap=round]
+      (0,0) .. controls (2.4mm,0.5pt) and (4.8mm,-0.5pt) .. (7.2mm,0);
+    \draw[mauve, line width=1pt, line cap=round] (7.2mm,0) -- (5.4mm,1.3mm);
+    \draw[mauve, line width=1pt, line cap=round] (7.2mm,0) -- (5.6mm,-1.2mm);
+  \end{tikzpicture}}
+\fancyfoot[C]{\carouseldots}
+\fancyfoot[R]{\penarrow}
+
+% subtle attribution watermark on every slide (top-right) -> reshares credit you
+\newcommand{\watermark}{@asanchezyali}
+\newcommand{\setwatermark}[1]{\renewcommand{\watermark}{#1}}
+\AddToShipoutPictureFG{\begin{tikzpicture}[remember picture, overlay]
+  \node[anchor=north east, inner sep=0pt] at ($(current page.north east)+(-11mm,-9mm)$)
+    {\displayfont\itshape\fontsize{8}{9}\selectfont\color{mauve}\watermark};
+\end{tikzpicture}}
+
+% series tag on every slide (top-left) -> signals this is part of a series
+\newcommand{\seriestag}{}
+\newcommand{\setseriestag}[1]{\renewcommand{\seriestag}{#1}}
+\AddToShipoutPictureFG{\begin{tikzpicture}[remember picture, overlay]
+  \node[anchor=north west, inner sep=0pt] at ($(current page.north west)+(11mm,-9mm)$)
+    {\displayfont\itshape\fontsize{8}{9}\selectfont\color{mauve}\seriestag};
+\end{tikzpicture}}
+
+% =====================================================================
+%  Slide layout
+% =====================================================================
+% real lecture-notes: content flows from the TOP (no vertical centring).
+\newenvironment{slide}{%
+  \clearpage\setlength{\parindent}{0pt}\RaggedRight
+  \hyphenpenalty=2500\exhyphenpenalty=2500
+  \setlength{\parskip}{1.4mm}%
+  \fontsize{13.5}{16}\selectfont\vspace*{1mm}%
+}{\par}
+% a vertically-centred slide (use for the cover / closing if wanted)
+\newenvironment{slidec}{%
+  \clearpage\setlength{\parindent}{0pt}\RaggedRight
+  \hyphenpenalty=2500\exhyphenpenalty=2500
+  \fontsize{13.5}{16}\selectfont\vspace*{\fill}%
+}{\vspace*{\fill}\par}
+
+% ---- text styles -----------------------------------------------------
+% one uniform handwriting size everywhere (SignPainter, 15/21)
+\newcommand{\sertitle}[1]{{\displayfont\bfseries\color{ink}#1\par}}
+\newcommand{\serlead}[1]{{\handfont\fontsize{15}{21}\selectfont\color{ink}#1\par}}
+\newcommand{\hand}[1]{{\handfont\fontsize{15}{21}\selectfont\color{handInk}#1\par}}
+% highlight: accent colour + a hand-drawn double underline (two quick pen
+% strokes: slight curve, slight slope, not parallel -> organic, not a ruler)
+\newcommand{\hl}[1]{%
+  \tikz[baseline=(u.base)]{%
+    \node[inner sep=0pt, outer sep=0pt] (u) {\textcolor{accent}{#1}};%
+    \coordinate (a) at ([yshift=-1.5pt]u.south west);
+    \coordinate (b) at ([yshift=-2.2pt]u.south east);
+    \coordinate (c) at ([yshift=-3.4pt]u.south west);
+    \coordinate (d) at ([yshift=-2.9pt]u.south east);
+    \draw[accent, line width=0.7pt, line cap=round]
+      (a) .. controls ($(a)!.35!(b)+(0,-0.5pt)$) and ($(a)!.7!(b)+(0,0.3pt)$) .. (b);
+    \draw[accent, line width=0.55pt, line cap=round]
+      (c) .. controls ($(c)!.3!(d)+(0,0.5pt)$) and ($(c)!.75!(d)+(0,-0.3pt)$) .. (d);
+  }%
+}
+\newcommand{\hlm}[1]{{\color{accent}#1}}   % maths highlight: colour only
+\newcommand{\soft}[1]{\textcolor{mauve}{#1}}
+
+% ---- lecture-notes structure ----------------------------------------
+% topic heading: handwritten, underlined with two quick pen strokes —
+% the way a student actually heads a section in their notebook.
+% section heading: handwritten title with a highlighter-marker swipe behind
+% it (the way a student marks a section header).
+\newcounter{topicnum}
+% The article FLOWS and fills each page like a normal document (no one-topic-
+% per-slide gaps).  A tiny needspace only stops a heading from landing in the
+% last few mm of a page; the \nobreak glue after the heading keeps it welded to
+% its first following line, so a heading is never left orphaned at a page foot.
+%
+% Optional arg = needspace reserved before the heading (default 4mm).  For a
+% topic that ends in a LARGE atomic figure (pgfplots graph, \eqfit matrix), set
+% it to the whole topic's height, e.g. \topic[84mm]{...}, so the entire block
+% (heading + text + figure) moves to the next page together instead of the
+% figure tearing off onto its own slide.
+\newcommand{\topic}[2][4mm]{\par\addvspace{3mm}\needspace{#1}\refstepcounter{topicnum}%
+  \noindent\begin{tikzpicture}
+    \node[anchor=base west, inner sep=0pt] (tt) at (0,0)
+      {\handfont\fontsize{19}{23}\selectfont\color{ink}#2};
+    \begin{scope}[on background layer]
+      \fill[hltopic, opacity=0.45, rounded corners=0.8mm]
+        ([xshift=-1mm,yshift=-1mm]tt.south west)
+        rectangle ([xshift=1mm,yshift=0.6mm]tt.north east);
+    \end{scope}
+  \end{tikzpicture}\par\nobreak\vskip 2.5mm\nobreak}
+% single hand-drawn underline (one pen stroke, slight curve — not a ruler)
+\newcommand{\uhand}[1]{%
+  \tikz[baseline=(u.base)]{%
+    \node[inner sep=0pt, outer sep=0pt] (u) {{\color{ink}#1}};%
+    \coordinate (a) at ([yshift=-1.6pt]u.south west);
+    \coordinate (b) at ([yshift=-2.3pt]u.south east);
+    \draw[ink, line width=0.6pt, line cap=round]
+      (a) .. controls ($(a)!.35!(b)+(0,-0.5pt)$) and ($(a)!.7!(b)+(0,0.3pt)$) .. (b);
+  }%
+}
+% definition:  \defn{full sentence — underline the defined term with \uhand{...}}
+%   e.g. \defn{Una \uhand{solución} es una n-tupla que ...}
+\newcommand{\defn}[1]{\par\addvspace{1mm}%
+  {\handfont\fontsize{15}{21}\selectfont
+   \textcolor{accent}{Def.}\ #1\par}}
+% example:  \eg{body}
+\newcommand{\eg}[1]{\par\addvspace{1mm}%
+  {\handfont\fontsize{15}{21}\selectfont\textcolor{accent}{Ej.}\ #1\par}}
+% remark / note:  \obs{body}
+\newcommand{\obs}[1]{\par\addvspace{1mm}%
+  {\handfont\fontsize{15}{21}\selectfont\textcolor{accent}{Obs.}\ #1\par}}
+% display equations -- all at ONE uniform size (break wide ones by hand).
+% Centred with clear breathing room ABOVE and BELOW so they never crowd the text.
+% Tune \eqskip to change that breathing room everywhere.
+\newlength{\eqskip}\setlength{\eqskip}{4mm}
+\newcommand{\eq}[1]{\par\addvspace{\eqskip}\centerline{$\displaystyle\color{eqink}#1$}\addvspace{\eqskip}}
+\newcommand{\eqx}[1]{\par\addvspace{\eqskip}\centerline{$\displaystyle\color{eqink}#1$}\addvspace{\eqskip}}
+% for big blocks (matrices) that may be scaled to fit the width.
+% \centerline centres it even under \RaggedRight (adjustbox alone would sit left).
+\newcommand{\eqfit}[1]{\par\addvspace{\eqskip}%
+  \centerline{\adjustbox{max width=0.98\linewidth}{$\displaystyle\color{eqink}#1$}}\addvspace{\eqskip}}
+% key result boxed by hand — four slightly-wobbly pen strokes around the
+% equation, like circling the result you'll need for the exam.
+\newcommand{\keyeq}[1]{\par\addvspace{\eqskip}%
+  \begin{center}\begin{tikzpicture}
+    \node[inner xsep=3.4mm, inner ysep=2.6mm] (k) {$\displaystyle\color{eqink}#1$};
+    \coordinate (nw) at ([shift={( 0.5pt,-0.4pt)}]k.north west);
+    \coordinate (ne) at ([shift={(-0.6pt,-1.1pt)}]k.north east);
+    \coordinate (se) at ([shift={(-0.3pt, 0.9pt)}]k.south east);
+    \coordinate (sw) at ([shift={( 0.7pt, 0.5pt)}]k.south west);
+    \draw[accent, line width=0.75pt, line cap=round]
+      (nw) .. controls ($(nw)!.4!(ne)+(0,0.7pt)$) and ($(nw)!.75!(ne)+(0,-0.4pt)$) .. (ne)
+      (ne) .. controls ($(ne)!.5!(se)+(0.6pt,0)$) .. (se)
+      (se) .. controls ($(se)!.45!(sw)+(0,-0.6pt)$) and ($(se)!.8!(sw)+(0,0.4pt)$) .. (sw)
+      (sw) .. controls ($(sw)!.5!(nw)+(-0.6pt,0)$) .. (nw);
+  \end{tikzpicture}\end{center}\addvspace{\eqskip}}
+
+% ---- decorations -----------------------------------------------------
+% hand-drawn double underline rule: two non-parallel, slightly curved pen
+% strokes (same motif as \hl).  \penrule[width]
+\newcommand{\penrule}[1][42mm]{%
+  \par\nobreak\noindent
+  \begin{tikzpicture}
+    \coordinate (pa) at (0,0);       \coordinate (pb) at (#1,-0.5mm);
+    \coordinate (pc) at (0,-1.4mm);  \coordinate (pd) at (#1,-1.0mm);
+    \draw[accent, line width=0.8pt, line cap=round]
+      (pa) .. controls ($(pa)!.35!(pb)+(0,-0.5pt)$) and ($(pa)!.7!(pb)+(0,0.4pt)$) .. (pb);
+    \draw[accent, line width=0.6pt, line cap=round]
+      (pc) .. controls ($(pc)!.3!(pd)+(0,0.5pt)$) and ($(pc)!.75!(pd)+(0,-0.3pt)$) .. (pd);
+  \end{tikzpicture}\par}
+% legacy wavy rule (kept for compatibility)
+\newcommand{\wavyrule}[1][45mm]{%
+  \par\vspace{2mm}\noindent
+  \begin{tikzpicture}
+    \draw[accent, line width=1pt,
+          decorate, decoration={snake, amplitude=0.6mm, segment length=6mm}]
+      (0,0) -- (#1,0);\end{tikzpicture}\par}
+
+% ---- full-bleed cover photo with a uniform veil --------------------
+%   Both the photo and the cream veil are placed on THIS page's background via
+%   eso-pic (\AtPageLowerLeft), so the cover is reliably full-bleed even on a
+%   SINGLE XeLaTeX pass.  Two deliberate choices make it robust:
+%     * NOT a remember-picture overlay (that only resolves on the 2nd pass and
+%       otherwise collapses the photo to a top band).
+%     * The veil is a pre-baked alpha PNG (../Headers/veil.png, cream @ ~0.66),
+%       NOT a pgf `opacity` fill — pgf transparency corrupts the eso-pic
+%       background stream here (unknown ExtGState) and blanks the whole cover.
+%   The optional arg is accepted for backwards compatibility but the veil tint
+%   is fixed by veil.png (regenerate it to change the tint/opacity).
+\newcommand{\coverphoto}[2][0.66]{%
+  \AddToShipoutPictureBG*{%
+    \AtPageLowerLeft{\includegraphics[width=\paperwidth,height=\paperheight,%
+      keepaspectratio=false]{#2}}%
+    \AtPageLowerLeft{\includegraphics[width=\paperwidth,height=\paperheight,%
+      keepaspectratio=false]{\yalixroot Headers/veil.png}}%
+  }}
+
+% ---- framed polaroid photo ------------------------------------------
+\newcommand{\polaroid}[3][6]{%
+  \begin{tikzpicture}[rotate=#1]
+    \node[fill=white, inner sep=1.6mm, draw=mauve!40, line width=0.2pt]
+      {\includegraphics[width=#3]{#2}};\end{tikzpicture}}

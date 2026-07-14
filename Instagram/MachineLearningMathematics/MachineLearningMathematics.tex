@@ -1,0 +1,119 @@
+% =====================================================================
+%  yalix  --  "Matematicas del Machine Learning"  (articulo / apuntes)
+%  El contenido FLUYE y se pagina solo: varios temas por pagina, los
+%  titulos aparecen dentro del flujo (no uno por slide).
+%  Compilar:  xelatex MachineLearningMathematics.tex   (dos pasadas)
+% =====================================================================
+\def\yalixroot{../}\input{\yalixroot Headers/Headers.tex}
+\settotalslides{11}
+
+\begin{document}
+
+% ===================== PORTADA (pagina 1) ===========================
+\begin{slidec}
+  \coverphoto{assets/studying-title.jpg}
+  \raggedright
+  \serlead{Estudia conmigo:}
+  \vspace{1mm}
+  \sertitle{\fontsize{34}{37}\selectfont Matemáticas del Machine Learning}
+  \vspace{5mm}
+  \hand{Cómo se puede optimizar el descenso de gradiente}
+\end{slidec}
+\clearpage
+
+% ===================== ARTICULO (fluye) =============================
+\RaggedRight\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\parindent}{0pt}\setlength{\parskip}{1.4mm}
+\fontsize{13.5}{16}\selectfont\vspace*{1mm}
+
+\topic{Descenso de gradiente}
+\hand{El paso de primer orden avanza en contra del gradiente, escalado por un tamaño de paso $\alpha$:}
+\eq{x_{k+1} = x_k - \alpha \nabla f(x_k)}
+\obs{solo usa la pendiente, no cómo está cambiando.}
+
+\topic{Un paso más fino}
+\hand{Un dato extra hace cada paso más inteligente:}
+\keyeq{x_{k+1} = x_k - \hlm{H^{-1}} \nabla f(x_k)}
+\hand{...y solo necesita un poco del cálculo que ya conocemos.}
+
+\topic{Curvatura}
+\defn{La \uhand{expansión de Taylor} ajusta una parábola a $f$ cerca de un punto $a$:}
+\eq{\begin{aligned}
+    f(x) &= f(a) + \frac{f'(a)}{1!}(x-a)\\[1mm]
+         &\;+ \frac{f''(a)}{2!}(x-a)^2 + \dots
+  \end{aligned}}
+\obs{el término cuadrático lleva la \hl{curvatura}.}
+
+\topic{Método de Newton (1D)}
+\hand{Sea $a = x_k$ y $x-a = t$, y minimizamos la parábola:}
+\eqx{f(x_k+t) \approx f(x_k) + f'(x_k)t + \tfrac{1}{2}f''(x_k)t^2}
+\eqx{\Rightarrow\quad t = -\frac{f'(x_k)}{f''(x_k)}}
+
+\topic{Ejemplo}
+\eg{para $f(x) = 0.05x^4 - 0.2x^3 - 0.5x^2 + x + 2$ en $x_k = 3.5$:}
+\eqx{f'(3.5) = -1.275,\; f''(3.5) = 2.15}
+\eqx{t = -\frac{(-1.275)}{2.15} \approx 0.593 \Rightarrow x_{k+1} \approx 4.093}
+\begin{center}
+\begin{tikzpicture}
+  \begin{axis}[
+      width=66mm, height=42mm,
+      axis lines=middle,
+      axis line style={mauve, line width=0.5pt},
+      xtick={-2,0,2,4}, ytick={-2,2},
+      tick style={mauve, thin},
+      tick label style={color=mauve, font=\tiny},
+      xmin=-2.9, xmax=5.5, ymin=-2.8, ymax=2.8,
+      enlargelimits=false, clip=false,
+    ]
+    \addplot[ink, line width=1pt, smooth, samples=140, domain=-2.6:5.2]
+      {0.05*x^4 - 0.2*x^3 - 0.5*x^2 + x + 2};
+    % Newton step:  x_k -> x_{k+1}
+    \addplot[eqink, only marks, mark=*, mark size=1.3pt] coordinates {(3.5,-1.697)};
+    \addplot[accent, only marks, mark=*, mark size=1.3pt] coordinates {(4.093,-1.964)};
+    \node[anchor=north east, inner sep=1pt, font=\footnotesize]
+      at ([xshift=1pt,yshift=-3pt]axis cs:3.5,-1.697) {$\color{eqink}x_k$};
+    \node[anchor=north west, inner sep=1pt, font=\footnotesize]
+      at ([xshift=-1pt,yshift=-3pt]axis cs:4.093,-1.964) {$\color{accent}x_{k+1}$};
+  \end{axis}
+\end{tikzpicture}
+\end{center}
+
+\topic{Muchos parámetros}
+\hand{Los modelos reales tienen muchos parámetros, así que $f'$ y $f''$ pasan a sus análogos multivariados, hechos de derivadas parciales.}
+\defn{El gradiente \uhand{$\nabla f$} es el vector de todas las primeras derivadas parciales:}
+\eq{\nabla f = \begin{bmatrix} \dfrac{\partial f}{\partial x_1} \\[4mm]
+    \dfrac{\partial f}{\partial x_2} \\[3.5mm] \vdots \end{bmatrix}}
+
+\topic{La Hessiana}
+\defn{La Hessiana \uhand{$H$} es la matriz de todas las segundas derivadas parciales:}
+\eqfit{H_f = \begin{bmatrix}
+    \dfrac{\partial^2 f}{\partial x_1^2} & \dfrac{\partial^2 f}{\partial x_1 \partial x_2} & \cdots & \dfrac{\partial^2 f}{\partial x_1 \partial x_n} \\[5mm]
+    \dfrac{\partial^2 f}{\partial x_2 \partial x_1} & \dfrac{\partial^2 f}{\partial x_2^2} & \cdots & \dfrac{\partial^2 f}{\partial x_2 \partial x_n} \\[4.5mm]
+    \vdots & \vdots & \ddots & \vdots \\[4.5mm]
+    \dfrac{\partial^2 f}{\partial x_n \partial x_1} & \dfrac{\partial^2 f}{\partial x_n \partial x_2} & \cdots & \dfrac{\partial^2 f}{\partial x_n^2}
+  \end{bmatrix}}
+
+\topic{Newton en $n$ dimensiones}
+\hand{Reemplazamos $f' \to \nabla f$ y $f'' \to H$:}
+\eq{x_{k+1} = x_k - \frac{f'(x_k)}{f''(x_k)}}
+\keyeq{x_{k+1} = x_k - \hlm{H^{-1}} \nabla f(x_k)}
+
+\topic{En la práctica}
+\obs{calcular la Hessiana completa es costoso en modelos con muchas dimensiones.}
+\hand{Por eso normalmente se \hl{aproxima} $H^{-1}$ — la idea detrás de los métodos quasi-Newton como BFGS.}
+
+\vspace{2mm}
+\hand{En el fondo, dos ideas antiguas — la expansión de \hl{Taylor} y el paso de \hl{Newton} — todavía dan forma a los algoritmos que entrenan los modelos de hoy.}
+
+\clearpage
+% ===================== CIERRE (pagina final) ========================
+\begin{slidec}
+  \raggedright
+  \sertitle{\fontsize{23}{26}\selectfont ¿Cuál es tu aplicación favorita del cálculo en machine learning?}
+  \vspace{5mm}
+  \hand{\hl{Guarda} esto para tu próxima sesión de estudio, y cuéntame tu favorita en los comentarios}
+  \vspace{3mm}
+  \hand{\hl{Sígueme} — escribo las notas completas en \hl{asanchezyali.com}}
+\end{slidec}
+
+\end{document}
