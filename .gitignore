@@ -6,3 +6,11 @@ JavaScript/node_modules/
 *.aux
 *.out
 *.log
+
+# publishing tool
+.env
+publish/.env
+publish/.instagram_session.json
+Instagram/**/build/
+__pycache__/
+*.pyc
