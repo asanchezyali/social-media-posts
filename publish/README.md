@@ -1,12 +1,13 @@
 # publish — yalix carousel publisher
 
 Compile a yalix Instagram carousel, render Instagram-ready slides, and publish
-them as a carousel. Run everything from the **repository root**.
+them as a carousel. Managed with [uv](https://docs.astral.sh/uv/). Run everything
+from the **repository root**.
 
 ```
-python -m publish build <post_dir>            # compile + render slides
-python -m publish post  <post_dir>            # build + DRY-RUN publish plan
-python -m publish post  <post_dir> --publish  # build + actually upload
+uv run publish build <post_dir>            # compile + render slides
+uv run publish post  <post_dir>            # build + DRY-RUN publish plan
+uv run publish post  <post_dir> --publish  # build + actually upload
 ```
 
 `<post_dir>` is a post folder, e.g. `Instagram/MatematicasParaML/EspaciosVectoriales`.
@@ -29,11 +30,11 @@ python -m publish post  <post_dir> --publish  # build + actually upload
 - **Build**: `xelatex` (MacTeX/TeX Live) and `pdftoppm` (poppler) on your PATH.
   No Python packages. On macOS: `brew install poppler`. The handwriting font
   **SignPainter** is a macOS system font — building on Linux needs it installed.
-- **Publish**: a virtualenv with the publish deps.
+- **Publish**: uv resolves the Python deps automatically. The first
+  `uv run publish …` creates `.venv` and installs from `pyproject.toml`
+  (`uv sync` to do it up front). Then add your credentials:
 
 ```bash
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r publish/requirements.txt
 cp publish/.env.example .env        # then edit .env with your credentials
 ```
 

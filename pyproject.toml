@@ -1,0 +1,24 @@
+[project]
+name = "yalix-publish"
+version = "0.1.0"
+description = "Compile yalix Instagram carousels and publish them to Instagram"
+authors = [{ name = "Alejandro Sánchez Yalí", email = "asanchezyali@gmail.com" }]
+readme = "publish/README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "instagrapi>=2.1.2",
+    "python-dotenv>=1.0.1",
+    "pillow>=10.0.0",
+]
+
+# `uv run publish <cmd> ...` — the build step itself needs no Python packages
+# (just xelatex + pdftoppm on PATH); these deps are only for publishing.
+[project.scripts]
+publish = "publish.__main__:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["publish"]

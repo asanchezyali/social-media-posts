@@ -1,6 +1,0 @@
-# Publishing dependencies (only needed for `python -m publish post --publish`).
-# The `build` step needs NO Python packages — just xelatex + pdftoppm (poppler)
-# on your PATH.
-instagrapi>=2.1.2
-python-dotenv>=1.0.1
-Pillow>=10.0.0

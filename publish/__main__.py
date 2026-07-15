@@ -1,15 +1,15 @@
 """CLI for the yalix publishing tool.
 
-    python -m publish build <post_dir>
+    uv run publish build <post_dir>
         Compile the post and render 1080x1350 slides into <post_dir>/build/.
 
-    python -m publish post  <post_dir> [--publish]
+    uv run publish post  <post_dir> [--publish]
         Build, read <post_dir>/caption.md, and publish the carousel.
         DRY RUN by default (prints the plan). Add --publish to actually upload.
 
 Run from the repository root, e.g.
 
-    python -m publish post Instagram/MatematicasParaML/EspaciosVectoriales --publish
+    uv run publish post Instagram/MatematicasParaML/EspaciosVectoriales --publish
 """
 
 from __future__ import annotations
@@ -56,7 +56,7 @@ def cmd_post(args: argparse.Namespace) -> int:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(prog="python -m publish", description=__doc__)
+    parser = argparse.ArgumentParser(prog="uv run publish", description=__doc__)
     sub = parser.add_subparsers(dest="cmd", required=True)
 
     b = sub.add_parser("build", help="compile + render slides only")
