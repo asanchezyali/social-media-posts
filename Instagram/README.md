@@ -79,8 +79,17 @@ Instagram/
 │   ├── EliminacionGauss/        # post #6 (elementary transforms, row-echelon, RREF)
 │   │   ├── EliminacionGauss.tex
 │   │   └── assets/cover.jpg
-│   └── TrucoMenosUno/           # post #7 (Minus-1 trick: kernel basis from RREF)
-│       ├── TrucoMenosUno.tex
+│   ├── TrucoMenosUno/           # post #7 (Minus-1 trick: kernel basis from RREF)
+│   │   ├── TrucoMenosUno.tex
+│   │   └── assets/cover.jpg
+│   ├── CalcularInversa/         # post #8 (inverse via Gauss-Jordan: [A|I]→[I|A⁻¹])
+│   │   ├── CalcularInversa.tex
+│   │   └── assets/cover.jpg
+│   ├── AlgoritmosSolucion/      # post #9 (methods map: inverse, least-squares/pseudo-inverse, gaussian elim., iterative)
+│   │   ├── AlgoritmosSolucion.tex
+│   │   └── assets/cover.jpg
+│   └── EspaciosVectoriales/     # post #10 (§2.4: groups, Abelian, GL(n,R), vector spaces, column/row vectors)
+│       ├── EspaciosVectoriales.tex
 │       └── assets/cover.jpg
 └── MachineLearningMathematics/  # earlier standalone demo (1 level deep)
 ```

@@ -12,7 +12,8 @@ auto-paginated — not one topic per slide. The reference deck is
 `Instagram/MatematicasParaML/` — the series *Matemáticas para Machine Learning*,
 with posts `SistemasLineales/` (#1), `Matrices/` (#2), `InversaTranspuesta/` (#3)
 `MultiplicacionEscalar/` (#4), `SolucionParticularGeneral/` (#5),
-`EliminacionGauss/` (#6) and `TrucoMenosUno/` (#7). It follows
+`EliminacionGauss/` (#6), `TrucoMenosUno/` (#7), `CalcularInversa/` (#8) and
+`AlgoritmosSolucion/` (#9) and `EspaciosVectoriales/` (#10). It follows
 the MML book (Deisenroth/Faisal/Ong) §2, so the tag names the module:
 `\setseriestag{Álgebra lineal · ML \#N}`. The goal of the series is a genuinely
 useful **study resource** — lean into many colourful, didactic illustrations, and
