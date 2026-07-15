@@ -1,5 +1,5 @@
 % =====================================================================
-%  yalix  --  "Eliminación de Gauss"  (apuntes)   ·  Serie ML · #6
+%  yalix  --  "Eliminación Gaussiana"  (apuntes)   ·  Serie ML · #6
 %  Basado en: Deisenroth, Faisal, Ong -- Mathematics for ML (2.3.2)
 %  Compilar:  xelatex EliminacionGauss.tex   (dos pasadas)
 % =====================================================================
@@ -27,7 +27,7 @@
   \raggedright
   \serlead{Serie · Matemáticas para Machine Learning}
   \vspace{1mm}
-  \sertitle{\fontsize{35}{38}\selectfont Eliminación de Gauss}
+  \sertitle{\fontsize{35}{38}\selectfont Eliminación Gaussiana}
   \vspace{4mm}
   \hand{Simplificar un sistema \hl{sin cambiar} sus soluciones}
 \end{slidec}
@@ -69,7 +69,7 @@
 
 % -------------------------------------------------- aumentada ------
 \topic{La matriz aumentada}
-\hand{Guardamos solo los números en la \hl{matriz aumentada} $[A\mid\mathbf{b}]$; las incógnitas quedan implícitas. Sobre ella operamos por filas.}
+\hand{La matriz \hl{aumentada} guarda solo los números, sin escribir las incógnitas; sobre ella operamos por filas.}
 \begin{center}
 \begin{tikzpicture}[x=6.4mm, y=6.4mm]
   \foreach \r in {0,-1}{\foreach \c in {0,1,2}{\cell{\c}{\r}{cellBase}{}}}  % A: cols 0-2
@@ -86,7 +86,7 @@
 
 % -------------------------------------------------- escalonada -----
 \topic{Hasta la forma escalonada}
-\hand{Aplicamos las operaciones hasta dejar una \hl{escalera}: la forma escalonada por filas.}
+\hand{Operamos hasta dejar una \hl{escalera}: la forma escalonada por filas.}
 \begin{center}
 \begin{tikzpicture}[x=6.4mm, y=6.4mm]
   % REF 4x5, pivotes en (0,0),(2,-1),(3,-2)
@@ -135,7 +135,7 @@
 % -------------------------------------------------- por qué --------
 \topic{Por qué lo hacemos}
 \hand{Desde la forma escalonada, la solución \hl{particular} y la \hl{general} salen casi directo (justo la receta de la parte anterior).}
-\obs{Y la eliminación de Gauss es el motor detrás de resolver sistemas, \hl{invertir} matrices y medir el \hl{rango}.}
+\obs{Y la eliminación gaussiana es el motor detrás de resolver sistemas lineales, \hl{invertir} matrices y medir el \hl{rango}.}
 
 \clearpage
 % ===================== CIERRE =======================================
