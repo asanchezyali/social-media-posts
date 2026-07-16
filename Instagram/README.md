@@ -1,7 +1,8 @@
 # yalix — carousel template
 
 The **yalix** brand style for technical carousels: a grid-paper "study notes"
-(*apuntes*) look designed for **Instagram** (4:5 portrait, 108×135 mm). The
+(*apuntes*) look designed for **Instagram** (3:4 portrait, 108×144 mm — matches
+the 2026 profile-grid crop). The
 content **flows like a small article** — several topics per slide, auto-paginated
 — with left-aligned handwritten text (like real maths notes), centred equations,
 a warm cream palette, and a full-bleed photo cover.
@@ -149,7 +150,7 @@ for the old 1-level demo).
 **Notes on layout:** text is left-aligned and flows (no manual `\\`); equations
 stay centred. Wide equations are split into two lines by hand so they keep the
 same size (don't rely on shrinking; `\eqfit` is only for big matrices). Dense
-slides are near the 135 mm height limit — keep sizes uniform and `\eq` spacing
+slides are near the 144 mm height limit — keep sizes uniform and `\eq` spacing
 minimal so nothing overflows to an extra page. Graphs are native **pgfplots** in
 the brand colours. See `SistemasLineales/SistemasLineales.tex` for the full
 pattern.

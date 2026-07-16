@@ -14,9 +14,10 @@ import subprocess
 import sys
 from pathlib import Path
 
-# Instagram recommended portrait size (4:5). yalix pages are 108x135 mm,
-# i.e. exactly 4:5, so forcing both dimensions rescales without distortion.
-IG_WIDTH, IG_HEIGHT = 1080, 1350
+# Instagram portrait 3:4 (matches the 2026 profile-grid crop; the tallest feed
+# size). yalix pages are 108x144 mm = exactly 3:4, so forcing both dimensions
+# rescales without distortion.
+IG_WIDTH, IG_HEIGHT = 1080, 1440
 
 # LaTeX build litter to remove after a successful compile (the .pdf stays).
 AUX_EXTS = (".aux", ".log", ".out", ".synctex.gz", ".nav", ".snm", ".toc")
@@ -57,7 +58,7 @@ def compile_post(post_dir: Path, tex: Path) -> Path:
 
 
 def render(pdf: Path, out_dir: Path) -> list[Path]:
-    """Render every PDF page straight to a 1080x1350 JPEG with pdftoppm."""
+    """Render every PDF page straight to a 1080x1440 JPEG with pdftoppm."""
     if out_dir.exists():
         shutil.rmtree(out_dir)
     out_dir.mkdir(parents=True)

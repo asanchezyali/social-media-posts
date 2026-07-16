@@ -19,9 +19,10 @@ uv run publish post  <post_dir> --publish  # build + actually upload
    (`\yalixroot ../../` → `Instagram/`, plus `Headers/`, `fonts/`,
    `palette.tex`, `veil.png`, `assets/cover.jpg`). This is why the tool does
    **not** copy the lone `.tex` into a temp dir — the includes would break.
-2. **Render** — `pdftoppm` rasterises each page straight to a **1080×1350 JPEG**
-   (Instagram 4:5). yalix pages are 108×135 mm = exactly 4:5, so no cropping or
-   padding is needed. Slides land in `<post_dir>/build/slide-N.jpg` (gitignored).
+2. **Render** — `pdftoppm` rasterises each page straight to a **1080×1440 JPEG**
+   (Instagram 3:4 — matches the 2026 profile-grid crop, no cutoff). yalix pages
+   are 108×144 mm = exactly 3:4, so no cropping or padding is needed. Slides land
+   in `<post_dir>/build/slide-N.jpg` (gitignored).
 3. **Publish** — reads `<post_dir>/caption.md` and uploads the ordered slides as
    one carousel. Two backends via `--api`:
    - **`graph`** (default) — the official Instagram **Graph API**. ToS-compliant

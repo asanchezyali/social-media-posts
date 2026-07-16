@@ -7,11 +7,14 @@
 
 \documentclass[12pt]{article}
 
-% ---- Instagram portrait 4:5 canvas -----------------------------------
+% ---- Instagram portrait 3:4 canvas (1080x1440) -----------------------
+%   3:4 matches Instagram's profile-grid crop (2026), so posts show in the
+%   grid WITHOUT losing the top tag / bottom dots, and the taller page gives
+%   dense notes more vertical room. 108x144mm = 0.75 = 3:4.
 \usepackage{geometry}
 \geometry{
     paperwidth=108mm,
-    paperheight=135mm,
+    paperheight=144mm,
     left=11mm, right=11mm,
     top=13mm, bottom=16mm,
     headheight=8mm, headsep=5mm,

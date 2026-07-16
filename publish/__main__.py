@@ -1,7 +1,7 @@
 """CLI for the yalix publishing tool.
 
     uv run publish build <post_dir>
-        Compile the post and render 1080x1350 slides into <post_dir>/build/.
+        Compile the post and render 1080x1440 slides into <post_dir>/build/.
 
     uv run publish post  <post_dir> [--publish]
         Build, read <post_dir>/caption.md, and publish the carousel.

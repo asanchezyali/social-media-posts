@@ -1,13 +1,13 @@
 ---
 name: instagram-carousel
-description: Create yalix "study-notes" math/tech carousels for Instagram (4:5 portrait, cream grid-paper, XeLaTeX + SignPainter). Use when the user asks to create, draft, restyle, or extend an Instagram post/carousel in this repo — a new topic, a new part of a series, a new palette, or edits to the "apuntes" slides. The template lives in Instagram/Headers/Headers.tex. NOTE: for LinkedIn dark-theme code posts, use the linkedin-post skill instead.
+description: Create yalix "study-notes" math/tech carousels for Instagram (3:4 portrait, cream grid-paper, XeLaTeX + SignPainter). Use when the user asks to create, draft, restyle, or extend an Instagram post/carousel in this repo — a new topic, a new part of a series, a new palette, or edits to the "apuntes" slides. The template lives in Instagram/Headers/Headers.tex. NOTE: for LinkedIn dark-theme code posts, use the linkedin-post skill instead.
 ---
 
 # yalix carousel — study-notes math posts (Instagram)
 
 This skill builds **yalix**-brand carousels for **Instagram**: a student's
 **lecture-notes (apuntes)** look on cream grid paper, written in **Spanish**,
-4:5 portrait. Content **flows like a small article** — several topics per slide,
+3:4 portrait (1080×1440). Content **flows like a small article** — several topics per slide,
 auto-paginated — not one topic per slide. The reference deck is
 `Instagram/MatematicasParaML/` — the series *Matemáticas para Machine Learning*,
 with posts `SistemasLineales/` (#1), `Matrices/` (#2), `InversaTranspuesta/` (#3)
@@ -239,7 +239,7 @@ count** (drives the progress dots).
 
 ## Layout discipline (avoid overflow)
 
-Dense slides sit near the 135 mm height limit. Keep uniform sizing:
+Dense slides sit near the 144 mm height limit. Keep uniform sizing:
 
 - Keep body at 13.5/16 and handwriting at 15/21 — **do not bump sizes** to fill
   space; that causes overflow to an extra page and breaks the dot count.
