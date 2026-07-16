@@ -1,0 +1,126 @@
+% =====================================================================
+%  yalix  --  "Subespacios vectoriales"  (apuntes)  ·  Serie ML · #11
+%  Basado en: Deisenroth, Faisal, Ong -- Mathematics for ML (2.4.3)
+%  Compilar:  xelatex Subespacios.tex   (dos pasadas)
+% =====================================================================
+\def\yalixroot{../../}\input{\yalixroot Headers/Headers.tex}
+\input{../palette.tex}   % paleta de la serie "Matemáticas para ML"
+\settotalslides{6}
+\setseriestag{Álgebra lineal · ML \#11}
+
+% ---- colores + iconos para las ilustraciones ------------------------
+\definecolor{cellBase}{RGB}{233,241,242}   % pale aqua
+\definecolor{cellEdge}{RGB}{144,170,178}   % borde
+\definecolor{nocol}{RGB}{197,90,48}        % terracota (cruces)
+\definecolor{setfill}{RGB}{176,214,220}    % relleno de conjuntos (aqua)
+
+\tikzset{
+  yes/.pic={\draw[eqink, line width=1.2pt, line cap=round, line join=round]
+              (-1.6mm,0) -- (-0.4mm,-1.4mm) -- (2.1mm,1.6mm);},
+  no/.pic={\draw[nocol, line width=1.2pt, line cap=round]
+              (-1.5mm,1.5mm)--(1.5mm,-1.5mm) (-1.5mm,-1.5mm)--(1.5mm,1.5mm);},
+  ax/.style={mauve, line width=0.4pt, -{Latex[length=1.1mm]}},
+}
+
+\begin{document}
+
+% ===================== PORTADA ======================================
+\begin{slidec}
+  \coverphoto{assets/cover.jpg}
+  \raggedright
+  \serlead{Serie · Matemáticas para Machine Learning}
+  \vspace{1mm}
+  \sertitle{\fontsize{33}{37}\selectfont Subespacios vectoriales}
+  \vspace{4mm}
+  \hand{Un espacio dentro de otro del que \hl{nunca sales}}
+\end{slidec}
+\clearpage
+
+% ===================== ARTICULO =====================================
+\RaggedRight\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\parindent}{0pt}\setlength{\parskip}{1.4mm}
+\fontsize{13.5}{16}\selectfont\vspace*{1mm}
+
+% -------------------------------------------------- la idea --------
+\topic{La idea}
+\hand{Un \uhand{subespacio} es un subconjunto de un espacio vectorial que, con las \hl{mismas} operaciones, es a su vez un espacio vectorial.}
+\defn{$U\subseteq V$ es un subespacio si $U\neq\varnothing$ y $U$ es cerrado bajo la suma y el producto por escalares de $V$.}
+\obs{"Cerrado" significa que operando \hl{dentro} de $U$ nunca te sales de $U$. Es una idea central en ML (p.\,ej. reducción de dimensionalidad).}
+
+% -------------------------------------------------- 3 condiciones --
+\topic{Solo hay que verificar tres cosas}
+\hand{De $V$ se \hl{heredan} gratis el grupo abeliano, la distributividad, la asociatividad y el neutro. Basta comprobar:}
+\begin{center}
+\begin{tikzpicture}
+  \node[draw=cellEdge, line width=0.4pt, fill=cellBase, rounded corners=1.4mm,
+        text width=74mm, inner sep=2.6mm, font=\small\color{ink}] {%
+    \textbf{1.\ No vacío:}\ \ $\mathbf{0}\in U$\\[1.6mm]
+    \textbf{2.\ Cerrado $+$:}\ \ $\forall\,\mathbf{x},\mathbf{y}\in U:\ \mathbf{x}+\mathbf{y}\in U$\\[1.6mm]
+    \textbf{3.\ Cerrado $\cdot$:}\ \ $\forall\,\lambda\in\mathbb{R},\,\mathbf{x}\in U:\ \lambda\mathbf{x}\in U$};
+\end{tikzpicture}
+\end{center}
+\obs{La condición $\mathbf{0}\in U$ es la prueba más rápida: si un conjunto no pasa por el origen, \hl{no} es subespacio.}
+
+% -------------------------------------------------- figura R^2 ----
+\topic{Míralo en el plano}
+\hand{¿Cuáles de estos subconjuntos de $\mathbb{R}^2$ son subespacios?}
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  % ---- A: cuadrado acotado (falla cerradura) ----
+  \begin{scope}[shift={(0,0)}]
+    \draw[ax] (-1,0)--(1,0);  \draw[ax] (0,-1)--(0,1);
+    \fill[setfill, opacity=0.65, draw=eqink, line width=0.5pt] (0.15,0.15) rectangle (0.85,0.85);
+    \node[font=\scriptsize\color{ink}] at (-0.8,0.8) {$A$};
+    \pic at (0.8,-0.75) {no};
+  \end{scope}
+  % ---- B: recta que NO pasa por el origen (no contiene 0) ----
+  \begin{scope}[shift={(3.3,0)}]
+    \draw[ax] (-1,0)--(1,0);  \draw[ax] (0,-1)--(0,1);
+    \draw[eqink, line width=1pt] (-0.75,-0.55) -- (0.6,1.0);
+    \node[font=\scriptsize\color{ink}] at (-0.8,0.8) {$B$};
+    \pic at (0.8,-0.75) {no};
+  \end{scope}
+  % ---- C: dos rectas por el origen + cono (falla cerradura) ----
+  \begin{scope}[shift={(0,-3)}]
+    \draw[ax] (-1,0)--(1,0);  \draw[ax] (0,-1)--(0,1);
+    \fill[setfill, opacity=0.6] (0.9,0.55) -- (0,0) -- (0.9,-0.55) -- cycle;
+    \fill[setfill, opacity=0.6] (-0.9,-0.55) -- (0,0) -- (-0.9,0.55) -- cycle;
+    \draw[eqink, line width=1pt] (-0.9,0.55) -- (0.9,-0.55);
+    \draw[eqink, line width=1pt] (-0.9,-0.55) -- (0.9,0.55);
+    \node[font=\scriptsize\color{ink}] at (-0.8,0.8) {$C$};
+    \pic at (0.8,-0.75) {no};
+  \end{scope}
+  % ---- D: recta por el origen (SÍ es subespacio) ----
+  \begin{scope}[shift={(3.3,-3)}]
+    \draw[ax] (-1,0)--(1,0);  \draw[ax] (0,-1)--(0,1);
+    \draw[eqink, line width=1pt] (-0.9,-0.6) -- (0.9,0.6);
+    \fill[ink] (0,0) circle (0.7pt);
+    \node[font=\scriptsize\color{ink}] at (-0.8,0.8) {$D$};
+    \pic at (0.8,-0.75) {yes};
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+\obs{Solo $D$ (una recta \hl{por el origen}) lo es. $A$ y $C$ rompen la cerradura; $B$ no contiene a $\mathbf{0}$.}
+
+% -------------------------------------------------- ejemplos ------
+\topic{Los que sí y los que no}
+\hand{Todo espacio $V$ tiene dos subespacios \hl{triviales}: él mismo y $\{\mathbf{0}\}$.}
+\obs{El conjunto solución de un sistema \hl{homogéneo} $A\mathbf{x}=\mathbf{0}$ es un subespacio de $\mathbb{R}^n$; el de uno \hl{inhomogéneo} ($\mathbf{b}\neq\mathbf{0}$) no lo es, porque no contiene a $\mathbf{0}$.}
+\obs{Y la \hl{intersección} de varios subespacios es, de nuevo, un subespacio.}
+
+% -------------------------------------------------- puente --------
+\topic{El puente con los sistemas}
+\obs{De hecho, \hl{todo} subespacio de $\mathbb{R}^n$ es el espacio solución de algún sistema homogéneo $A\mathbf{x}=\mathbf{0}$: subespacios y sistemas lineales son dos caras de lo mismo.}
+
+\clearpage
+% ===================== CIERRE =======================================
+\begin{slidec}
+  \raggedright
+  \sertitle{\fontsize{24}{27}\selectfont ¿Ya te basta el origen para descartar un subespacio?}
+  \vspace{5mm}
+  \hand{Forma parte de la serie \hl{Matemáticas para Machine Learning}.}
+  \vspace{3mm}
+  \hand{\hl{Guarda} esto y \hl{sígueme} para las siguientes en \hl{asanchezyali.com}}
+\end{slidec}
+
+\end{document}

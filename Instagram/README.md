@@ -89,8 +89,11 @@ Instagram/
 │   ├── AlgoritmosSolucion/      # post #9 (methods map: inverse, least-squares/pseudo-inverse, gaussian elim., iterative)
 │   │   ├── AlgoritmosSolucion.tex
 │   │   └── assets/cover.jpg
-│   └── EspaciosVectoriales/     # post #10 (§2.4: groups, Abelian, GL(n,R), vector spaces, column/row vectors)
-│       ├── EspaciosVectoriales.tex
+│   ├── EspaciosVectoriales/     # post #10 (§2.4: groups, Abelian, GL(n,R), vector spaces, column/row vectors)
+│   │   ├── EspaciosVectoriales.tex
+│   │   └── assets/cover.jpg
+│   └── Subespacios/             # post #11 (§2.4.3: vector subspaces, 3 conditions, R^2 figure, homogeneous systems)
+│       ├── Subespacios.tex
 │       └── assets/cover.jpg
 └── MachineLearningMathematics/  # earlier standalone demo (1 level deep)
 ```
