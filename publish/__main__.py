@@ -44,13 +44,19 @@ def cmd_post(args: argparse.Namespace) -> int:
     print(caption)
     print("=" * 56)
 
+    print(f"API   : {args.api}")
     if not args.publish:
         print("\n🔒 DRY RUN — nothing uploaded. Re-run with --publish to post.")
         return 0
 
-    from .poster import InstagramPoster
+    if args.api == "graph":
+        from .graph_poster import GraphPoster
 
-    url = InstagramPoster().post_carousel(slides, caption)
+        url = GraphPoster().post_carousel(slides, caption)
+    else:
+        from .poster import InstagramPoster
+
+        url = InstagramPoster().post_carousel(slides, caption, verification_code=args.code)
     print(f"\n🚀 Published: {url}")
     return 0
 
@@ -66,6 +72,14 @@ def main() -> int:
     p = sub.add_parser("post", help="build + publish a carousel (dry-run unless --publish)")
     p.add_argument("post", help="path to the post folder")
     p.add_argument("--publish", action="store_true", help="actually upload to Instagram")
+    p.add_argument(
+        "--api",
+        choices=("graph", "instagrapi"),
+        default="graph",
+        help="publishing backend: 'graph' = official Graph API (default), "
+        "'instagrapi' = private API (unofficial, often blocked)",
+    )
+    p.add_argument("--code", default="", help="2FA code (instagrapi backend only)")
     p.set_defaults(func=cmd_post)
 
     args = parser.parse_args()

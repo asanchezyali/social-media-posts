@@ -4,11 +4,20 @@ version = "0.1.0"
 description = "Compile yalix Instagram carousels and publish them to Instagram"
 authors = [{ name = "Alejandro Sánchez Yalí", email = "asanchezyali@gmail.com" }]
 readme = "publish/README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.13"
+# Pinned to the versions the account last logged in with successfully
+# (asanchezyali/instagram-bot, Nov 2024). instagrapi bakes the Instagram
+# app-version / device fingerprint into the library, so the exact version
+# matters for passing login — newer instagrapi presents a new device and
+# trips Instagram's suspicious-login checkpoint.
 dependencies = [
-    "instagrapi>=2.1.2",
+    "requests>=2.31",          # Graph API backend (default)
     "python-dotenv>=1.0.1",
-    "pillow>=10.0.0",
+    # instagrapi backend (unofficial, often blocked). Pinned to the versions
+    # the account last logged in with; newer instagrapi trips the checkpoint.
+    "instagrapi==2.1.2",
+    "pydantic==2.7.1",
+    "pillow==10.0.0",
 ]
 
 # `uv run publish <cmd> ...` — the build step itself needs no Python packages

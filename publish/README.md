@@ -23,7 +23,14 @@ uv run publish post  <post_dir> --publish  # build + actually upload
    (Instagram 4:5). yalix pages are 108×135 mm = exactly 4:5, so no cropping or
    padding is needed. Slides land in `<post_dir>/build/slide-N.jpg` (gitignored).
 3. **Publish** — reads `<post_dir>/caption.md` and uploads the ordered slides as
-   one carousel via [instagrapi](https://github.com/subzeroid/instagrapi).
+   one carousel. Two backends via `--api`:
+   - **`graph`** (default) — the official Instagram **Graph API**. ToS-compliant
+     and reliable. One-time setup in [GRAPH_API.md](GRAPH_API.md); it fetches the
+     slides from public URLs (uploaded to catbox.moe by default, or self-hosted
+     via `IMAGE_BASE_URL`).
+   - **`instagrapi`** — the unofficial private API (username/password). Simpler
+     but Instagram actively blocks new automated logins with a checkpoint, so it
+     often fails. Kept as a fallback.
 
 ## Requirements
 
