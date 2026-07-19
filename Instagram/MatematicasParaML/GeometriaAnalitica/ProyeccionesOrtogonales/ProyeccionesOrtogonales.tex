@@ -1,0 +1,77 @@
+% =====================================================================
+%  yalix  --  "Proyecciones ortogonales"  (apuntes) · Geom. analítica · #7
+%  Basado en: Deisenroth, Faisal, Ong -- Mathematics for ML (3.8)
+%  Compilar:  xelatex ProyeccionesOrtogonales.tex   (dos pasadas)
+% =====================================================================
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
+\input{../palette.tex}
+\settotalslides{5}
+\setseriestag{Geometría analítica · ML \#7}
+
+\definecolor{cellBase}{RGB}{236,233,246}
+\definecolor{cellEdge}{RGB}{150,148,182}
+\definecolor{coral}{RGB}{201,84,60}
+
+\begin{document}
+
+% ===================== PORTADA ======================================
+\begin{slidec}
+  \coverphoto{assets/cover.jpg}
+  \raggedright
+  \serlead{Serie · Matemáticas para Machine Learning}
+  \vspace{1mm}
+  \sertitle{\fontsize{32}{36}\selectfont Proyecciones ortogonales}
+  \vspace{4mm}
+  \hand{La \hl{sombra} más cercana de un vector}
+\end{slidec}
+\clearpage
+
+% ===================== ARTICULO =====================================
+\RaggedRight\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\parindent}{0pt}\setlength{\parskip}{1.4mm}
+\fontsize{13.5}{16}\selectfont\vspace*{1mm}
+
+% -------------------------------------------------- idea --------
+\topic{La idea}
+\hand{Proyectar $\mathbf{x}$ sobre un subespacio $U$ es hallar el punto de $U$ \hl{más cercano} a $\mathbf{x}$. La clave: el error $\mathbf{x}-\pi_U(\mathbf{x})$ queda \hl{perpendicular} a $U$.}
+\obs{Es comprimir con la menor pérdida posible —el corazón de PCA, mínimos cuadrados y la regresión.}
+
+% -------------------------------------------------- sobre recta -
+\topic{Sobre una recta}
+\hand{Si $U$ es la recta generada por $\mathbf{b}$, la sombra de $\mathbf{x}$ es:}
+\keyeq{\pi_U(\mathbf{x}) = \dfrac{\langle\mathbf{x},\mathbf{b}\rangle}{\langle\mathbf{b},\mathbf{b}\rangle}\,\mathbf{b}}
+\begin{center}
+\begin{tikzpicture}[x=11mm,y=11mm,>={Latex[length=2mm]}]
+  \draw[mauve, line width=0.9pt] (-0.5,-0.35)--(2.7,1.89) node[right,font=\scriptsize\color{mauve}]{$U=\operatorname{span}[\mathbf{b}]$};
+  \coordinate (X) at (1.0,1.9);
+  \coordinate (P) at (1.732,1.212);   % pie de la perpendicular sobre la recta
+  \draw[->, ink, line width=1.1pt] (0,0)--(X) node[left,font=\scriptsize\color{ink}]{$\mathbf{x}$};
+  \draw[->, accent, line width=1.1pt] (0,0)--(P) node[below right,font=\scriptsize\color{accent}]{$\pi_U(\mathbf{x})$};
+  \draw[coral, densely dashed, line width=0.7pt] (X)--(P);
+  \draw[coral, line width=0.6pt] ($(P)+(-0.22,0.06)$)--($(P)+(-0.15,0.28)$)--($(P)+(0.07,0.21)$);
+  \fill[ink] (0,0) circle (0.8pt);
+\end{tikzpicture}
+\end{center}
+
+% -------------------------------------------------- matriz -----
+\topic{La matriz de proyección}
+\hand{La proyección es \hl{lineal}: se aplica con una matriz. Sobre una recta y sobre un subespacio general $U=\operatorname{span}[B]$:}
+\keyeq{P = \dfrac{\mathbf{b}\mathbf{b}^\top}{\mathbf{b}^\top\mathbf{b}}, \qquad P = B(B^\top B)^{-1}B^\top}
+\obs{$P$ es simétrica y cumple $P^2=P$ : proyectar dos veces da lo mismo.}
+
+% -------------------------------------------------- ML ---------
+\topic{¿Por qué importa en ML?}
+\obs{Mínimos cuadrados proyecta $\mathbf{b}$ sobre el espacio columna de $A$; PCA proyecta los datos sobre las direcciones de mayor \hl{varianza}. Comprimir bien \emph{es} proyectar bien.}
+
+\clearpage
+% ===================== CIERRE =======================================
+\begin{slidec}
+  \raggedright
+  \sertitle{\fontsize{25}{28}\selectfont ¿Sobre qué subespacio proyectas tus datos?}
+  \vspace{5mm}
+  \hand{Parte del módulo de \hl{Geometría analítica} de la serie.}
+  \vspace{3mm}
+  \hand{\hl{Guarda} esto y \hl{sígueme} para las siguientes en \hl{asanchezyali.com}}
+\end{slidec}
+
+\end{document}

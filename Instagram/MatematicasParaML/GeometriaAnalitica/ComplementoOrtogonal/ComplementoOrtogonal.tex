@@ -1,0 +1,73 @@
+% =====================================================================
+%  yalix  --  "Complemento ortogonal"  (apuntes)  ·  Geometría analítica · #5
+%  Basado en: Deisenroth, Faisal, Ong -- Mathematics for ML (3.6)
+%  Compilar:  xelatex ComplementoOrtogonal.tex   (dos pasadas)
+% =====================================================================
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
+\input{../palette.tex}
+\settotalslides{5}
+\setseriestag{Geometría analítica · ML \#5}
+
+\definecolor{cellBase}{RGB}{236,233,246}
+\definecolor{cellEdge}{RGB}{150,148,182}
+\definecolor{coral}{RGB}{201,84,60}
+
+\begin{document}
+
+% ===================== PORTADA ======================================
+\begin{slidec}
+  \coverphoto{assets/cover.jpg}
+  \raggedright
+  \serlead{Serie · Matemáticas para Machine Learning}
+  \vspace{1mm}
+  \sertitle{\fontsize{33}{37}\selectfont Complemento ortogonal}
+  \vspace{4mm}
+  \hand{Todo lo \hl{perpendicular} a un subespacio}
+\end{slidec}
+\clearpage
+
+% ===================== ARTICULO =====================================
+\RaggedRight\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\parindent}{0pt}\setlength{\parskip}{1.4mm}
+\fontsize{13.5}{16}\selectfont\vspace*{1mm}
+
+% -------------------------------------------------- qué es -------
+\topic{¿Qué es?}
+\hand{Dado un subespacio $U\subseteq V$, su complemento \uhand{ortogonal} $U^\perp$ reúne \emph{todos} los vectores perpendiculares a $U$:}
+\keyeq{U^\perp = \{\,\mathbf{v}\in V : \langle\mathbf{v},\mathbf{u}\rangle=0 \ \forall\,\mathbf{u}\in U\,\}}
+\obs{También es un subespacio, y se cortan solo en el origen: $U\cap U^\perp=\{\mathbf{0}\}$.}
+
+% -------------------------------------------------- dimensiones -
+\topic{Se reparten el espacio}
+\hand{Entre $U$ y $U^\perp$ cubren todo $V$ sin solaparse —una suma \hl{directa}:}
+\keyeq{V = U \oplus U^\perp}
+\obs{Las dimensiones encajan: $\dim U + \dim U^\perp = \dim V$.}
+\obs{Así, cada vector se descompone de forma única: algo en $U$ y algo en $U^\perp$.}
+
+% -------------------------------------------------- ilustración -
+\topic{El vector normal}
+\hand{En $\mathbb{R}^3$, si $U$ es un plano, su complemento es la \hl{recta normal}: la dirección perpendicular al plano.}
+\begin{center}
+\begin{tikzpicture}[x=10mm,y=10mm]
+  \fill[accent!16] (-1.5,-0.55)--(1.5,-1.0)--(1.5,0.35)--(-1.5,0.8)--cycle;
+  \draw[accent!75!ink, line width=0.7pt] (-1.5,-0.55)--(1.5,-1.0)--(1.5,0.35)--(-1.5,0.8)--cycle;
+  \node[font=\scriptsize\color{accent}] at (1.15,-0.55){$U$};
+  \draw[->, eqink, line width=1.2pt] (0,-0.12)--(0,1.9) node[right,font=\scriptsize\color{eqink}]{$U^\perp$};
+  \draw[coral, line width=0.6pt] (0.26,-0.08)--(0.26,0.18)--(0,0.18);
+  \fill[ink] (0,-0.12) circle (0.8pt);
+\end{tikzpicture}
+\end{center}
+\obs{Ese vector normal define el plano: es la clave de los \hl{hiperplanos} y de las fronteras de decisión en ML.}
+
+\clearpage
+% ===================== CIERRE =======================================
+\begin{slidec}
+  \raggedright
+  \sertitle{\fontsize{25}{28}\selectfont ¿Qué queda perpendicular a tu subespacio?}
+  \vspace{5mm}
+  \hand{Parte del módulo de \hl{Geometría analítica} de la serie.}
+  \vspace{3mm}
+  \hand{\hl{Guarda} esto y \hl{sígueme} para las siguientes en \hl{asanchezyali.com}}
+\end{slidec}
+
+\end{document}

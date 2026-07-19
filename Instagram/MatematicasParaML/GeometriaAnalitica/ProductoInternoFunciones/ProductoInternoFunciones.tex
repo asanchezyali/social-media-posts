@@ -1,0 +1,72 @@
+% =====================================================================
+%  yalix  --  "Producto interno de funciones"  (apuntes) · Geom. analítica · #6
+%  Basado en: Deisenroth, Faisal, Ong -- Mathematics for ML (3.7)
+%  Compilar:  xelatex ProductoInternoFunciones.tex   (dos pasadas)
+% =====================================================================
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
+\input{../palette.tex}
+\settotalslides{5}
+\setseriestag{Geometría analítica · ML \#6}
+
+\definecolor{coral}{RGB}{201,84,60}
+
+\begin{document}
+
+% ===================== PORTADA ======================================
+\begin{slidec}
+  \coverphoto{assets/cover.jpg}
+  \raggedright
+  \serlead{Serie · Matemáticas para Machine Learning}
+  \vspace{1mm}
+  \sertitle{\fontsize{31}{35}\selectfont Producto interno de funciones}
+  \vspace{4mm}
+  \hand{Cuando los \hl{vectores} son funciones}
+\end{slidec}
+\clearpage
+
+% ===================== ARTICULO =====================================
+\RaggedRight\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\parindent}{0pt}\setlength{\parskip}{1.4mm}
+\fontsize{13.5}{16}\selectfont\vspace*{1mm}
+
+% -------------------------------------------------- idea --------
+\topic{Funciones como vectores}
+\hand{Una función también es un "vector" —con infinitas componentes. El producto interno deja de ser una suma y se vuelve una \hl{integral}:}
+\keyeq{\langle u,v\rangle = \int_a^b u(x)\,v(x)\,\mathrm{d}x}
+\obs{Todo lo de antes sigue valiendo: longitud, ángulo, y sobre todo \hl{ortogonalidad}.}
+
+% -------------------------------------------------- ortogonales -
+\topic{Funciones ortogonales}
+\hand{Dos funciones son ortogonales si su producto interno da cero. Por ejemplo, $\sin$ y $\cos$ en $[-\pi,\pi]$:}
+\begin{center}
+\begin{tikzpicture}
+  \begin{axis}[width=68mm, height=42mm, axis lines=middle,
+      axis line style={mauve, line width=0.5pt},
+      xtick=\empty, ytick=\empty, clip=false,
+      xmin=-3.5, xmax=3.5, ymin=-1.4, ymax=1.4, samples=60]
+    \addplot[accent, line width=1pt, domain=-3.14:3.14] {sin(deg(x))}
+      node[pos=0.30, above, font=\tiny\color{accent}]{$\sin x$};
+    \addplot[eqink, line width=1pt, domain=-3.14:3.14] {cos(deg(x))}
+      node[pos=0.62, above, font=\tiny\color{eqink}]{$\cos x$};
+  \end{axis}
+\end{tikzpicture}
+\end{center}
+\obs{$\int_{-\pi}^{\pi}\sin x\,\cos x\,\mathrm{d}x = 0$: lo que sube de un lado baja del otro y se cancela.}
+
+% -------------------------------------------------- fourier -----
+\topic{El motor de Fourier}
+\obs{Los $\sin(nx)$ y $\cos(nx)$ forman una base \hl{ortogonal} infinita. Proyectar una señal sobre ellos es, justamente, su serie de \hl{Fourier}.}
+\obs{La misma idea sostiene los \hl{kernels} y los espacios de funciones en machine learning.}
+
+\clearpage
+% ===================== CIERRE =======================================
+\begin{slidec}
+  \raggedright
+  \sertitle{\fontsize{25}{28}\selectfont ¿Habías pensado una función como un vector?}
+  \vspace{5mm}
+  \hand{Parte del módulo de \hl{Geometría analítica} de la serie.}
+  \vspace{3mm}
+  \hand{\hl{Guarda} esto y \hl{sígueme} para las siguientes en \hl{asanchezyali.com}}
+\end{slidec}
+
+\end{document}

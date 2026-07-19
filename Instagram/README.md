@@ -79,8 +79,15 @@ Instagram/
 │       │   ├── Normas.tex
 │       │   ├── caption.md
 │       │   └── assets/cover.jpg
-│       └── ProductosInternos/ … #2        #   §3.2: dot/inner product, SPD matrix, ellipse vs hyperbola
-│           └── ProductosInternos.tex + caption.md + assets/cover.jpg
+│       ├── ProductosInternos/ … #2        #   §3.2: dot/inner product, SPD matrix, ellipse vs hyperbola
+│       │   └── ProductosInternos.tex + caption.md + assets/cover.jpg
+│       ├── LongitudesAngulos/ … #3         #   §3.3: induced norm, Cauchy–Schwarz, distance, angle cos ω, orthogonality
+│       ├── BaseOrtonormal/ … #4            #   §3.5: orthonormal basis, coords via inner products, Gram–Schmidt
+│       ├── ComplementoOrtogonal/ … #5      #   §3.6: U⊥, V = U ⊕ U⊥, normal vector
+│       ├── ProductoInternoFunciones/ … #6  #   §3.7: functions as vectors, ∫uv, orthogonal sin/cos, Fourier
+│       ├── ProyeccionesOrtogonales/ … #7   #   §3.8: projection onto line/subspace, projection matrix, PCA/least-squares
+│       └── Rotaciones/ … #8                #   §3.9: rotation matrix R(θ), RᵀR=I, preserves length/angle (closes §3)
+│           (each: <Post>.tex + caption.md + assets/cover.jpg)
 └── MachineLearningMathematics/  # earlier standalone demo (1 level deep)
 ```
 

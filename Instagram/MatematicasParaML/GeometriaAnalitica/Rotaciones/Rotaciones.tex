@@ -1,0 +1,76 @@
+% =====================================================================
+%  yalix  --  "Rotaciones"  (apuntes)  ·  Geometría analítica · #8
+%  Basado en: Deisenroth, Faisal, Ong -- Mathematics for ML (3.9)
+%  Compilar:  xelatex Rotaciones.tex   (dos pasadas)
+% =====================================================================
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
+\input{../palette.tex}
+\settotalslides{5}
+\setseriestag{Geometría analítica · ML \#8}
+
+\definecolor{coral}{RGB}{201,84,60}
+
+\begin{document}
+
+% ===================== PORTADA ======================================
+\begin{slidec}
+  \coverphoto{assets/cover.jpg}
+  \raggedright
+  \serlead{Serie · Matemáticas para Machine Learning}
+  \vspace{1mm}
+  \sertitle{\fontsize{42}{45}\selectfont Rotaciones}
+  \vspace{4mm}
+  \hand{Girar sin \hl{deformar} nada}
+\end{slidec}
+\clearpage
+
+% ===================== ARTICULO =====================================
+\RaggedRight\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\parindent}{0pt}\setlength{\parskip}{1.4mm}
+\fontsize{13.5}{16}\selectfont\vspace*{1mm}
+
+% -------------------------------------------------- qué es -------
+\topic{¿Qué es una rotación?}
+\hand{Es una aplicación lineal \hl{ortogonal} que gira el espacio: preserva longitudes, ángulos y área. Nada se estira ni se refleja.}
+\obs{Su matriz $R$ cumple $R^\top R=I$ y $\det R=1$ (una reflexión tendría $\det=-1$).}
+
+% -------------------------------------------------- plano -------
+\topic{En el plano}
+\hand{Girar un ángulo $\theta$ en $\mathbb{R}^2$ se hace con una sola matriz:}
+\keyeq{R(\theta)=\begin{bmatrix}\cos\theta & -\sin\theta\\[1mm] \sin\theta & \cos\theta\end{bmatrix}}
+\begin{center}
+\begin{tikzpicture}[x=11mm,y=11mm,>={Latex[length=2mm]}]
+  \draw[mauve, line width=0.4pt, ->] (-0.3,0)--(2.0,0);
+  \draw[mauve, line width=0.4pt, ->] (0,-0.3)--(0,2.0);
+  % base original
+  \draw[->, mauve, line width=1pt] (0,0)--(1.6,0) node[right,font=\tiny\color{mauve}]{$\mathbf{e}_1$};
+  % base rotada 40 grados
+  \draw[->, accent, line width=1.1pt] (0,0)--(1.226,1.028) node[right,font=\scriptsize\color{accent}]{$R\mathbf{e}_1$};
+  \draw[->, eqink, line width=1.1pt]  (0,0)--(-1.028,1.226) node[above,font=\scriptsize\color{eqink}]{$R\mathbf{e}_2$};
+  \draw[coral, line width=0.8pt] (0.7,0) arc (0:40:0.7);
+  \node[font=\scriptsize\color{coral}] at (0.92,0.28){$\theta$};
+  \fill[ink] (0,0) circle (0.8pt);
+\end{tikzpicture}
+\end{center}
+
+% -------------------------------------------------- propiedades -
+\topic{Sus propiedades}
+\obs{La inversa es \hl{gratis}: $R(\theta)^{-1}=R(\theta)^\top=R(-\theta)$, girar hacia el otro lado. Y componer rotaciones es sumar ángulos.}
+\obs{En $\mathbb{R}^3$ hay una rotación por cada eje; combinadas giran cualquier objeto en el espacio.}
+
+% -------------------------------------------------- ML ---------
+\topic{En machine learning}
+\obs{Las rotaciones cambian de \hl{coordenadas} sin perder información y generan datos (\emph{data augmentation}): la misma imagen, vista desde otro ángulo.}
+
+\clearpage
+% ===================== CIERRE =======================================
+\begin{slidec}
+  \raggedright
+  \sertitle{\fontsize{26}{29}\selectfont ¿Girar cambia tus datos, o solo tu punto de vista?}
+  \vspace{5mm}
+  \hand{Cierra el módulo de \hl{Geometría analítica} de la serie.}
+  \vspace{3mm}
+  \hand{\hl{Guarda} esto y \hl{sígueme} para las siguientes en \hl{asanchezyali.com}}
+\end{slidec}
+
+\end{document}

@@ -15,7 +15,9 @@ with posts `SistemasLineales/` (#1), `Matrices/` (#2), `InversaTranspuesta/` (#3
 `EliminacionGauss/` (#6), `TrucoMenosUno/` (#7), `CalcularInversa/` (#8) and
 `AlgoritmosSolucion/` (#9), `EspaciosVectoriales/` (#10), `Subespacios/` (#11), `IndependenciaLineal/` (#12), `BaseYDimension/` (#13), `Rango/` (#14), `AplicacionesLineales/` (#15), `MatrizTransformacion/` (#16), `CambioDeBase/` (#17), `ImagenNucleo/` (#18) and `EspaciosAfines/` (#19, finale of the LA chapter). A
 second module, `GeometriaAnalitica/` (indigo/violet palette), covers book §3:
-`Normas/` (#1), `ProductosInternos/` (#2). The tag names the module:
+`Normas/` (#1), `ProductosInternos/` (#2), `LongitudesAngulos/` (#3), `BaseOrtonormal/` (#4),
+`ComplementoOrtogonal/` (#5), `ProductoInternoFunciones/` (#6), `ProyeccionesOrtogonales/` (#7),
+`Rotaciones/` (#8) — the whole §3 chapter. The tag names the module:
 `\setseriestag{Álgebra lineal · ML \#N}` or `\setseriestag{Geometría analítica · ML \#N}`
 (numbering restarts per module). The goal is a genuinely useful **study
 resource** — lean into many colourful, didactic illustrations, and write like an

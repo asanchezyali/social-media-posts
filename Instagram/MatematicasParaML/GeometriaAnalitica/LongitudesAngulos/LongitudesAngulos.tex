@@ -1,0 +1,93 @@
+% =====================================================================
+%  yalix  --  "Longitudes y ángulos"  (apuntes)  ·  Geometría analítica · #3
+%  Basado en: Deisenroth, Faisal, Ong -- Mathematics for ML (3.3)
+%  Compilar:  xelatex LongitudesAngulos.tex   (dos pasadas)
+% =====================================================================
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
+\input{../palette.tex}   % paleta del módulo "Geometría analítica" (índigo/violeta)
+\settotalslides{7}
+\setseriestag{Geometría analítica · ML \#3}
+
+% ---- colores para las ilustraciones ---------------------------------
+\definecolor{cellBase}{RGB}{236,233,246}   % lavanda muy claro (tarjetas)
+\definecolor{cellEdge}{RGB}{150,148,182}   % borde
+\definecolor{coral}{RGB}{201,84,60}         % arcos / ángulo recto
+
+\begin{document}
+
+% ===================== PORTADA ======================================
+\begin{slidec}
+  \coverphoto{assets/cover.jpg}
+  \raggedright
+  \serlead{Serie · Matemáticas para Machine Learning}
+  \vspace{1mm}
+  \sertitle{\fontsize{35}{39}\selectfont Longitudes y ángulos}
+  \vspace{4mm}
+  \hand{El producto interno se vuelve \hl{geometría}}
+\end{slidec}
+\clearpage
+
+% ===================== ARTICULO =====================================
+\RaggedRight\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\parindent}{0pt}\setlength{\parskip}{1.4mm}
+\fontsize{13.5}{16}\selectfont\vspace*{1mm}
+
+% -------------------------------------------------- longitud -----
+\topic{La longitud}
+\hand{Todo producto interno trae su propia \hl{norma}: la longitud de un vector es la raíz de su producto consigo mismo.}
+\keyeq{\lVert\mathbf{x}\rVert = \sqrt{\langle\mathbf{x},\mathbf{x}\rangle}}
+\obs{Y siempre vale \hl{Cauchy}--Schwarz, de donde saldrá el ángulo:}
+\eqx{|\langle\mathbf{x},\mathbf{y}\rangle|\le\lVert\mathbf{x}\rVert\,\lVert\mathbf{y}\rVert}
+
+% -------------------------------------------------- distancia ----
+\topic{La distancia}
+\hand{Con la norma medimos qué tan lejos están dos vectores: su \uhand{distancia}.}
+\keyeq{d(\mathbf{x},\mathbf{y}) = \lVert\mathbf{x}-\mathbf{y}\rVert}
+\obs{Es una \hl{métrica}: nunca negativa, simétrica, y cumple la desigualdad triangular. Con el producto punto, es la distancia euclidiana de siempre.}
+
+% -------------------------------------------------- ángulo -------
+\topic{El ángulo}
+\hand{Cauchy--Schwarz garantiza que este cociente vive en $[-1,1]$, así que \emph{es} un coseno. Ese es el ángulo entre dos vectores:}
+\keyeq{\cos\omega = \dfrac{\langle\mathbf{x},\mathbf{y}\rangle}{\lVert\mathbf{x}\rVert\,\lVert\mathbf{y}\rVert}}
+\begin{center}
+\begin{tikzpicture}[x=10mm,y=10mm,>={Latex[length=2mm]}]
+  \draw[->, accent, line width=1.1pt] (0,0)--(2.4,0.5) node[right,font=\scriptsize\color{accent}]{$\mathbf{x}$};
+  \draw[->, eqink, line width=1.1pt]  (0,0)--(0.9,2.0) node[above,font=\scriptsize\color{eqink}]{$\mathbf{y}$};
+  \draw[coral, line width=0.8pt] (0.62,0.13) arc (11.8:65.8:0.65);
+  \node[font=\scriptsize\color{coral}] at (0.98,0.62){$\omega$};
+  \fill[ink] (0,0) circle (0.9pt);
+\end{tikzpicture}
+\end{center}
+
+% -------------------------------------------------- ortogonalidad
+\topic{Ortogonalidad}
+\hand{El caso estrella: si el producto interno da \hl{cero}, los vectores son \uhand{ortogonales} ($\mathbf{x}\perp\mathbf{y}$) —forman un ángulo recto.}
+\begin{center}
+\begin{tikzpicture}[x=10mm,y=10mm,>={Latex[length=2mm]}]
+  \draw[->, accent, line width=1.1pt] (0,0)--(2.2,0) node[right,font=\scriptsize\color{accent}]{$\mathbf{x}$};
+  \draw[->, eqink, line width=1.1pt]  (0,0)--(0,1.9) node[above,font=\scriptsize\color{eqink}]{$\mathbf{y}$};
+  \draw[coral, line width=0.7pt] (0,0.28)--(0.28,0.28)--(0.28,0);
+  \node[font=\scriptsize\color{coral}] at (1.2,1.0){$\langle\mathbf{x},\mathbf{y}\rangle=0$};
+  \fill[ink] (0,0) circle (0.9pt);
+\end{tikzpicture}
+\end{center}
+\obs{Ojo: la ortogonalidad \hl{depende} del producto interno. Dos vectores perpendiculares con el punto pueden no serlo con otro.}
+
+% -------------------------------------------------- ortogonales --
+\topic{Matrices ortogonales}
+\hand{Una matriz es \uhand{ortogonal} cuando sus columnas son ortonormales. Entonces su inversa es \hl{gratis} —solo transponer:}
+\keyeq{A^\top A = I \;\Longrightarrow\; A^{-1}=A^\top}
+\obs{Preservan longitudes y ángulos ($\lVert A\mathbf{x}\rVert=\lVert\mathbf{x}\rVert$): son exactamente las \hl{rotaciones} y reflexiones.}
+
+\clearpage
+% ===================== CIERRE =======================================
+\begin{slidec}
+  \raggedright
+  \sertitle{\fontsize{25}{28}\selectfont ¿Ya le ves los ángulos a tus vectores?}
+  \vspace{5mm}
+  \hand{Parte del módulo de \hl{Geometría analítica} de la serie.}
+  \vspace{3mm}
+  \hand{\hl{Guarda} esto y \hl{sígueme} para las siguientes en \hl{asanchezyali.com}}
+\end{slidec}
+
+\end{document}

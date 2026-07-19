@@ -1,0 +1,78 @@
+% =====================================================================
+%  yalix  --  "Base ortonormal"  (apuntes)  ·  Geometría analítica · #4
+%  Basado en: Deisenroth, Faisal, Ong -- Mathematics for ML (3.5)
+%  Compilar:  xelatex BaseOrtonormal.tex   (dos pasadas)
+% =====================================================================
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
+\input{../palette.tex}   % paleta del módulo "Geometría analítica" (índigo/violeta)
+\settotalslides{5}
+\setseriestag{Geometría analítica · ML \#4}
+
+\definecolor{cellBase}{RGB}{236,233,246}
+\definecolor{cellEdge}{RGB}{150,148,182}
+\definecolor{coral}{RGB}{201,84,60}
+
+\begin{document}
+
+% ===================== PORTADA ======================================
+\begin{slidec}
+  \coverphoto{assets/cover.jpg}
+  \raggedright
+  \serlead{Serie · Matemáticas para Machine Learning}
+  \vspace{1mm}
+  \sertitle{\fontsize{36}{40}\selectfont Base ortonormal}
+  \vspace{4mm}
+  \hand{La base más \hl{cómoda} para trabajar}
+\end{slidec}
+\clearpage
+
+% ===================== ARTICULO =====================================
+\RaggedRight\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\parindent}{0pt}\setlength{\parskip}{1.4mm}
+\fontsize{13.5}{16}\selectfont\vspace*{1mm}
+
+% -------------------------------------------------- qué es -------
+\topic{¿Qué es?}
+\hand{Una \uhand{base ortonormal} (ONB) es una base cuyos vectores son \hl{perpendiculares} entre sí y de longitud $1$:}
+\keyeq{\langle\mathbf{b}_i,\mathbf{b}_j\rangle = \begin{cases}1 & i=j\\ 0 & i\neq j\end{cases}}
+\obs{La base estándar $(\mathbf{e}_1,\dots,\mathbf{e}_n)$ es ortonormal con el producto punto. Si solo son perpendiculares (sin normalizar), es \hl{ortogonal}.}
+
+% -------------------------------------------------- por qué -----
+\topic{¿Por qué es tan cómoda?}
+\hand{Con una ONB, las coordenadas de un vector se leen con \hl{productos internos} —sin resolver ningún sistema:}
+\keyeq{\mathbf{x} = \textstyle\sum_{i} \langle\mathbf{x},\mathbf{b}_i\rangle\,\mathbf{b}_i}
+\obs{Cada coeficiente $\langle\mathbf{x},\mathbf{b}_i\rangle$ es la \hl{proyección} de $\mathbf{x}$ sobre esa dirección.}
+
+% -------------------------------------------------- ilustración -
+\topic{Míralo}
+\hand{En $\mathbb{R}^2$, $\mathbf{b}_1\perp\mathbf{b}_2$ y cada uno mide $1$. Descomponer $\mathbf{x}$ es soltar perpendiculares:}
+\begin{center}
+\begin{tikzpicture}[x=11mm,y=11mm,>={Latex[length=2mm]}]
+  \draw[->, accent, line width=1.1pt] (0,0)--(1,0) node[below,font=\scriptsize\color{accent}]{$\mathbf{b}_1$};
+  \draw[->, eqink, line width=1.1pt]  (0,0)--(0,1) node[left,font=\scriptsize\color{eqink}]{$\mathbf{b}_2$};
+  \coordinate (X) at (1.7,1.2);
+  \draw[->, ink, line width=1.1pt] (0,0)--(X) node[right,font=\scriptsize\color{ink}]{$\mathbf{x}$};
+  \draw[coral, densely dashed, line width=0.6pt] (X)--(1.7,0) (X)--(0,1.2);
+  \node[font=\tiny\color{coral}, anchor=north] at (1.7,-0.05){$\langle\mathbf{x},\mathbf{b}_1\rangle$};
+  \node[font=\tiny\color{coral}, anchor=east]  at (-0.05,1.2){$\langle\mathbf{x},\mathbf{b}_2\rangle$};
+  \draw[coral, line width=0.6pt] (0,0.22)--(0.22,0.22)--(0.22,0);
+  \fill[ink] (0,0) circle (0.8pt);
+\end{tikzpicture}
+\end{center}
+
+% -------------------------------------------------- Gram-Schmidt -
+\topic{¿Cómo conseguirla?}
+\obs{¿No tienes una ONB? \hl{Gram}--Schmidt convierte cualquier base en una: resta proyecciones para ortogonalizar y luego normaliza cada vector.}
+
+\clearpage
+% ===================== CIERRE =======================================
+\begin{slidec}
+  \raggedright
+  \sertitle{\fontsize{26}{29}\selectfont ¿En qué base se simplifican tus cuentas?}
+  \vspace{5mm}
+  \hand{Parte del módulo de \hl{Geometría analítica} de la serie.}
+  \vspace{3mm}
+  \hand{\hl{Guarda} esto y \hl{sígueme} para las siguientes en \hl{asanchezyali.com}}
+\end{slidec}
+
+\end{document}
