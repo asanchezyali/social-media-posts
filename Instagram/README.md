@@ -62,40 +62,39 @@ Instagram/
 ├── Headers/Headers.tex          # shared template: palette, fonts, layout, commands
 ├── Headers/veil.png             # cream alpha-PNG veil for the cover (required)
 ├── fonts/                       # vendored Playfair Display .otf
-├── MatematicasParaML/                    # the SERIES
-│   ├── AlgebraLineal/                     # module 1 — forest-green palette (book §2)
-│   │   ├── palette.tex                    #   forest green
-│   │   ├── SistemasLineales/  … #1        #   19 posts, §2.1–§2.8:
-│   │   │   ├── SistemasLineales.tex       #     Sistemas, Matrices, InversaTranspuesta,
-│   │   │   ├── caption.md                 #     MultiplicacionEscalar, SolucionParticularGeneral,
-│   │   │   └── assets/cover.jpg           #     EliminacionGauss, TrucoMenosUno, CalcularInversa,
-│   │   ├── Matrices/ … EspaciosAfines/    #     AlgoritmosSolucion, EspaciosVectoriales, Subespacios,
-│   │   │                                  #     IndependenciaLineal, BaseYDimension, Rango,
-│   │   │                                  #     AplicacionesLineales, MatrizTransformacion,
-│   │   │                                  #     CambioDeBase, ImagenNucleo, EspaciosAfines (#19)
-│   └── GeometriaAnalitica/                # module 2 — indigo/violet palette (book §3)
-│       ├── palette.tex                    #   indigo / violet
-│       ├── Normas/  … #1                  #   §3.1: norm axioms, ℓ1/ℓ2, unit ball (rombo vs círculo)
-│       │   ├── Normas.tex
-│       │   ├── caption.md
-│       │   └── assets/cover.jpg
-│       ├── ProductosInternos/ … #2        #   §3.2: dot/inner product, SPD matrix, ellipse vs hyperbola
-│       │   └── ProductosInternos.tex + caption.md + assets/cover.jpg
-│       ├── LongitudesAngulos/ … #3         #   §3.3: induced norm, Cauchy–Schwarz, distance, angle cos ω, orthogonality
-│       ├── BaseOrtonormal/ … #4            #   §3.5: orthonormal basis, coords via inner products, Gram–Schmidt
-│       ├── ComplementoOrtogonal/ … #5      #   §3.6: U⊥, V = U ⊕ U⊥, normal vector
-│       ├── ProductoInternoFunciones/ … #6  #   §3.7: functions as vectors, ∫uv, orthogonal sin/cos, Fourier
-│       ├── ProyeccionesOrtogonales/ … #7   #   §3.8: projection onto line/subspace, projection matrix, PCA/least-squares
-│       └── Rotaciones/ … #8                #   §3.9: rotation matrix R(θ), RᵀR=I, preserves length/angle (closes §3)
-│           (each: <Post>.tex + caption.md + assets/cover.jpg)
-└── MachineLearningMathematics/  # earlier standalone demo (1 level deep)
+└── MatematicasParaML/                    # the SERIES
+    ├── AlgebraLineal/                     # module 1 — forest-green palette (book §2)
+    │   ├── palette.tex                    #   forest green
+    │   ├── SistemasLineales/  … #1        #   19 posts, §2.1–§2.8:
+    │   │   ├── SistemasLineales.tex       #     Sistemas, Matrices, InversaTranspuesta,
+    │   │   ├── caption.md                 #     MultiplicacionEscalar, SolucionParticularGeneral,
+    │   │   └── assets/cover.jpg           #     EliminacionGauss, TrucoMenosUno, CalcularInversa,
+    │   ├── Matrices/ … EspaciosAfines/    #     AlgoritmosSolucion, EspaciosVectoriales, Subespacios,
+    │   │                                  #     IndependenciaLineal, BaseYDimension, Rango,
+    │   │                                  #     AplicacionesLineales, MatrizTransformacion,
+    │   │                                  #     CambioDeBase, ImagenNucleo, EspaciosAfines (#19)
+    └── GeometriaAnalitica/                # module 2 — indigo/violet palette (book §3)
+        ├── palette.tex                    #   indigo / violet
+        ├── Normas/  … #1                  #   §3.1: norm axioms, ℓ1/ℓ2, unit ball (rombo vs círculo)
+        │   ├── Normas.tex
+        │   ├── caption.md
+        │   └── assets/cover.jpg
+        ├── ProductosInternos/ … #2        #   §3.2: dot/inner product, SPD matrix, ellipse vs hyperbola
+        │   └── ProductosInternos.tex + caption.md + assets/cover.jpg
+        ├── LongitudesAngulos/ … #3         #   §3.3: induced norm, Cauchy–Schwarz, distance, angle cos ω, orthogonality
+        ├── BaseOrtonormal/ … #4            #   §3.5: orthonormal basis, coords via inner products, Gram–Schmidt
+        ├── ComplementoOrtogonal/ … #5      #   §3.6: U⊥, V = U ⊕ U⊥, normal vector
+        ├── ProductoInternoFunciones/ … #6  #   §3.7: functions as vectors, ∫uv, orthogonal sin/cos, Fourier
+        ├── ProyeccionesOrtogonales/ … #7   #   §3.8: projection onto line/subspace, projection matrix, PCA/least-squares
+        └── Rotaciones/ … #8                #   §3.9: rotation matrix R(θ), RᵀR=I, preserves length/angle (closes §3)
+            (each: <Post>.tex + caption.md + assets/cover.jpg)
 ```
 
 `Headers.tex` resolves the shared fonts and `veil.png` via `\yalixroot` — the
 relative path from the post back to `Instagram/`. A post declares it before
 loading the template, so it works at any depth: **`../../../`** for a module post
-(`MatematicasParaML/<Module>/<Post>/`), `../` for the old 1-level demo. Each post
-also does `\input{../palette.tex}` to pull its **module** palette (one level up).
+(`MatematicasParaML/<Module>/<Post>/`). Each post also does
+`\input{../palette.tex}` to pull its **module** palette (one level up).
 
 ## Authoring
 

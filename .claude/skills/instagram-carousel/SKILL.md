@@ -106,9 +106,8 @@ Instagram/
 **Depth-independent paths (`\yalixroot`).** `Headers.tex` finds the shared fonts
 and `veil.png` relative to `\yalixroot` — the path from the post file back up to
 `Instagram/`. Each post declares it before `\input`-ing the template, so a post
-works at any depth. For a module post (`Series/Module/Post/`) it is `../../../`;
-the older 1-level demo folders use `../`. `\input{../palette.tex}` pulls the
-**module** palette (one level up).
+works at any depth. For a module post (`Series/Module/Post/`) it is `../../../`.
+`\input{../palette.tex}` pulls the **module** palette (one level up).
 
 **Cover robustness / `veil.png`.** `\coverphoto` places the photo AND its cream
 veil on the page background via eso-pic (`\AtPageLowerLeft`), so the cover is
