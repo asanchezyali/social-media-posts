@@ -1,0 +1,105 @@
+% =====================================================================
+%  yalix  --  "Productos internos"  (apuntes)  ·  Geometría analítica · #2
+%  Basado en: Deisenroth, Faisal, Ong -- Mathematics for ML (3.2)
+%  Compilar:  xelatex ProductosInternos.tex   (dos pasadas)
+% =====================================================================
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
+\input{../palette.tex}   % paleta del módulo "Geometría analítica" (índigo/violeta)
+\settotalslides{6}
+\setseriestag{Geometría analítica · ML \#2}
+
+% ---- colores para las ilustraciones ---------------------------------
+\definecolor{cellBase}{RGB}{236,233,246}   % lavanda muy claro (tarjetas)
+\definecolor{cellEdge}{RGB}{150,148,182}   % borde
+\definecolor{coral}{RGB}{201,84,60}         % "no definida positiva" / hipérbola
+
+\begin{document}
+
+% ===================== PORTADA ======================================
+\begin{slidec}
+  \coverphoto{assets/cover.jpg}
+  \raggedright
+  \serlead{Serie · Matemáticas para Machine Learning}
+  \vspace{1mm}
+  \sertitle{\fontsize{34}{38}\selectfont Productos internos}
+  \vspace{4mm}
+  \hand{Más allá del \hl{producto punto}}
+\end{slidec}
+\clearpage
+
+% ===================== ARTICULO =====================================
+\RaggedRight\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\parindent}{0pt}\setlength{\parskip}{1.4mm}
+\fontsize{13.5}{16}\selectfont\vspace*{1mm}
+
+% -------------------------------------------------- dot product ---
+\topic{El producto punto}
+\hand{Ya lo conoces: multiplicas componente a componente y sumas.}
+\keyeq{\mathbf{x}^\top\mathbf{y} = \textstyle\sum_{i=1}^{n} x_i\,y_i}
+\obs{Mide qué tan \hl{alineados} van dos vectores —la base de la similitud, los ángulos y las distancias.}
+
+% -------------------------------------------------- inner product -
+\topic{El producto interno}
+\hand{Un \uhand{producto interno} $\langle\mathbf{x},\mathbf{y}\rangle$ generaliza al punto: es cualquier función de dos vectores que cumpla tres cosas.}
+\begin{center}
+\begin{tikzpicture}
+  \node[draw=cellEdge, line width=0.4pt, fill=cellBase, rounded corners=1.4mm,
+        text width=76mm, inner sep=2.6mm, font=\small\color{ink}] {%
+    \textbf{1.\ Bilineal:}\ lineal en cada argumento por separado.\\[1.6mm]
+    \textbf{2.\ Simétrico:}\ $\langle\mathbf{x},\mathbf{y}\rangle=\langle\mathbf{y},\mathbf{x}\rangle$.\\[1.6mm]
+    \textbf{3.\ Definido positivo:}\ $\langle\mathbf{x},\mathbf{x}\rangle>0$ para todo $\mathbf{x}\neq\mathbf{0}$.};
+\end{tikzpicture}
+\end{center}
+\obs{El punto es solo \emph{un} ejemplo. En $\mathbb{R}^2$, $\langle\mathbf{x},\mathbf{y}\rangle = x_1y_1-(x_1y_2+x_2y_1)+2x_2y_2$ también es válido y \hl{no} es el punto.}
+
+% -------------------------------------------------- matriz -------
+\topic{Todo cabe en una matriz}
+\hand{Fijada una base, cada producto interno se escribe con una matriz $A$ sobre las \hl{coordenadas} $\hat{\mathbf{x}},\hat{\mathbf{y}}$:}
+\keyeq{\langle\mathbf{x},\mathbf{y}\rangle = \hat{\mathbf{x}}^\top A\,\hat{\mathbf{y}}}
+\obs{Y no cualquier $A$ sirve: debe ser \hl{simétrica} y definida positiva. Con $A=I$ recuperas el producto punto.}
+
+% -------------------------------------------------- SPD ----------
+\topic{Definida positiva}
+\hand{$A$ es \uhand{definida positiva} si $\mathbf{x}^\top A\mathbf{x}>0$ para todo $\mathbf{x}\neq\mathbf{0}$. Se ve completando cuadrados:}
+\eqx{\mathbf{x}^\top\!\begin{bmatrix}9&6\\6&5\end{bmatrix}\!\mathbf{x} = (3x_1+2x_2)^2 + x_2^2 > 0}
+\eqx{\mathbf{x}^\top\!\begin{bmatrix}9&6\\6&3\end{bmatrix}\!\mathbf{x} = (3x_1+2x_2)^2 - x_2^2}
+\obs{La primera siempre es positiva (define un producto interno); la segunda no —el $-x_2^2$ la hunde.}
+
+% -------------------------------------------------- geometría ----
+\topic{Su geometría}
+\hand{El conjunto $\langle\mathbf{x},\mathbf{x}\rangle=1$ dibuja la forma del producto interno: una \hl{elipse} si $A$ es definida positiva; una \hl{hipérbola} si no.}
+\begin{center}
+\begin{tikzpicture}[x=9mm,y=9mm]
+  % --- definida positiva: elipse ---
+  \begin{scope}
+    \draw[mauve, line width=0.4pt, ->] (-1.5,0)--(1.5,0);
+    \draw[mauve, line width=0.4pt, ->] (0,-1.5)--(0,1.5);
+    \draw[accent, line width=1.2pt, rotate=-30] (0,0) ellipse (1.3 and 0.5);
+    \node[font=\scriptsize\color{accent}] at (0,1.4){elipse};
+  \end{scope}
+  % --- no definida positiva: hipérbola ---
+  \begin{scope}[shift={(3.7,0)}]
+    \draw[mauve, line width=0.4pt, ->] (-1.5,0)--(1.5,0);
+    \draw[mauve, line width=0.4pt, ->] (0,-1.5)--(0,1.5);
+    \draw[coral, line width=1.2pt] plot[domain=-1.0:1.0, samples=30, variable=\t]
+        ({0.75*cosh(\t)},{1.15*sinh(\t)});
+    \draw[coral, line width=1.2pt] plot[domain=-1.0:1.0, samples=30, variable=\t]
+        ({-0.75*cosh(\t)},{1.15*sinh(\t)});
+    \node[font=\scriptsize\color{coral}] at (0,1.4){hipérbola};
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+\obs{La elipse es \hl{acotada}: por eso mide bien. La hipérbola se escapa al infinito —no sirve como "distancia".}
+
+\clearpage
+% ===================== CIERRE =======================================
+\begin{slidec}
+  \raggedright
+  \sertitle{\fontsize{25}{28}\selectfont ¿Qué geometría le pondrías a tu espacio?}
+  \vspace{5mm}
+  \hand{Parte del módulo de \hl{Geometría analítica} de la serie.}
+  \vspace{3mm}
+  \hand{\hl{Guarda} esto y \hl{sígueme} para las siguientes en \hl{asanchezyali.com}}
+\end{slidec}
+
+\end{document}

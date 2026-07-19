@@ -1,0 +1,99 @@
+% =====================================================================
+%  yalix  --  "Normas"  (apuntes)  ·  Geometría analítica · #1
+%  Basado en: Deisenroth, Faisal, Ong -- Mathematics for ML (3.1)
+%  Compilar:  xelatex Normas.tex   (dos pasadas)
+% =====================================================================
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
+\input{../palette.tex}   % paleta del módulo "Geometría analítica" (índigo/violeta)
+\settotalslides{5}
+\setseriestag{Geometría analítica · ML \#1}
+
+% ---- colores para las ilustraciones ---------------------------------
+\definecolor{cellBase}{RGB}{236,233,246}   % lavanda muy claro (tarjetas)
+\definecolor{cellEdge}{RGB}{150,148,182}   % borde
+
+\begin{document}
+
+% ===================== PORTADA ======================================
+\begin{slidec}
+  \coverphoto{assets/cover.jpg}
+  \raggedright
+  \serlead{Serie · Matemáticas para Machine Learning}
+  \vspace{1mm}
+  \sertitle{\fontsize{42}{45}\selectfont Normas}
+  \vspace{4mm}
+  \hand{Cómo medir la \hl{longitud} de un vector}
+\end{slidec}
+\clearpage
+
+% ===================== ARTICULO =====================================
+\RaggedRight\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\parindent}{0pt}\setlength{\parskip}{1.4mm}
+\fontsize{13.5}{16}\selectfont\vspace*{1mm}
+
+% -------------------------------------------------- definición ----
+\topic{Qué es una norma}
+\hand{Una \uhand{norma} le asigna a cada vector una \hl{longitud}: un número $\lVert\mathbf{x}\rVert\ge0$ que mide qué tan "grande" es.}
+\keyeq{\lVert\cdot\rVert : V \to \mathbb{R}, \qquad \mathbf{x}\mapsto\lVert\mathbf{x}\rVert}
+\hand{No cualquier función sirve: debe cumplir tres reglas.}
+
+% -------------------------------------------------- axiomas -------
+\topic{Las tres reglas}
+\begin{center}
+\begin{tikzpicture}
+  \node[draw=cellEdge, line width=0.4pt, fill=cellBase, rounded corners=1.4mm,
+        text width=76mm, inner sep=2.6mm, font=\small\color{ink}] {%
+    \textbf{1.\ Homogénea:}\ $\lVert\lambda\mathbf{x}\rVert = |\lambda|\,\lVert\mathbf{x}\rVert$\\[1.6mm]
+    \textbf{2.\ Desigualdad triangular:}\ $\lVert\mathbf{x}+\mathbf{y}\rVert \le \lVert\mathbf{x}\rVert+\lVert\mathbf{y}\rVert$\\[1.6mm]
+    \textbf{3.\ Definida positiva:}\ $\lVert\mathbf{x}\rVert\ge0$, y $\lVert\mathbf{x}\rVert=0 \iff \mathbf{x}=\mathbf{0}$};
+\end{tikzpicture}
+\end{center}
+\obs{La regla 2 es la de siempre: un lado de un triángulo nunca supera a la suma de los otros dos.}
+
+% -------------------------------------------------- ejemplos -----
+\topic{Manhattan y euclidiana}
+\hand{Dos normas dominan en $\mathbb{R}^n$. La de \hl{Manhattan} ($\ell_1$) suma valores absolutos:}
+\eqx{\lVert\mathbf{x}\rVert_1 = \textstyle\sum_{i=1}^{n} |x_i|}
+\hand{La \hl{euclidiana} ($\ell_2$) es la distancia de siempre al origen, y es la norma por defecto:}
+\eqx{\lVert\mathbf{x}\rVert_2 = \sqrt{\textstyle\sum_{i=1}^{n} x_i^2} = \sqrt{\mathbf{x}^\top\mathbf{x}}}
+
+% -------------------------------------------------- bola unitaria -
+\topic{La bola unitaria}
+\hand{Dibuja todos los vectores de norma $1$: su forma \emph{es} la norma. En $\ell_1$ sale un rombo; en $\ell_2$, un círculo.}
+\begin{center}
+\begin{tikzpicture}[x=9mm,y=9mm,>={Latex[length=1.6mm]}]
+  % --- l1: rombo ---
+  \begin{scope}
+    \draw[mauve, line width=0.4pt, ->] (-1.5,0)--(1.5,0);
+    \draw[mauve, line width=0.4pt, ->] (0,-1.5)--(0,1.5);
+    \draw[accent, line width=1.2pt] (1,0)--(0,1)--(-1,0)--(0,-1)--cycle;
+    \node[font=\scriptsize\color{accent}] at (0.55,1.32){$\lVert\mathbf{x}\rVert_1=1$};
+    \node[font=\tiny\color{ink}, anchor=north] at (1,-0.08){$1$};
+  \end{scope}
+  % --- l2: círculo ---
+  \begin{scope}[shift={(3.6,0)}]
+    \draw[mauve, line width=0.4pt, ->] (-1.5,0)--(1.5,0);
+    \draw[mauve, line width=0.4pt, ->] (0,-1.5)--(0,1.5);
+    \draw[accent, line width=1.2pt] (0,0) circle (1);
+    \node[font=\scriptsize\color{accent}] at (0.55,1.32){$\lVert\mathbf{x}\rVert_2=1$};
+    \node[font=\tiny\color{ink}, anchor=north] at (1,-0.08){$1$};
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+
+% -------------------------------------------------- ML -----------
+\topic{Por qué importa en ML}
+\obs{Las normas miden distancias y "tamaños". En regularización, penalizar con $\ell_2$ (Ridge) encoge los pesos, mientras que $\ell_1$ (Lasso) los vuelve \hl{dispersos} —justo por las esquinas del rombo.}
+
+\clearpage
+% ===================== CIERRE =======================================
+\begin{slidec}
+  \raggedright
+  \sertitle{\fontsize{25}{28}\selectfont ¿Con qué norma mides la distancia de tus datos?}
+  \vspace{5mm}
+  \hand{Abre el módulo de \hl{Geometría analítica} de la serie.}
+  \vspace{3mm}
+  \hand{\hl{Guarda} esto y \hl{sígueme} para las siguientes en \hl{asanchezyali.com}}
+\end{slidec}
+
+\end{document}
