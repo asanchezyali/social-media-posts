@@ -36,10 +36,11 @@ SignPainter is a **macOS system font** and has no bold/italic (a cosmetic
 The base template keeps the cream/teal/terracotta identity. A **module** overrides
 the four semantic colours (`eqink`, `accent`, `hltopic`, `mauve`) in a small file
 `\input` **after** `Headers.tex`. Each **module has its own folder** with a
-`palette.tex`: `AlgebraLineal/palette.tex` (forest green) and
-`GeometriaAnalitica/palette.tex` (indigo/violet), each plus one subfolder per
-post. Copy a palette to theme a new module; keep paper, grid and general `ink`
-untouched.
+`palette.tex`: `AlgebraLineal/palette.tex` (forest green),
+`GeometriaAnalitica/palette.tex` (indigo/violet) and
+`AlgebraLinealPython/palette.tex` (Python blue — same LA topics, developed with
+NumPy code cards), each plus one subfolder per post. Copy a palette to theme a
+new module; keep paper, grid and general `ink` untouched.
 
 ## Requirements & compile
 
@@ -73,21 +74,25 @@ Instagram/
     │   │                                  #     IndependenciaLineal, BaseYDimension, Rango,
     │   │                                  #     AplicacionesLineales, MatrizTransformacion,
     │   │                                  #     CambioDeBase, ImagenNucleo, EspaciosAfines (#19)
-    └── GeometriaAnalitica/                # module 2 — indigo/violet palette (book §3)
-        ├── palette.tex                    #   indigo / violet
-        ├── Normas/  … #1                  #   §3.1: norm axioms, ℓ1/ℓ2, unit ball (rombo vs círculo)
-        │   ├── Normas.tex
-        │   ├── caption.md
-        │   └── assets/cover.jpg
-        ├── ProductosInternos/ … #2        #   §3.2: dot/inner product, SPD matrix, ellipse vs hyperbola
-        │   └── ProductosInternos.tex + caption.md + assets/cover.jpg
-        ├── LongitudesAngulos/ … #3         #   §3.3: induced norm, Cauchy–Schwarz, distance, angle cos ω, orthogonality
-        ├── BaseOrtonormal/ … #4            #   §3.5: orthonormal basis, coords via inner products, Gram–Schmidt
-        ├── ComplementoOrtogonal/ … #5      #   §3.6: U⊥, V = U ⊕ U⊥, normal vector
-        ├── ProductoInternoFunciones/ … #6  #   §3.7: functions as vectors, ∫uv, orthogonal sin/cos, Fourier
-        ├── ProyeccionesOrtogonales/ … #7   #   §3.8: projection onto line/subspace, projection matrix, PCA/least-squares
-        └── Rotaciones/ … #8                #   §3.9: rotation matrix R(θ), RᵀR=I, preserves length/angle (closes §3)
-            (each: <Post>.tex + caption.md + assets/cover.jpg)
+    ├── GeometriaAnalitica/                # module 2 — indigo/violet palette (book §3)
+    │   ├── palette.tex                    #   indigo / violet
+    │   ├── Normas/  … #1                  #   §3.1: norm axioms, ℓ1/ℓ2, unit ball (rombo vs círculo)
+    │   │   ├── Normas.tex
+    │   │   ├── caption.md
+    │   │   └── assets/cover.jpg
+    │   ├── ProductosInternos/ … #2        #   §3.2: dot/inner product, SPD matrix, ellipse vs hyperbola
+    │   │   └── ProductosInternos.tex + caption.md + assets/cover.jpg
+    │   ├── LongitudesAngulos/ … #3         #   §3.3: induced norm, Cauchy–Schwarz, distance, angle cos ω, orthogonality
+    │   ├── BaseOrtonormal/ … #4            #   §3.5: orthonormal basis, coords via inner products, Gram–Schmidt
+    │   ├── ComplementoOrtogonal/ … #5      #   §3.6: U⊥, V = U ⊕ U⊥, normal vector
+    │   ├── ProductoInternoFunciones/ … #6  #   §3.7: functions as vectors, ∫uv, orthogonal sin/cos, Fourier
+    │   ├── ProyeccionesOrtogonales/ … #7   #   §3.8: projection onto line/subspace, projection matrix, PCA/least-squares
+    │   └── Rotaciones/ … #8                #   §3.9: rotation matrix R(θ), RᵀR=I, preserves length/angle (closes §3)
+    │       (each: <Post>.tex + caption.md + assets/cover.jpg)
+    └── AlgebraLinealPython/               # module 3 — Python-blue palette (LA topics via NumPy)
+        ├── palette.tex                    #   Python blue (+ gold reserved for code strings)
+        └── SistemasLineales/ … #1         #   Ax=b with np.linalg.solve: setup, verify (A@x), rank, LAPACK/LU
+            (code cards via \begin{pycode}…\end{pycode} + \begin{pyout}…\end{pyout})
 ```
 
 `Headers.tex` resolves the shared fonts and `veil.png` via `\yalixroot` — the

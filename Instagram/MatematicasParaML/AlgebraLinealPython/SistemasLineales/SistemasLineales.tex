@@ -1,0 +1,128 @@
+% =====================================================================
+%  yalix  --  "Sistemas lineales con Python"  (apuntes + NumPy)
+%  Colección: Álgebra Lineal con Python  ·  #1
+%  Basado en: Deisenroth, Faisal, Ong -- Mathematics for ML (2.1-2.3)
+%  Compilar:  xelatex SistemasLineales.tex   (dos pasadas)
+% =====================================================================
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
+\input{../palette.tex}   % paleta del módulo "Álgebra lineal con Python" (azul)
+\settotalslides{9}
+\setseriestag{Álgebra lineal · Python \#1}
+
+\begin{document}
+
+% ===================== PORTADA ======================================
+\begin{slidec}
+  \coverphoto{assets/cover.jpg}
+  \raggedright
+  \serlead{Serie · Álgebra Lineal con Python}
+  \vspace{1mm}
+  \sertitle{\fontsize{34}{37}\selectfont Sistemas lineales con Python}
+  \vspace{4mm}
+  \hand{Resolver $A\mathbf{x}=\mathbf{b}$ en \hl{una} línea de NumPy}
+\end{slidec}
+\clearpage
+
+% ===================== ARTICULO =====================================
+\RaggedRight\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\parindent}{0pt}\setlength{\parskip}{1.4mm}
+\fontsize{13.5}{16}\selectfont\vspace*{1mm}
+
+\topic{La idea}
+\hand{Un sistema de ecuaciones lineales se guarda como una \hl{matriz} $A$ y un \hl{vector} $\mathbf{b}$. Resolverlo es hallar el $\mathbf{x}$ que cumple:}
+\keyeq{A\,\mathbf{x} = \mathbf{b}}
+\hand{Con NumPy, $A$ y $\mathbf{b}$ son \hl{arrays}. Tomemos este sistema:}
+\eqx{\begin{aligned}
+    x_1 + x_2 + x_3 &= 3\\
+    x_1 - x_2 + 2x_3 &= 2\\
+    x_2 + x_3 &= 2
+  \end{aligned}}
+
+\topic[52mm]{Montar el sistema}
+\hand{Cada fila de $A$ es una ecuación; $\mathbf{b}$ son los términos de la derecha:}
+\begin{pycode}
+import numpy as np
+
+A = np.array([[1,  1, 1],
+              [1, -1, 2],
+              [0,  1, 1]])
+b = np.array([3, 2, 2])
+\end{pycode}
+
+\topic[46mm]{Resolverlo}
+\hand{Una sola línea encuentra la solución:}
+\begin{pycode}
+x = np.linalg.solve(A, b)
+\end{pycode}
+\begin{pyout}
+array([1., 1., 1.])
+\end{pyout}
+\obs{Por dentro, \hl{solve} no invierte $A$: factoriza $A=LU$ (LAPACK) y despeja. Es $O(n^3)$, rápido y estable.}
+
+\topic[44mm]{Verificar}
+\hand{Nunca confíes a ciegas: sustituye $\mathbf{x}$ y comprueba que $A\mathbf{x}$ reproduce $\mathbf{b}$. El operador \hl{@} es el producto matriz-vector:}
+\begin{pycode}
+np.allclose(A @ x, b)
+\end{pycode}
+\begin{pyout}
+True
+\end{pyout}
+
+\topic[70mm]{¿Y si no hay solución única?}
+\hand{\texttt{solve} solo funciona si $A$ es invertible. Si una fila es combinación de otras (aquí fila$_3$ = fila$_1$+fila$_2$), $A$ es \hl{singular} y falla:}
+\begin{pycode}
+C = np.array([[1,  1, 1],
+              [1, -1, 2],
+              [2,  0, 3]])
+np.linalg.solve(C, np.array([3, 2, 1]))
+\end{pycode}
+\begin{pyout}
+LinAlgError: Singular matrix
+\end{pyout}
+\hand{Quien decide es el \hl{rango}: si $\operatorname{rank}(A)<n$, hay $0$ o $\infty$ soluciones, nunca una sola.}
+\begin{pycode}
+np.linalg.matrix_rank(C)   # -> 2  (< 3)
+\end{pycode}
+\obs{Para esos casos, \hl{lstsq} da la solución de mínimos cuadrados aunque \texttt{solve} se rinda.}
+
+\topic[70mm]{Verlo en 2D}
+\hand{Con dos variables, cada ecuación es una \hl{recta}; \texttt{solve} devuelve el punto donde se cruzan:}
+\begin{center}
+\begin{tikzpicture}
+  \begin{axis}[
+      width=58mm, height=40mm,
+      axis lines=middle, axis line style={mauve, line width=0.5pt},
+      xlabel={$x_1$}, ylabel={$x_2$},
+      xlabel style={mauve, font=\tiny, anchor=north west},
+      ylabel style={mauve, font=\tiny, anchor=south east},
+      xtick=\empty, ytick=\empty,
+      xmin=-0.7, xmax=2.4, ymin=-0.9, ymax=1.9, clip=false,
+    ]
+    \addplot[eqink, line width=1pt, domain=-0.6:2.3] {1.25 - x}
+      node[pos=0.17, sloped, above, eqink, font=\tiny, inner sep=2.5pt] {$x_1+x_2=\tfrac54$};
+    \addplot[accent, line width=1pt, domain=-0.6:2.3] {0.5*x - 0.25}
+      node[pos=0.82, sloped, above, accent, font=\tiny, inner sep=2.5pt] {$x_1-2x_2=\tfrac12$};
+    \fill[ink] (axis cs:1,0.25) circle (1.5pt);
+    \draw[ink, line width=0.3pt, densely dotted] (axis cs:1,0.16) -- (axis cs:1,-0.34);
+    \node[ink, font=\tiny, anchor=north] at (axis cs:1,-0.4) {$(1,\tfrac14)$};
+  \end{axis}
+\end{tikzpicture}
+\end{center}
+\obs{Con tres variables cada ecuación es un \hl{plano}, y la solución es donde los tres se cortan.}
+
+\topic[34mm]{Regla de oro}
+\hand{Para resolver $A\mathbf{x}=\mathbf{b}$ usa \hl{solve}, nunca \texttt{inv(A) @ b}: calcular la inversa es más lento, menos preciso y casi nunca hace falta.}
+\obs{NumPy apoya todo esto en \hl{LAPACK}, la misma biblioteca de álgebra lineal que mueve el cómputo científico desde los años 90.}
+
+\clearpage
+% ===================== CIERRE =======================================
+\begin{slidec}
+  \raggedright
+  \sertitle{\fontsize{24}{27}\selectfont ¿Resuelves tus sistemas a mano o dejas que NumPy piense?}
+  \vspace{5mm}
+  \hand{Arranca la serie \hl{Álgebra Lineal con Python}.}
+  \vspace{3mm}
+  \hand{\hl{Guarda} esto y \hl{sígueme} para las siguientes en \hl{asanchezyali.com}}
+\end{slidec}
+
+\end{document}

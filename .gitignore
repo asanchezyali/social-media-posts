@@ -14,3 +14,6 @@ publish/.instagram_session.json
 Instagram/**/build/
 __pycache__/
 *.pyc
+
+# listings package aux
+*.listing

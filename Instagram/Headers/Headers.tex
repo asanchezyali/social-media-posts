@@ -41,6 +41,8 @@
 \usepackage{pgfplots}    % native vector plots (matches the brand style)
 \pgfplotsset{compat=1.18}
 \usetikzlibrary{calc,decorations.pathmorphing,arrows.meta,fadings,backgrounds}
+\usepackage{listings}          % code blocks (Python module) — pure LaTeX, no shell-escape
+\usepackage[most]{tcolorbox}   % rounded "code card" around the listing
 
 % =====================================================================
 %  Palette  --  cream & sage-green  (edit these 6 lines to recolour)
@@ -67,6 +69,7 @@
     BoldItalicFont = PlayfairDisplay-BoldItalic ]{PlayfairDisplay}
 
 \newfontfamily\handfont{SignPainter}
+\newfontfamily\codefont{Menlo}   % monospace for code cards (macOS system font)
 \setmainfont{SignPainter}
 
 % Maths stays in LaTeX's default Latin Modern maths font: clean, legible
@@ -250,6 +253,57 @@
       (se) .. controls ($(se)!.45!(sw)+(0,-0.6pt)$) and ($(se)!.8!(sw)+(0,0.4pt)$) .. (sw)
       (sw) .. controls ($(sw)!.5!(nw)+(-0.6pt,0)$) .. (nw);
   \end{tikzpicture}\end{center}\addvspace{\eqskip}}
+
+% ---- Python code card + REPL output (Python module) ------------------
+%   A small "editor window": rounded pale panel, three dots + a `python`
+%   label, monospace Menlo.  Syntax colours are THEME-DRIVEN (accent/eqink/
+%   mauve) so the card recolours per module, plus a warm Python gold for
+%   strings.  `pyout` is a paper-tinted box that reads like a REPL result.
+\definecolor{codebg}{RGB}{237, 241, 247}    % pale cool code panel
+\definecolor{codeframe}{RGB}{205, 215, 227}
+\definecolor{pygold}{RGB}{176, 132, 12}      % darkened Python gold (readable on cream)
+\lstdefinestyle{yalixpy}{%
+  language=Python,
+  basicstyle=\codefont\fontsize{8.6}{11.4}\selectfont\color{ink},
+  keywordstyle=\color{accent},
+  commentstyle=\color{mauve},
+  stringstyle=\color{pygold},
+  showstringspaces=false,
+  columns=fullflexible, keepspaces=true,
+  breaklines=true, breakatwhitespace=false,
+  tabsize=4,
+  morekeywords={np,as,None,True,False},
+  literate=%
+    {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+    {Á}{{\'A}}1 {ñ}{{\~n}}1 {¿}{{\textquestiondown}}1 {¡}{{\textexclamdown}}1
+    {→}{{$\to$}}1 {×}{{$\times$}}1,
+}
+\newtcblisting{pycode}{%
+  listing only, listing style=yalixpy,
+  enhanced,
+  colback=codebg, colframe=codeframe, boxrule=0.5pt, arc=2mm,
+  left=3mm, right=3mm, top=5.6mm, bottom=2.6mm,
+  overlay={%
+    \fill[accent] ([xshift=3.6mm,yshift=-3.1mm]frame.north west) circle (0.72mm);
+    \fill[pygold] ([xshift=6.2mm,yshift=-3.1mm]frame.north west) circle (0.72mm);
+    \fill[mauve]  ([xshift=8.8mm,yshift=-3.1mm]frame.north west) circle (0.72mm);
+    \node[anchor=east, text=mauve]
+      at ([xshift=-3mm,yshift=-3.1mm]frame.north east)
+      {\codefont\fontsize{6.6}{7}\selectfont python};
+  },
+}
+% REPL result: paper-tinted box, small "Out" tab, monospace.
+\newtcolorbox{pyout}{%
+  enhanced,
+  colback=paperBg, colframe=codeframe, boxrule=0.5pt, arc=2mm,
+  left=3mm, right=3mm, top=4.6mm, bottom=2.4mm,
+  fontupper=\codefont\fontsize{8.4}{11}\selectfont\color{ink},
+  overlay={%
+    \node[anchor=west, text=mauve]
+      at ([xshift=3mm,yshift=-3mm]frame.north west)
+      {\codefont\fontsize{6.6}{7}\selectfont Out};
+  },
+}
 
 % ---- decorations -----------------------------------------------------
 % hand-drawn double underline rule: two non-parallel, slightly curved pen

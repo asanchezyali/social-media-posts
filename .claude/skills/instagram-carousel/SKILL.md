@@ -17,7 +17,12 @@ with posts `SistemasLineales/` (#1), `Matrices/` (#2), `InversaTranspuesta/` (#3
 second module, `GeometriaAnalitica/` (indigo/violet palette), covers book §3:
 `Normas/` (#1), `ProductosInternos/` (#2), `LongitudesAngulos/` (#3), `BaseOrtonormal/` (#4),
 `ComplementoOrtogonal/` (#5), `ProductoInternoFunciones/` (#6), `ProyeccionesOrtogonales/` (#7),
-`Rotaciones/` (#8) — the whole §3 chapter. The tag names the module:
+`Rotaciones/` (#8) — the whole §3 chapter. A third module,
+`AlgebraLinealPython/` (Python-blue palette), retells the Álgebra Lineal topics
+**developed with NumPy** — same apuntes style, plus brand-styled code cards
+(`pycode`/`pyout`); tag `\setseriestag{Álgebra lineal · Python \#N}`. Its pilot is
+`SistemasLineales/` (#1): `Ax=b` via `np.linalg.solve`, verify with `A @ x`,
+classify with `matrix_rank`, LAPACK/LU note. The tag names the module:
 `\setseriestag{Álgebra lineal · ML \#N}` or `\setseriestag{Geometría analítica · ML \#N}`
 (numbering restarts per module). The goal is a genuinely useful **study
 resource** — lean into many colourful, didactic illustrations, and write like an
@@ -60,10 +65,12 @@ across all palettes.
 
 Each **module lives in its own folder** (`Instagram/MatematicasParaML/<Module>/`)
 holding a `palette.tex` plus one subfolder per post. The palette overrides the
-four semantic colours in a file that is `\input` **after** `Headers.tex`. Two in
-the repo: `AlgebraLineal/palette.tex` (forest green) and
+four semantic colours in a file that is `\input` **after** `Headers.tex`. Three in
+the repo: `AlgebraLineal/palette.tex` (forest green),
 `GeometriaAnalitica/palette.tex` (indigo/violet — `accent` #6A4FC0, `eqink`
-#3A4A9E, `hltopic` #C4BAEA, `mauve` #7C82A6). One file recolours a whole module:
+#3A4A9E, `hltopic` #C4BAEA, `mauve` #7C82A6) and `AlgebraLinealPython/palette.tex`
+(Python blue — `accent` #1E6FB0, `eqink` #21486E, `hltopic` #BED4E9, `mauve`
+#7C8BA3). One file recolours a whole module:
 
 ```latex
 % forest green (deep pine + leaf green). Keep highlight dark enough to read on
@@ -175,6 +182,8 @@ centred. Structure it with topic headings and note blocks:
 | `\eq{...}` / `\eqx{...}` | Centred display equation, uniform size, with `\eqskip` breathing room above/below |
 | `\eqfit{...}` | Wide block (big matrix) auto-scaled to the text width |
 | `\keyeq{...}` | Key result boxed by four wobbly hand-drawn pen strokes |
+| `\begin{pycode}…\end{pycode}` | **Python module only.** Code card: rounded pale panel, 3 dots + `python` label, Menlo mono; syntax colours are theme-driven (keywords=`accent`, comments=`mauve`, strings=`pygold`). Atomic (won't split across slides) — keep it with its heading via `\topic[<h>]{...}` |
+| `\begin{pyout}…\end{pyout}` | **Python module only.** REPL result box (paper-tinted, "Out" tab, Menlo) — put the printed array / value / error here right after its `pycode` |
 | `\coverphoto`, `\polaroid[angle]{file}{width}` | Photos (polaroid = framed, tilted) |
 | `\penrule[width]` / `\wavyrule[width]` | Hand-drawn underline rules (legacy; prefer `\hl`/`\topic`) |
 
