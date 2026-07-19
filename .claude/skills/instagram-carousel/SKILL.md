@@ -13,12 +13,13 @@ auto-paginated — not one topic per slide. The reference deck is
 with posts `SistemasLineales/` (#1), `Matrices/` (#2), `InversaTranspuesta/` (#3)
 `MultiplicacionEscalar/` (#4), `SolucionParticularGeneral/` (#5),
 `EliminacionGauss/` (#6), `TrucoMenosUno/` (#7), `CalcularInversa/` (#8) and
-`AlgoritmosSolucion/` (#9), `EspaciosVectoriales/` (#10) and `Subespacios/` (#11). It follows
-the MML book (Deisenroth/Faisal/Ong) §2, so the tag names the module:
-`\setseriestag{Álgebra lineal · ML \#N}`. The goal of the series is a genuinely
-useful **study resource** — lean into many colourful, didactic illustrations, and
-write like an advanced linear-algebra student (precise terms: núcleo/kernel,
-subespacio afín, columnas pivote/libres).
+`AlgoritmosSolucion/` (#9), `EspaciosVectoriales/` (#10), `Subespacios/` (#11), `IndependenciaLineal/` (#12), `BaseYDimension/` (#13), `Rango/` (#14), `AplicacionesLineales/` (#15), `MatrizTransformacion/` (#16), `CambioDeBase/` (#17), `ImagenNucleo/` (#18) and `EspaciosAfines/` (#19, finale of the LA chapter). A
+second module, `GeometriaAnalitica/` (indigo/violet palette), covers book §3:
+`Normas/` (#1), `ProductosInternos/` (#2). The tag names the module:
+`\setseriestag{Álgebra lineal · ML \#N}` or `\setseriestag{Geometría analítica · ML \#N}`
+(numbering restarts per module). The goal is a genuinely useful **study
+resource** — lean into many colourful, didactic illustrations, and write like an
+advanced student (precise terms: núcleo/kernel, subespacio afín, definida positiva).
 
 > This is a **different system** from the LinkedIn dark-theme code posts
 > (Python/JS/AI). For those, use the **`linkedin-post`** skill instead.
@@ -55,11 +56,12 @@ across all palettes.
 
 ## Per-series palettes
 
-Each **series lives in its own folder** (`Instagram/<Series>/`) holding a
-`palette.tex` plus one subfolder per post. The palette overrides the four
-semantic colours in a file that is `\input` **after** `Headers.tex`. Example in
-the repo — `Instagram/MatematicasParaML/palette.tex` (forest green — one file
-recolours every post in the series):
+Each **module lives in its own folder** (`Instagram/MatematicasParaML/<Module>/`)
+holding a `palette.tex` plus one subfolder per post. The palette overrides the
+four semantic colours in a file that is `\input` **after** `Headers.tex`. Two in
+the repo: `AlgebraLineal/palette.tex` (forest green) and
+`GeometriaAnalitica/palette.tex` (indigo/violet — `accent` #6A4FC0, `eqink`
+#3A4A9E, `hltopic` #C4BAEA, `mauve` #7C82A6). One file recolours a whole module:
 
 ```latex
 % forest green (deep pine + leaf green). Keep highlight dark enough to read on
@@ -78,26 +80,33 @@ When two plot lines use `eqink` + `accent`, verify they stay distinguishable.
 
 ## Starting a new post
 
-Posts are grouped by series, **two levels below `Instagram/`**:
+The series **Matemáticas para ML** is split into **modules**; a post lives
+**three levels below `Instagram/`** (`Series/Module/Post/`):
 
 ```
 Instagram/
 ├── Headers/Headers.tex        # the shared template (don't fork; \input it)
 ├── Headers/veil.png           # cream alpha-PNG for the cover veil (required asset)
 ├── fonts/                     # vendored Playfair Display .otf
-└── <Series>/                  # e.g. MatematicasParaML/
-    ├── palette.tex            # this series' colour override
-    ├── <Post1>/
-    │   ├── <Post1>.tex
-    │   └── assets/cover.jpg   # cover photo — VARY it per post
-    └── <Post2>/ ...
+└── MatematicasParaML/         # the SERIES
+    ├── AlgebraLineal/         # a MODULE (forest-green palette)
+    │   ├── palette.tex        # this module's colour override
+    │   ├── <Post1>/
+    │   │   ├── <Post1>.tex
+    │   │   ├── caption.md      # Spanish caption for publishing
+    │   │   └── assets/cover.jpg   # cover photo — VARY it per post
+    │   └── <Post2>/ ...
+    └── GeometriaAnalitica/    # another MODULE (indigo/violet palette)
+        ├── palette.tex
+        └── Normas/ ...
 ```
 
 **Depth-independent paths (`\yalixroot`).** `Headers.tex` finds the shared fonts
 and `veil.png` relative to `\yalixroot` — the path from the post file back up to
 `Instagram/`. Each post declares it before `\input`-ing the template, so a post
-works at any depth. For the standard 2-level series layout it is `../../`; the
-older 1-level demo folders use `../`.
+works at any depth. For a module post (`Series/Module/Post/`) it is `../../../`;
+the older 1-level demo folders use `../`. `\input{../palette.tex}` pulls the
+**module** palette (one level up).
 
 **Cover robustness / `veil.png`.** `\coverphoto` places the photo AND its cream
 veil on the page background via eso-pic (`\AtPageLowerLeft`), so the cover is
@@ -117,17 +126,19 @@ design — don't undo them:
 Preamble of a post (2-level series layout):
 
 ```latex
-\def\yalixroot{../../}\input{\yalixroot Headers/Headers.tex}
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
 \input{../palette.tex}              % this series' palette (one level up)
 \settotalslides{10}                 % update to the real page count (see below)
 \setwatermark{@asanchezyali}        % top-right on every slide (default already this)
-\setseriestag{Álgebra lineal · ML \#2}     % top-left tag — module + part number, on every slide
+\setseriestag{Álgebra lineal · ML \#2}     % footer-left tag — module + part number, on every slide
 ```
 
 Numbering lives **only** in the series tag (`· #N`) — do not also write "Parte N"
 in the cover/closing text (that was removed as duplicate).
 
-`\settotalslides{N}` must equal the final page count (drives the progress dots).
+`\settotalslides{N}` is optional now — the progress dots were removed, so it's a
+harmless no-op (kept for backwards compatibility). The footer shows the series
+tag (left) + swipe arrow (right); no dots to keep in sync.
 Compile once, read the page count, set N, compile again.
 
 ## Authoring — the apuntes flow
@@ -203,7 +214,7 @@ images. Lean into **colourful, didactic illustrations** — they make the post.
   tiene ninguna solución:", "Si ahora cambiamos la última ecuación…").
 - **Cover photo must VARY** between posts — don't reuse the same image.
 - If the post is part of a **series**, say so in three places: the **cover**
-  (`\serlead{Serie · …}` + a highlighted "Parte N"), the persistent **top-left
+  (`\serlead{Serie · …}` + a highlighted "Parte N"), the persistent **footer
   series tag** (`\setseriestag`), and the **closing** CTA.
 - Closing = a big **question** + Save/Follow CTA ("Guarda esto y sígueme … en
   asanchezyali.com"). **Vary the closing question across posts** — do NOT default
@@ -234,8 +245,8 @@ centre themselves — `\eqfit` uses `\centerline` so it stays centred under
 `\RaggedRight`.
 
 Consequence: page count is driven by content, and denser than the old
-one-per-slide layout. **Always recompile and set `\settotalslides{N}` to the real
-count** (drives the progress dots).
+one-per-slide layout. **Always recompile and re-check the page count.**
+(Progress dots were removed, so `\settotalslides` no longer needs to match.)
 
 ## Layout discipline (avoid overflow)
 
@@ -266,16 +277,15 @@ pdftoppm -png -r 120 -f 1 -l 1 <Post>.pdf preview   # render a page to inspect
 ```
 
 Always **render and visually verify** the affected pages after a change —
-colour, overflow, label collisions, and the top-left tag vs. top-right watermark.
+colour, overflow, label collisions, and the footer tag vs. top-right watermark.
 
 ## Checklist
 
-- [ ] `\def\yalixroot{../../}\input{\yalixroot Headers/Headers.tex}` + `\input{../palette.tex}`
-- [ ] `\settotalslides{N}` equals the real page count
+- [ ] `\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}` + `\input{../palette.tex}`
 - [ ] Cover: full-bleed photo (a **new** one), series lead + Parte N, subtitle
 - [ ] Interior flows as an article; topics via `\topic`; only equations centred
 - [ ] Definitions as sentences; observations standalone; Spanish reads naturally
 - [ ] Math coloured `eqink`; highlights `accent`; no `\textbf`/`\emph` in handwriting
 - [ ] Graphs are native pgfplots in brand colours, labels clear of the curves
-- [ ] Series mentioned on cover + top-left tag + closing
-- [ ] Compiles clean with **XeLaTeX ×2**; no page overflow; dots match N
+- [ ] Series mentioned on cover + footer tag + closing
+- [ ] Compiles clean with **XeLaTeX ×2**; no page overflow

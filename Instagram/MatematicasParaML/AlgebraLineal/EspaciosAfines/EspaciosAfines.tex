@@ -1,0 +1,94 @@
+% =====================================================================
+%  yalix  --  "Espacios afines"  (apuntes)  ·  Serie ML · #19  (FINAL LA)
+%  Basado en: Deisenroth, Faisal, Ong -- Mathematics for ML (2.8)
+%  Compilar:  xelatex EspaciosAfines.tex   (dos pasadas)
+% =====================================================================
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
+\input{../palette.tex}   % paleta de la serie "Matemáticas para ML"
+\settotalslides{8}
+\setseriestag{Álgebra lineal · ML \#19}
+
+% ---- colores para la ilustración ------------------------------------
+\definecolor{violet}{RGB}{140,102,172}   % punto de apoyo x0
+\definecolor{coral}{RGB}{201,84,60}       % la recta afín L
+\definecolor{gold}{RGB}{212,160,45}       % vector y
+
+\begin{document}
+
+% ===================== PORTADA ======================================
+\begin{slidec}
+  \coverphoto{assets/cover.jpg}
+  \raggedright
+  \serlead{Serie · Matemáticas para Machine Learning}
+  \vspace{1mm}
+  \sertitle{\fontsize{38}{42}\selectfont Espacios afines}
+  \vspace{4mm}
+  \hand{Cuando el espacio se \hl{despega} del origen}
+\end{slidec}
+\clearpage
+
+% ===================== ARTICULO =====================================
+\RaggedRight\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\parindent}{0pt}\setlength{\parskip}{1.4mm}
+\fontsize{13.5}{16}\selectfont\vspace*{1mm}
+
+% -------------------------------------------------- definición ----
+\topic{Despegar del origen}
+\hand{Toma un subespacio $U\subseteq V$ y \hl{desplázalo} por un vector $\mathbf{x}_0$. Lo que obtienes, $\{\mathbf{x}_0+\mathbf{u}:\mathbf{u}\in U\}$, es un \uhand{subespacio afín}:}
+\keyeq{L = \mathbf{x}_0 + U}
+\hand{A $\mathbf{x}_0$ lo llamamos punto de \hl{apoyo} y a $U$, el espacio de \hl{dirección}.}
+\obs{Si $\mathbf{x}_0\notin U$, entonces $\mathbf{0}\notin L$: un subespacio afín \hl{no} es un subespacio vectorial. Puntos, rectas y planos que no pasan por el origen son afines.}
+
+% -------------------------------------------------- figura --------
+\topic{La recta afín}
+\hand{La recta $L=\mathbf{x}_0+\lambda\mathbf{b}_1$: un punto de apoyo $\mathbf{x}_0$ más una dirección $\mathbf{b}_1$.}
+\begin{center}
+\begin{tikzpicture}[x=13mm,y=13mm,>={Latex[length=2.2mm]}]
+  % la recta afin L (coral), con flecha
+  \draw[->, coral, line width=1.1pt] (0.12,1.72) -- (4.0,2.68);
+  \node[font=\scriptsize\color{coral}] at (1.0,2.55){$L=\mathbf{x}_0+\lambda\mathbf{b}_1$};
+  % x0 (violeta)
+  \draw[->, violet, line width=1pt] (0,0) -- (0.9,1.9);
+  \node[font=\scriptsize\color{violet}, anchor=east] at (0.45,1.05){$\mathbf{x}_0$};
+  % y (oro) hacia un punto sobre la recta:  y = x0 + 1*b1
+  \draw[->, gold, line width=1pt] (0,0) -- (2.7,2.35);
+  \node[font=\scriptsize\color{gold}, anchor=west] at (1.7,1.35){$\mathbf{y}$};
+  % b1 (dirección, tinta) abajo
+  \draw[->, ink, line width=1pt] (1.4,0.15) -- (3.2,0.6);
+  \node[font=\scriptsize\color{ink}, anchor=north] at (2.3,0.3){$\mathbf{b}_1$};
+  % origen
+  \fill[ink] (0,0) circle (0.9pt);
+  \node[font=\scriptsize\color{ink}, anchor=north east] at (0,0){$\mathbf{0}$};
+\end{tikzpicture}
+\end{center}
+\obs{$\mathbf{y}=\mathbf{x}_0+\lambda\mathbf{b}_1$ vive en $L$: la recta empieza en $\mathbf{x}_0$, no en el origen.}
+
+% -------------------------------------------------- paramétrica ---
+\topic{Ecuación paramétrica}
+\hand{Con una base $(\mathbf{b}_1,\dots,\mathbf{b}_k)$ de la dirección, cada punto de $L$ se escribe de una sola forma:}
+\keyeq{\mathbf{x} = \mathbf{x}_0 + \lambda_1\mathbf{b}_1 + \cdots + \lambda_k\mathbf{b}_k}
+\obs{Según la dimensión: $1$ es una \hl{recta}, $2$ un \hl{plano}, y $n-1$ en $\mathbb{R}^n$, un \hl{hiperplano} (en $\mathbb{R}^2$ la recta ya es hiperplano).}
+
+% -------------------------------------------------- puente --------
+\topic{El puente con los sistemas}
+\obs{El conjunto solución de $A\mathbf{x}=\mathbf{b}$ (con $\mathbf{b}\neq\mathbf{0}$) es un subespacio \hl{afín} de dimensión $n-\operatorname{rk}(A)$; el de $A\mathbf{x}=\mathbf{0}$ pasa por el origen y es \hl{vectorial}.}
+\obs{Justo la historia de la solución particular más el núcleo, ahora con nombre propio.}
+
+% -------------------------------------------------- aplicaciones --
+\topic{Aplicaciones afines}
+\hand{Una \uhand{aplicación afín} es una lineal seguida de una traslación por un vector $\mathbf{a}$:}
+\keyeq{\phi(\mathbf{x}) = \mathbf{a} + \Phi(\mathbf{x})}
+\obs{Componer afines da otra afín, y \hl{preservan} la dimensión y el paralelismo —aunque muevan el origen.}
+
+\clearpage
+% ===================== CIERRE =======================================
+\begin{slidec}
+  \raggedright
+  \sertitle{\fontsize{23}{26}\selectfont Con esto cerramos el álgebra lineal. ¿Lista tu base?}
+  \vspace{5mm}
+  \hand{Fue la \hl{primera parte} de la serie Matemáticas para Machine Learning.}
+  \vspace{3mm}
+  \hand{\hl{Guarda} esto y \hl{sígueme} para lo que viene en \hl{asanchezyali.com}}
+\end{slidec}
+
+\end{document}

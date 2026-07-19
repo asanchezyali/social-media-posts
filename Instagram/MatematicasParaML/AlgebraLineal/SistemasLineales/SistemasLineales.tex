@@ -1,0 +1,124 @@
+% =====================================================================
+%  yalix  --  "Sistemas de ecuaciones lineales"  (apuntes de estudiante)
+%  Basado en: Deisenroth, Faisal, Ong -- Mathematics for Machine Learning
+%  Compilar:  xelatex SistemasLineales.tex   (dos pasadas)
+% =====================================================================
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
+\input{../palette.tex}   % paleta de la serie "Matemáticas para ML"
+\settotalslides{9}
+\setseriestag{Álgebra lineal · ML \#1}
+
+\begin{document}
+
+% ===================== PORTADA ======================================
+\begin{slidec}
+  \coverphoto{assets/cover.jpg}
+  \raggedright
+  \serlead{Serie · Matemáticas para Machine Learning}
+  \vspace{1mm}
+  \sertitle{\fontsize{35}{38}\selectfont Sistemas de ecuaciones lineales}
+  \vspace{4mm}
+  \hand{El \hl{corazón} del álgebra lineal}
+\end{slidec}
+\clearpage
+
+% ===================== ARTICULO =====================================
+\RaggedRight\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\parindent}{0pt}\setlength{\parskip}{1.4mm}
+\fontsize{13.5}{16}\selectfont\vspace*{1mm}
+
+\topic{¿Qué son?}
+\hand{Muchísimos problemas se pueden plantear como sistemas de ecuaciones lineales, y el álgebra lineal nos da las herramientas para resolverlos.}
+
+\topic{Forma general}
+\hand{Un sistema con $m$ ecuaciones y $n$ incógnitas se escribe:}
+\eq{\begin{aligned}
+    a_{11}x_1 + \cdots + a_{1n}x_n &= b_1\\[1mm]
+    &\ \,\vdots\\[1mm]
+    a_{m1}x_1 + \cdots + a_{mn}x_n &= b_m
+  \end{aligned}}
+\defn{Una \uhand{solución} es una $n$-tupla $(x_1,\dots,x_n)$ que satisface todas las ecuaciones a la vez.}
+\obs{En todo sistema lineal ocurre siempre uno de tres casos: no tiene solución, tiene exactamente una, o tiene infinitas. Veamos un ejemplo de cada uno, cambiando solo la última ecuación.}
+
+\topic{Sin solución}
+\hand{Este sistema no tiene ninguna solución:}
+\eqx{\begin{aligned}
+    x_1 + x_2 + x_3 &= 3\\
+    x_1 - x_2 + 2x_3 &= 2\\
+    2x_1 \phantom{{}+ x_2} + 3x_3 &= 1
+  \end{aligned}}
+\hand{Sumando las dos primeras ecuaciones obtenemos $2x_1 + 3x_3 = 5$; pero la tercera dice $2x_1 + 3x_3 = 1$. No pueden valer $5$ y $1$ a la vez: hay una \hl{contradicción}.}
+
+\topic{Solución única}
+\hand{Si ahora, en el sistema anterior, cambiamos la última ecuación, tenemos un sistema con solución única:}
+\eqx{\begin{aligned}
+    x_1 + x_2 + x_3 &= 3\\
+    x_1 - x_2 + 2x_3 &= 2\\
+    x_2 + x_3 &= 2
+  \end{aligned}}
+\hand{despejando paso a paso llegamos a:}
+\keyeq{(x_1,x_2,x_3) = (1,\,1,\,1)}
+
+\topic{Infinitas soluciones}
+\hand{Y si cambiamos otra vez la última ecuación — ahora redundante, pues $(1)+(2)=(3)$ — el sistema tiene infinitas soluciones:}
+\eqx{\begin{aligned}
+    x_1 + x_2 + x_3 &= 3\\
+    x_1 - x_2 + 2x_3 &= 2\\
+    2x_1 \phantom{{}+ x_2} + 3x_3 &= 5
+  \end{aligned}}
+\hand{De $(1)$ y $(2)$: $\;2x_1 = 5 - 3x_3\;$ y $\;2x_2 = 1 + x_3$. Dejamos $x_3 = a$ libre:}
+\keyeq{\left(\tfrac{5}{2}-\tfrac{3}{2}a,\ \ \tfrac{1}{2}+\tfrac{1}{2}a,\ \ a\right),\quad a\in\mathbb{R}}
+\obs{Geométricamente, las soluciones forman una recta entera dentro del espacio.}
+
+\topic[66mm]{Geometría}
+\hand{Con dos variables, cada ecuación es una \hl{recta}; su intersección es la solución: un punto, una recta o nada (paralelas).}
+\begin{center}
+\begin{tikzpicture}
+  \begin{axis}[
+      width=58mm, height=40mm,
+      axis lines=middle, axis line style={mauve, line width=0.5pt},
+      xlabel={$x_1$}, ylabel={$x_2$},
+      xlabel style={mauve, font=\tiny, anchor=north west},
+      ylabel style={mauve, font=\tiny, anchor=south east},
+      xtick=\empty, ytick=\empty,
+      xmin=-0.7, xmax=2.4, ymin=-0.9, ymax=1.9, clip=false,
+    ]
+    % each equation sits ON its own line (sloped, same colour), never crossing
+    \addplot[eqink, line width=1pt, domain=-0.6:2.3] {1.25 - x}
+      node[pos=0.17, sloped, above, eqink, font=\tiny, inner sep=2.5pt] {$4x_1+4x_2=5$};
+    \addplot[accent, line width=1pt, domain=-0.6:2.3] {0.5*x - 0.25}
+      node[pos=0.82, sloped, above, accent, font=\tiny, inner sep=2.5pt] {$2x_1-4x_2=1$};
+    % intersection: coordinate centred below the point, clear of both lines
+    \fill[ink] (axis cs:1,0.25) circle (1.5pt);
+    \draw[ink, line width=0.3pt, densely dotted] (axis cs:1,0.16) -- (axis cs:1,-0.34);
+    \node[ink, font=\tiny, anchor=north] at (axis cs:1,-0.4) {$(1,\tfrac14)$};
+  \end{axis}
+\end{tikzpicture}
+\end{center}
+\obs{Con tres variables, cada ecuación pasa a ser un \hl{plano}, y la solución es donde todos se cortan.}
+
+\topic[74mm]{Notación compacta}
+\hand{Juntamos los coeficientes $a_{ij}$ en una \hl{matriz} y todo el sistema se escribe de forma breve:}
+\keyeq{A\,\mathbf{x} = \mathbf{b}}
+\eqfit{\begin{bmatrix}
+   a_{11} & \cdots & a_{1n}\\ \vdots & & \vdots\\ a_{m1} & \cdots & a_{mn}
+  \end{bmatrix}
+  \begin{bmatrix} x_1\\ \vdots\\ x_n \end{bmatrix}
+  = \begin{bmatrix} b_1\\ \vdots\\ b_m \end{bmatrix}}
+
+\topic[26mm]{Un poco de historia}
+\hand{La palabra \hl{matriz} la acuñó J. J. \hl{Sylvester} en 1850, del latín matrix ("útero"): la veía como aquello de donde "nacen" los determinantes menores.}
+\obs{En China ya resolvían estos sistemas lineales hacia el 200 a.C. (los "Nueve capítulos") con un método casi idéntico a la eliminación gaussiana — ¡unos 2000 años antes de Gauss!}
+
+\clearpage
+% ===================== CIERRE =======================================
+\begin{slidec}
+  \raggedright
+  \sertitle{\fontsize{23}{26}\selectfont ¿Dónde has visto un sistema de ecuaciones sin darte cuenta?}
+  \vspace{5mm}
+  \hand{Forma parte de la serie \hl{Matemáticas para Machine Learning}.}
+  \vspace{3mm}
+  \hand{\hl{Guarda} esto y \hl{sígueme} para las siguientes en \hl{asanchezyali.com}}
+\end{slidec}
+
+\end{document}

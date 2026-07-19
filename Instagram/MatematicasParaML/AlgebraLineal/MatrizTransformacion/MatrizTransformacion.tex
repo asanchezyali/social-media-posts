@@ -1,0 +1,126 @@
+% =====================================================================
+%  yalix  --  "Matrices y coordenadas"  (apuntes)  ·  Serie ML · #16
+%  Basado en: Deisenroth, Faisal, Ong -- Mathematics for ML (2.7.1)
+%  Compilar:  xelatex MatrizTransformacion.tex   (dos pasadas)
+% =====================================================================
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
+\input{../palette.tex}   % paleta de la serie "Matemáticas para ML"
+\settotalslides{6}
+\setseriestag{Álgebra lineal · ML \#16}
+
+% ---- colores para las ilustraciones ---------------------------------
+\definecolor{cellEdge}{RGB}{144,170,178}   % cuadrícula
+\definecolor{hlA}{RGB}{120,180,205}        % aqua (degradado)
+\definecolor{gold}{RGB}{212,160,45}        % oro  (degradado / base b)
+
+\begin{document}
+
+% ===================== PORTADA ======================================
+\begin{slidec}
+  \coverphoto{assets/cover.jpg}
+  \raggedright
+  \serlead{Serie · Matemáticas para Machine Learning}
+  \vspace{1mm}
+  \sertitle{\fontsize{34}{38}\selectfont Matrices y coordenadas}
+  \vspace{4mm}
+  \hand{Una base te da \hl{coordenadas}; una matriz las mueve}
+\end{slidec}
+\clearpage
+
+% ===================== ARTICULO =====================================
+\RaggedRight\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\parindent}{0pt}\setlength{\parskip}{1.4mm}
+\fontsize{13.5}{16}\selectfont\vspace*{1mm}
+
+% -------------------------------------------------- coordenadas ----
+\topic{Coordenadas}
+\hand{Fija una \uhand{base ordenada} $B=(\mathbf{b}_1,\dots,\mathbf{b}_n)$ —ahora el orden importa. Todo vector se escribe de \hl{una} sola forma:}
+\keyeq{\mathbf{x} = \alpha_1\mathbf{b}_1 + \cdots + \alpha_n\mathbf{b}_n}
+\hand{El vector de \hl{coordenadas} $\boldsymbol{\alpha}\in\mathbb{R}^n$ apila esos números y representa a $\mathbf{x}$ en la base $B$.}
+
+% -------------------------------------------------- base = coords --
+\topic{Una base es un sistema de coordenadas}
+\hand{El \emph{mismo} vector cambia de coordenadas según la base que elijas:}
+\begin{center}
+\begin{tikzpicture}[x=11.5mm,y=11.5mm,>={Latex[length=1.8mm]}]
+  % ejes + cuadrícula estándar tenue
+  \draw[cellEdge!45, line width=0.25pt] (-1,-1) grid (3,3);
+  \draw[mauve, line width=0.4pt, ->] (-1.2,0)--(3.2,0);
+  \draw[mauve, line width=0.4pt, ->] (0,-1.2)--(0,3.4);
+  % base estándar e1,e2
+  \draw[->, mauve, line width=0.9pt] (0,0)--(1,0) node[below,font=\scriptsize\color{mauve}]{$\mathbf{e}_1$};
+  \draw[->, mauve, line width=0.9pt] (0,0)--(0,1) node[left,font=\scriptsize\color{mauve}]{$\mathbf{e}_2$};
+  % base alterna b1=(1,-1), b2=(1,1)
+  \draw[->, gold, line width=0.9pt] (0,0)--(1,-1) node[right,font=\scriptsize\color{gold}]{$\mathbf{b}_1$};
+  \draw[->, gold, line width=0.9pt] (0,0)--(1,1) node[above left,font=\scriptsize\color{gold}]{$\mathbf{b}_2$};
+  % descomposicion en base b:  x = -1/2 b1 + 5/2 b2
+  \draw[gold!85, densely dashed, line width=0.5pt] (0,0)--(-0.5,0.5)--(2,3);
+  % el vector x=(2,3)
+  \draw[->, ink, line width=1pt] (0,0)--(2,3) node[right,font=\scriptsize\color{ink}]{$\mathbf{x}$};
+  \fill[ink] (2,3) circle (0.9pt);
+\end{tikzpicture}
+\end{center}
+\obs{Aquí $\mathbf{x}=2\mathbf{e}_1+3\mathbf{e}_2$, con coordenadas $(2,3)$; pero en la base $(\mathbf{b}_1,\mathbf{b}_2)$ el mismo punto es $\tfrac12(-1,5)$.}
+
+% -------------------------------------------------- matriz Phi -----
+\topic{La matriz de una aplicación}
+\hand{Una aplicación lineal $\Phi:V\to W$ (con bases $B$ y $C$) queda capturada por una matriz: en su columna $j$ van las coordenadas de $\Phi(\mathbf{b}_j)$ en la base $C$.}
+\obs{Entonces transformar un vector es \hl{multiplicar} sus coordenadas por esa matriz:}
+\keyeq{\hat{\mathbf{y}} = A_\Phi\,\hat{\mathbf{x}}}
+
+% -------------------------------------------------- Fig 2.10 -------
+\topic{Matrices que transforman}
+\hand{Una matriz \emph{es} una transformación. Mira qué le hace a un cuadrado de puntos:}
+\begin{center}
+\begin{tikzpicture}[x=5.6mm,y=5.6mm]
+  \def\vals{-1,-0.6,-0.2,0.2,0.6,1}
+  % ---- (a) original ----
+  \begin{scope}[shift={(0,0)}]
+    \draw[mauve!55, line width=0.25pt] (-2.3,0)--(2.3,0) (0,-2.3)--(0,2.3);
+    \foreach \i in \vals{\foreach \j in \vals{
+      \pgfmathsetmacro{\p}{int(round((\j+1)/2*100))}
+      \fill[hlA!\p!gold] (\i,\j) circle (1.15pt);}}
+    \node[font=\scriptsize\color{ink}] at (0,-3){(a) original};
+  \end{scope}
+  % ---- (b) rotar 45 ----
+  \begin{scope}[shift={(6.4,0)}]
+    \draw[mauve!55, line width=0.25pt] (-2.3,0)--(2.3,0) (0,-2.3)--(0,2.3);
+    \foreach \i in \vals{\foreach \j in \vals{
+      \pgfmathsetmacro{\p}{int(round((\j+1)/2*100))}
+      \pgfmathsetmacro{\xx}{0.707*(\i-\j)}\pgfmathsetmacro{\yy}{0.707*(\i+\j)}
+      \fill[hlA!\p!gold] (\xx,\yy) circle (1.15pt);}}
+    \node[font=\scriptsize\color{ink}] at (0,-3){(b) rotar $45^\circ$};
+  \end{scope}
+  % ---- (c) estirar x2 ----
+  \begin{scope}[shift={(0,-6.4)}]
+    \draw[mauve!55, line width=0.25pt] (-2.6,0)--(2.6,0) (0,-2.3)--(0,2.3);
+    \foreach \i in \vals{\foreach \j in \vals{
+      \pgfmathsetmacro{\p}{int(round((\j+1)/2*100))}
+      \fill[hlA!\p!gold] ({2*\i},\j) circle (1.15pt);}}
+    \node[font=\scriptsize\color{ink}] at (0,-3){(c) estirar $\times2$};
+  \end{scope}
+  % ---- (d) general ----
+  \begin{scope}[shift={(6.4,-6.4)}]
+    \draw[mauve!55, line width=0.25pt] (-2.3,0)--(2.3,0) (0,-2.3)--(0,2.3);
+    \foreach \i in \vals{\foreach \j in \vals{
+      \pgfmathsetmacro{\p}{int(round((\j+1)/2*100))}
+      \pgfmathsetmacro{\xx}{0.5*(3*\i-\j)}\pgfmathsetmacro{\yy}{0.5*(\i-\j)}
+      \fill[hlA!\p!gold] (\xx,\yy) circle (1.15pt);}}
+    \node[font=\scriptsize\color{ink}] at (0,-3){(d) general};
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+\obs{Rotar, estirar, reflejar: cada una es solo una matriz distinta actuando sobre las coordenadas.}
+
+\clearpage
+% ===================== CIERRE =======================================
+\begin{slidec}
+  \raggedright
+  \sertitle{\fontsize{25}{28}\selectfont ¿En qué base viven de verdad tus datos?}
+  \vspace{5mm}
+  \hand{Forma parte de la serie \hl{Matemáticas para Machine Learning}.}
+  \vspace{3mm}
+  \hand{\hl{Guarda} esto y \hl{sígueme} para las siguientes en \hl{asanchezyali.com}}
+\end{slidec}
+
+\end{document}

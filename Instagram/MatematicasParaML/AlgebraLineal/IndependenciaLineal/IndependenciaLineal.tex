@@ -1,0 +1,110 @@
+% =====================================================================
+%  yalix  --  "Independencia lineal"  (apuntes)  ·  Serie ML · #12
+%  Basado en: Deisenroth, Faisal, Ong -- Mathematics for ML (2.5)
+%  Compilar:  xelatex IndependenciaLineal.tex   (dos pasadas)
+% =====================================================================
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
+\input{../palette.tex}   % paleta de la serie "Matemáticas para ML"
+\settotalslides{8}
+\setseriestag{Álgebra lineal · ML \#12}
+
+% ---- colores para las ilustraciones ---------------------------------
+\definecolor{cellBase}{RGB}{233,241,242}   % pale aqua
+\definecolor{hlA}{RGB}{160,208,214}        % aqua  (columnas pivote)
+\definecolor{hlB}{RGB}{240,216,154}        % oro   (columna no-pivote)
+\definecolor{cellEdge}{RGB}{144,170,178}   % borde
+\definecolor{violet}{RGB}{140,102,172}     % 3.er vector (morado)
+
+\newcommand{\cell}[4]{\node[draw=cellEdge, line width=0.4pt, fill=#3,
+   minimum size=6.6mm, inner sep=0pt, font=\small\color{ink}] at (#1,#2) {#4};}
+
+\begin{document}
+
+% ===================== PORTADA ======================================
+\begin{slidec}
+  \coverphoto{assets/cover.jpg}
+  \raggedright
+  \serlead{Serie · Matemáticas para Machine Learning}
+  \vspace{1mm}
+  \sertitle{\fontsize{35}{38}\selectfont Independencia lineal}
+  \vspace{4mm}
+  \hand{Vectores \hl{sin redundancia}: ninguno sobra}
+\end{slidec}
+\clearpage
+
+% ===================== ARTICULO =====================================
+\RaggedRight\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\parindent}{0pt}\setlength{\parskip}{1.4mm}
+\fontsize{13.5}{16}\selectfont\vspace*{1mm}
+
+% -------------------------------------------------- combinación ----
+\topic{Combinación lineal}
+\hand{Sumar y escalar unos vectores $\mathbf{x}_1,\dots,\mathbf{x}_k$ produce una \uhand{combinación lineal}:}
+\keyeq{\mathbf{v} = \lambda_1\mathbf{x}_1 + \cdots + \lambda_k\mathbf{x}_k}
+\obs{El $\mathbf{0}$ siempre sale de forma \hl{trivial} (todos los $\lambda_i=0$). Lo interesante es si hay \emph{otra} manera de obtenerlo.}
+
+% -------------------------------------------------- (in)dependencia
+\topic{¿Independientes o dependientes?}
+\hand{Si existe una combinación \hl{no trivial} que da $\mathbf{0}$ (algún $\lambda_i\neq0$), los vectores son \hl{dependientes}. Si solo funciona la trivial, son \hl{independientes}:}
+\eqx{\lambda_1\mathbf{x}_1 + \cdots + \lambda_k\mathbf{x}_k = \mathbf{0}
+     \;\Longrightarrow\; \lambda_1=\cdots=\lambda_k=0}
+\obs{Independientes = \hl{sin redundancia}: si quitas cualquiera, pierdes algo que los demás no pueden recuperar.}
+
+% -------------------------------------------------- geográfico -----
+\topic{Un ejemplo geográfico}
+\hand{Desde Nairobi, para llegar a Kigali basta con dos vectores independientes; el tercero \hl{sobra}:}
+\begin{center}
+\begin{tikzpicture}[x=11mm,y=11mm,>={Latex[length=2mm]}]
+  \coordinate (N) at (4,0.1);
+  \coordinate (K) at (0.9,2.1);
+  \coordinate (G) at (-1.6,-0.5);
+  % vector 1: Nairobi -> Kampala (506 NO)
+  \draw[->, eqink, line width=1pt] (N) -- (K)
+    node[midway, sloped, above, font=\scriptsize\color{eqink}, inner sep=1.5pt] {506 NO};
+  % vector 2: Kampala -> Kigali (374 SO)
+  \draw[->, violet, line width=1pt] (K) -- (G)
+    node[midway, sloped, above, font=\scriptsize\color{violet}, inner sep=1.5pt] {374 SO};
+  % vector 3: Nairobi -> Kigali (751 O) = suma de los otros dos
+  \draw[->, ink, line width=1pt] (N) -- (G)
+    node[midway, sloped, below, font=\scriptsize\color{ink}, inner sep=1.5pt] {751 O};
+  % ciudades
+  \foreach \p in {N,K,G}{\fill[ink] (\p) circle (1.3pt);}
+  \node[font=\scriptsize\color{ink}, anchor=west]  at ([xshift=1mm]N) {Nairobi};
+  \node[font=\scriptsize\color{ink}, anchor=south] at ([yshift=0.5mm]K) {Kampala};
+  \node[font=\scriptsize\color{ink}, anchor=east]  at ([xshift=-1mm]G) {Kigali};
+\end{tikzpicture}
+\end{center}
+\obs{Las direcciones \soft{506 NO} y \soft{374 SO} son independientes; pero \soft{751 O} es su \hl{combinación}, así que los tres juntos son dependientes.}
+
+% -------------------------------------------------- reglas ---------
+\topic{Reglas rápidas}
+\obs{Un conjunto de vectores es dependiente o independiente: no hay tercera opción. Si el $\mathbf{0}$ está en el conjunto —o dos vectores son iguales— ya es \hl{dependiente}.}
+\obs{Y con $k\ge2$ vectores no nulos: son dependientes exactamente cuando \hl{alguno} es combinación de los demás (en particular, un múltiplo de otro).}
+
+% -------------------------------------------------- prueba ---------
+\topic{La prueba práctica}
+\hand{Pon los vectores como \hl{columnas} de una matriz y aplica eliminación gaussiana hasta la forma escalonada. Los \hl{pivotes} deciden:}
+\begin{center}
+\begin{tikzpicture}[x=6.6mm, y=6.6mm]
+  \cell{0}{0}{hlA}{$1$}\cell{1}{0}{hlB}{$3$}\cell{2}{0}{hlA}{$0$}
+  \cell{0}{-1}{hlA}{$0$}\cell{1}{-1}{hlB}{$0$}\cell{2}{-1}{hlA}{$2$}
+  \node[font=\scriptsize\color{ink}] at (0,0.95){piv.};
+  \node[font=\scriptsize\color{ink}] at (1,0.95){no};
+  \node[font=\scriptsize\color{ink}] at (2,0.95){piv.};
+\end{tikzpicture}
+\end{center}
+\obs{Columnas \hl{pivote} (aqua) = vectores independientes; una columna \hl{sin} pivote (oro) es combinación de las pivote a su izquierda —aquí la 2.ª es $3\times$ la 1.ª.}
+\keyeq{\text{todas pivote} \iff \text{independientes}}
+
+\clearpage
+% ===================== CIERRE =======================================
+\begin{slidec}
+  \raggedright
+  \sertitle{\fontsize{24}{27}\selectfont ¿Cuántas de tus variables son de verdad independientes?}
+  \vspace{5mm}
+  \hand{Forma parte de la serie \hl{Matemáticas para Machine Learning}.}
+  \vspace{3mm}
+  \hand{\hl{Guarda} esto y \hl{sígueme} para las siguientes en \hl{asanchezyali.com}}
+\end{slidec}
+
+\end{document}

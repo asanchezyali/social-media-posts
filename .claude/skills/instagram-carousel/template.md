@@ -10,9 +10,9 @@ the closing. Compile with `xelatex` twice.
 %  yalix -- "<TÍTULO>"  (apuntes de estudiante)
 %  Compilar:  xelatex <Post>.tex   (dos pasadas)
 % =====================================================================
-\def\yalixroot{../../}\input{\yalixroot Headers/Headers.tex}
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
 \input{../palette.tex}                      % OPCIONAL: paleta de la serie (un nivel arriba)
-\settotalslides{10}                        % = nº real de páginas (ajústalo)
+\settotalslides{10}                        % opcional: ya no hay puntos de progreso (no-op)
 \setwatermark{@asanchezyali}
 \setseriestag{Álgebra lineal · ML \#2}     % OPCIONAL: módulo + nº de parte (el número va aquí, no en el texto)
 

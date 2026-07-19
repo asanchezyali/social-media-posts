@@ -1,0 +1,123 @@
+% =====================================================================
+%  yalix  --  "Imagen y núcleo"  (apuntes)  ·  Serie ML · #18
+%  Basado en: Deisenroth, Faisal, Ong -- Mathematics for ML (2.7.3)
+%  Compilar:  xelatex ImagenNucleo.tex   (dos pasadas)
+% =====================================================================
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
+\input{../palette.tex}   % paleta de la serie "Matemáticas para ML"
+\usetikzlibrary{shapes.geometric}   % elipses (blobs de conjuntos)
+\settotalslides{7}
+\setseriestag{Álgebra lineal · ML \#18}
+
+% ---- colores para las ilustraciones ---------------------------------
+\definecolor{cellBase}{RGB}{233,241,242}   % pale aqua
+\definecolor{hlA}{RGB}{160,208,214}        % aqua (pivotes / imagen)
+\definecolor{cellEdge}{RGB}{144,170,178}   % borde
+\definecolor{domfill}{RGB}{238,224,178}    % dominio V (arena)
+\definecolor{kerfill}{RGB}{222,196,120}    % núcleo (arena fuerte)
+\definecolor{codfill}{RGB}{206,226,214}    % codominio W (verde agua)
+\definecolor{imfill}{RGB}{170,206,180}     % imagen (verde fuerte)
+
+\newcommand{\cell}[4]{\node[draw=cellEdge, line width=0.4pt, fill=#3,
+   minimum size=6.4mm, inner sep=0pt, font=\small\color{ink}] at (#1,#2) {#4};}
+
+\begin{document}
+
+% ===================== PORTADA ======================================
+\begin{slidec}
+  \coverphoto{assets/cover.jpg}
+  \raggedright
+  \serlead{Serie · Matemáticas para Machine Learning}
+  \vspace{1mm}
+  \sertitle{\fontsize{36}{40}\selectfont Imagen y núcleo}
+  \vspace{4mm}
+  \hand{Qué llega a \hl{cero} y qué se puede alcanzar}
+\end{slidec}
+\clearpage
+
+% ===================== ARTICULO =====================================
+\RaggedRight\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\parindent}{0pt}\setlength{\parskip}{1.4mm}
+\fontsize{13.5}{16}\selectfont\vspace*{1mm}
+
+% -------------------------------------------------- definiciones ---
+\topic{Dos subespacios que trae $\Phi$}
+\hand{Toda aplicación lineal $\Phi:V\to W$ carga consigo dos subespacios:}
+\defn{El \uhand{núcleo} (o espacio nulo) son los vectores que $\Phi$ envía al cero; la \uhand{imagen} (o rango), los que $\Phi$ alcanza.}
+\eqx{\ker(\Phi)=\{\mathbf{v}\in V:\ \Phi(\mathbf{v})=\mathbf{0}\}}
+\eqx{\operatorname{Im}(\Phi)=\{\Phi(\mathbf{v}):\ \mathbf{v}\in V\}}
+\obs{Llamamos \hl{dominio} a $V$ y \hl{codominio} a $W$.}
+
+% -------------------------------------------------- diagrama ------
+\topic{El mapa completo}
+\begin{center}
+\adjustbox{max width=0.96\linewidth}{%
+\begin{tikzpicture}[x=1mm,y=1mm,
+   >={Latex[length=1.6mm]}]
+  % --- dominio V ---
+  \node[ellipse, draw=cellEdge, line width=0.5pt, fill=domfill, fill opacity=0.7,
+        minimum width=34mm, minimum height=46mm] (V) at (0,0){};
+  \node[ellipse, draw=kerfill!70!ink, line width=0.5pt, fill=kerfill, fill opacity=0.8,
+        minimum width=18mm, minimum height=24mm] (K) at (-2,-3){};
+  \node[font=\scriptsize\color{ink}] at (-2,2){$\ker\Phi$};
+  \fill[ink] (-2,-5) circle (0.6mm); \node[font=\tiny\color{ink},anchor=west] at (-1,-5){$\mathbf{0}_V$};
+  \node[font=\scriptsize\color{ink}] at (0,26){$V$};
+  % --- codominio W ---
+  \begin{scope}[shift={(52,0)}]
+    \node[ellipse, draw=cellEdge, line width=0.5pt, fill=codfill, fill opacity=0.75,
+          minimum width=34mm, minimum height=46mm] (W) at (0,0){};
+    \node[ellipse, draw=imfill!70!ink, line width=0.5pt, fill=imfill, fill opacity=0.8,
+          minimum width=18mm, minimum height=24mm] (Im) at (2,3){};
+    \node[font=\scriptsize\color{ink}] at (2,-2){$\operatorname{Im}\Phi$};
+    \fill[ink] (2,5) circle (0.6mm); \node[font=\tiny\color{ink},anchor=west] at (3,5){$\mathbf{0}_W$};
+    \node[font=\scriptsize\color{ink}] at (0,26){$W$};
+  \end{scope}
+  % --- flechas Phi ---
+  \node[font=\scriptsize\color{eqink}] at (26,24){$\Phi:V\to W$};
+  \draw[->, eqink, densely dashed, line width=0.5pt] (-2,-3) .. controls (24,-2) .. (52,4);   % ker -> 0_W
+  \draw[->, eqink, densely dashed, line width=0.5pt] (-2,-5) .. controls (24,-6) .. (52,6);   % ker -> 0_W
+  \draw[->, eqink, densely dashed, line width=0.5pt] (6,8) .. controls (28,12) .. (50,6);     % fuera de ker -> Im
+  \draw[->, eqink, densely dashed, line width=0.5pt] (5,13) .. controls (28,16) .. (52,10);
+\end{tikzpicture}}
+\end{center}
+\obs{Como $\Phi(\mathbf{0}_V)=\mathbf{0}_W$, el $\mathbf{0}$ siempre está en el núcleo. Todo el $\ker\Phi$ colapsa al $\mathbf{0}_W$; la $\operatorname{Im}\Phi$ es lo que de verdad se alcanza.}
+\obs{Ambos son subespacios, y $\Phi$ es inyectiva exactamente cuando $\ker\Phi=\{\mathbf{0}\}$.}
+
+% -------------------------------------------------- matrices ------
+\topic{Con una matriz}
+\hand{Si $\Phi(\mathbf{x})=A\mathbf{x}$ y $A$ tiene columnas $\mathbf{a}_1,\dots,\mathbf{a}_n$, la imagen es su espacio \hl{columna}:}
+\eqx{\operatorname{Im}(\Phi)=\operatorname{span}[\mathbf{a}_1,\dots,\mathbf{a}_n]}
+\obs{Como $\operatorname{rk}(A)=\dim(\operatorname{Im}\Phi)$, la imagen mide justo el rango de $A$.}
+\obs{Y el núcleo es el conjunto solución de $A\mathbf{x}=\mathbf{0}$: codifica cómo dependen entre sí las columnas.}
+
+% -------------------------------------------------- ejemplo -------
+\topic{Un ejemplo}
+\hand{Sea $\Phi:\mathbb{R}^4\to\mathbb{R}^2$, $\ \mathbf{x}\mapsto A\mathbf{x}$ con $A=\big(\begin{smallmatrix}1&2&-1&0\\1&0&0&1\end{smallmatrix}\big)$. La imagen es el span de sus columnas.}
+\hand{Para el núcleo, llevamos $A$ a la forma reducida:}
+\begin{center}
+\begin{tikzpicture}[x=6.4mm,y=6.4mm]
+  \cell{0}{0}{hlA}{$1$}\cell{1}{0}{cellBase}{$0$}\cell{2}{0}{cellBase}{$0$}\cell{3}{0}{cellBase}{$1$}
+  \cell{0}{-1}{cellBase}{$0$}\cell{1}{-1}{hlA}{$1$}\cell{2}{-1}{cellBase}{$-\tfrac12$}\cell{3}{-1}{cellBase}{$-\tfrac12$}
+\end{tikzpicture}
+\end{center}
+\hand{Sus dos columnas libres dan una base del núcleo (aquí $\dim\ker=2$):}
+\eqfit{\ker(\Phi)=\operatorname{span}\!\left[\begin{bmatrix}0\\ \tfrac12\\ 1\\ 0\end{bmatrix},\ \begin{bmatrix}-1\\ \tfrac12\\ 0\\ 1\end{bmatrix}\right]}
+
+% -------------------------------------------------- rango-nulidad -
+\topic{Rango y nulidad}
+\hand{El dominio se reparte \hl{exactamente} entre lo que se aplasta y lo que se alcanza —el teorema fundamental de las aplicaciones lineales:}
+\keyeq{\dim(\ker\Phi)+\dim(\operatorname{Im}\Phi)=\dim(V)}
+\obs{Consecuencia elegante: si $\dim V=\dim W$, ser inyectiva, sobreyectiva o biyectiva es \hl{lo mismo}.}
+
+\clearpage
+% ===================== CIERRE =======================================
+\begin{slidec}
+  \raggedright
+  \sertitle{\fontsize{24}{27}\selectfont ¿Cuánto de tu espacio se pierde en el núcleo?}
+  \vspace{5mm}
+  \hand{Forma parte de la serie \hl{Matemáticas para Machine Learning}.}
+  \vspace{3mm}
+  \hand{\hl{Guarda} esto y \hl{sígueme} para las siguientes en \hl{asanchezyali.com}}
+\end{slidec}
+
+\end{document}

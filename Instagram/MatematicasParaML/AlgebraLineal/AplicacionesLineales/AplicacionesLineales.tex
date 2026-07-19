@@ -1,0 +1,146 @@
+% =====================================================================
+%  yalix  --  "Aplicaciones lineales"  (apuntes)  ·  Serie ML · #15
+%  Basado en: Deisenroth, Faisal, Ong -- Mathematics for ML (2.7)
+%  Compilar:  xelatex AplicacionesLineales.tex   (dos pasadas)
+% =====================================================================
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
+\input{../palette.tex}   % paleta de la serie "Matemáticas para ML"
+\usetikzlibrary{shapes.geometric}  % ellipse (blobs de conjuntos)
+\settotalslides{6}
+\setseriestag{Álgebra lineal · ML \#15}
+
+% ---- colores para las ilustraciones ---------------------------------
+\definecolor{cellBase}{RGB}{233,241,242}   % pale aqua
+\definecolor{cellEdge}{RGB}{144,170,178}   % borde/cuadrícula
+\definecolor{setfill}{RGB}{200,224,210}    % relleno de conjuntos
+\definecolor{gold}{RGB}{200,150,40}        % base transformada
+
+\tikzset{
+  dot/.style={circle, fill=ink, inner sep=0pt, minimum size=2.4pt},
+  fl/.style={-{Latex[length=1.5mm]}, eqink, line width=0.6pt,
+             shorten >=1.4pt, shorten <=1.4pt},
+  blob/.style={draw=cellEdge, line width=0.5pt, fill=setfill, fill opacity=0.45,
+               ellipse, minimum width=11mm, minimum height=17mm},
+}
+
+\begin{document}
+
+% ===================== PORTADA ======================================
+\begin{slidec}
+  \coverphoto{assets/cover.jpg}
+  \raggedright
+  \serlead{Serie · Matemáticas para Machine Learning}
+  \vspace{1mm}
+  \sertitle{\fontsize{33}{37}\selectfont Aplicaciones lineales}
+  \vspace{4mm}
+  \hand{Funciones que \hl{respetan} la estructura}
+\end{slidec}
+\clearpage
+
+% ===================== ARTICULO =====================================
+\RaggedRight\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\parindent}{0pt}\setlength{\parskip}{1.4mm}
+\fontsize{13.5}{16}\selectfont\vspace*{1mm}
+
+% -------------------------------------------------- linealidad -----
+\topic{Respetar la estructura}
+\hand{Una \uhand{aplicación lineal} $\Phi:V\to W$ es la que respeta la suma y el escalado: sumar y luego mapear da lo mismo que mapear y luego sumar.}
+\keyeq{\Phi(\lambda\mathbf{x}+\psi\mathbf{y}) = \lambda\,\Phi(\mathbf{x}) + \psi\,\Phi(\mathbf{y})}
+\begin{center}
+\begin{tikzpicture}[x=8.5mm,y=8.5mm]
+  % ---- cuadrícula original (cuadrada) ----
+  \draw[cellEdge!70, line width=0.3pt] (0,0) grid (2,2);
+  \draw[-{Latex[length=1.6mm]}, eqink, line width=0.9pt] (0,0)--(1,0);
+  \draw[-{Latex[length=1.6mm]}, eqink, line width=0.9pt] (0,0)--(0,1);
+  \fill[ink] (0,0) circle (0.7pt);
+  \node[font=\scriptsize\color{eqink}] at (0.6,-0.45){$\mathbf{e}_1$};
+  \node[font=\scriptsize\color{eqink}] at (-0.5,0.6){$\mathbf{e}_2$};
+  % ---- flecha Phi ----
+  \draw[-{Latex[length=1.8mm]}, ink, line width=0.8pt] (2.5,1)--(3.7,1);
+  \node[font=\small\color{ink}] at (3.1,1.5){$\Phi$};
+  % ---- cuadrícula transformada (paralelogramos): e1'=(1,0.35) e2'=(0.5,1) ----
+  \begin{scope}[shift={(4.4,0)}]
+    \foreach \i in {0,1,2}{\draw[cellEdge!70, line width=0.3pt]
+      (\i,{0.35*\i}) -- ({\i+1},{0.35*\i+2});}
+    \foreach \j in {0,1,2}{\draw[cellEdge!70, line width=0.3pt]
+      ({0.5*\j},\j) -- ({2+0.5*\j},{0.7+\j});}
+    \draw[-{Latex[length=1.6mm]}, gold, line width=0.9pt] (0,0)--(1,0.35);
+    \draw[-{Latex[length=1.6mm]}, gold, line width=0.9pt] (0,0)--(0.5,1);
+    \fill[ink] (0,0) circle (0.7pt);
+    \node[font=\scriptsize\color{gold}] at (1.15,0.1){$\Phi\mathbf{e}_1$};
+    \node[font=\scriptsize\color{gold}] at (0.1,1.15){$\Phi\mathbf{e}_2$};
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+\hand{Deforma la cuadrícula sin \hl{romperse}: las rectas siguen rectas y el origen no se mueve.}
+
+% -------------------------------------------------- inj/sur/biy ----
+\topic{Inyectiva, sobreyectiva, biyectiva}
+\hand{Tres formas en que $\Phi$ conecta el conjunto de salida con el de llegada:}
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  % ============ Panel A: Inyectiva (yc=0) ============
+  \node[blob] (VA) at (0,0){};   \node[blob] (WA) at (2.5,0){};
+  \foreach \y in {0.42,0,-0.42}{\node[dot] at (0,\y){};}
+  \foreach \y in {0.57,0.19,-0.19,-0.57}{\node[dot] at (2.5,\y){};}
+  \draw[fl] (0,0.42)--(2.5,0.57);
+  \draw[fl] (0,0)--(2.5,0.19);
+  \draw[fl] (0,-0.42)--(2.5,-0.19);
+  \node[font=\scriptsize\color{ink}] at (1.25,1.15){\textbf{Inyectiva}};
+  \node[font=\tiny\color{mauve}, anchor=west] at (3.3,0){distintos van a distintos};
+
+  % ============ Panel B: Sobreyectiva (yc=-2.6) ============
+  \node[blob] (VB) at (0,-2.6){};   \node[blob] (WB) at (2.5,-2.6){};
+  \foreach \y in {0.57,0.19,-0.19,-0.57}{\node[dot] at (0,{-2.6+\y}){};}
+  \foreach \y in {0.42,0,-0.42}{\node[dot] at (2.5,{-2.6+\y}){};}
+  \draw[fl] (0,-2.03)--(2.5,-2.18);
+  \draw[fl] (0,-2.41)--(2.5,-2.18);
+  \draw[fl] (0,-2.79)--(2.5,-2.6);
+  \draw[fl] (0,-3.17)--(2.5,-3.02);
+  \node[font=\scriptsize\color{ink}] at (1.25,-1.45){\textbf{Sobreyectiva}};
+  \node[font=\tiny\color{mauve}, anchor=west] at (3.3,-2.6){todos son alcanzados};
+
+  % ============ Panel C: Biyectiva (yc=-5.2) ============
+  \node[blob] (VC) at (0,-5.2){};   \node[blob] (WC) at (2.5,-5.2){};
+  \foreach \y in {0.42,0,-0.42}{\node[dot] at (0,{-5.2+\y}){};}
+  \foreach \y in {0.42,0,-0.42}{\node[dot] at (2.5,{-5.2+\y}){};}
+  \draw[fl] (0,-4.78)--(2.5,-4.78);
+  \draw[fl] (0,-5.2)--(2.5,-5.2);
+  \draw[fl] (0,-5.62)--(2.5,-5.62);
+  \node[font=\scriptsize\color{ink}] at (1.25,-4.05){\textbf{Biyectiva}};
+  \node[font=\tiny\color{mauve}, anchor=west] at (3.3,-5.2){pareja perfecta 1 a 1};
+\end{tikzpicture}
+\end{center}
+
+% -------------------------------------------------- inversa/nombres
+\topic{Deshacer y dar nombres}
+\hand{Una $\Phi$ biyectiva se puede \hl{deshacer}: existe su inversa $\Phi^{-1}$ con $\Phi^{-1}\!\circ\Phi=\mathrm{id}$. Y según a dónde va y si es biyectiva, cambia de nombre:}
+\begin{center}
+\begin{tikzpicture}
+  \node[draw=cellEdge, line width=0.4pt, fill=cellBase, rounded corners=1.4mm,
+        text width=74mm, inner sep=2.6mm, font=\small\color{ink}] {%
+    \textbf{Isomorfismo:}\ lineal y biyectiva, $V\to W$.\\[1.5mm]
+    \textbf{Endomorfismo:}\ lineal, $V\to V$.\\[1.5mm]
+    \textbf{Automorfismo:}\ lineal y biyectiva, $V\to V$.\\[1.5mm]
+    \textbf{Identidad:}\ $\mathrm{id}_V(\mathbf{x})=\mathbf{x}$, el automorfismo que no hace nada.};
+\end{tikzpicture}
+\end{center}
+
+% -------------------------------------------------- teorema --------
+\topic{Misma dimensión, misma cosa}
+\hand{Dos espacios de dimensión finita son \hl{isomorfos} —hay una biyección lineal entre ellos— exactamente cuando tienen la misma dimensión:}
+\keyeq{V\cong W \;\iff\; \dim(V)=\dim(W)}
+\obs{Por eso $\mathbb{R}^2$ y $\mathbb{C}$ son "lo mismo" ($z=x_1+ix_2$), y las matrices $\mathbb{R}^{m\times n}$ equivalen a $\mathbb{R}^{mn}$: misma dimensión, transformables sin \hl{pérdida}.}
+
+\clearpage
+% ===================== CIERRE =======================================
+\begin{slidec}
+  \raggedright
+  \sertitle{\fontsize{24}{27}\selectfont ¿Le ves la estructura que $\Phi$ no rompe?}
+  \vspace{5mm}
+  \hand{Forma parte de la serie \hl{Matemáticas para Machine Learning}.}
+  \vspace{3mm}
+  \hand{\hl{Guarda} esto y \hl{sígueme} para las siguientes en \hl{asanchezyali.com}}
+\end{slidec}
+
+\end{document}

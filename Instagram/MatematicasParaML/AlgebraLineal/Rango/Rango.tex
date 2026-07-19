@@ -1,0 +1,89 @@
+% =====================================================================
+%  yalix  --  "Rango"  (apuntes)  ·  Serie ML · #14
+%  Basado en: Deisenroth, Faisal, Ong -- Mathematics for ML (2.6.2)
+%  Compilar:  xelatex Rango.tex   (dos pasadas)
+% =====================================================================
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
+\input{../palette.tex}   % paleta de la serie "Matemáticas para ML"
+\settotalslides{5}
+\setseriestag{Álgebra lineal · ML \#14}
+
+% ---- colores para las ilustraciones ---------------------------------
+\definecolor{cellBase}{RGB}{233,241,242}   % pale aqua
+\definecolor{hlA}{RGB}{160,208,214}        % aqua  (pivotes)
+\definecolor{cellEdge}{RGB}{144,170,178}   % borde
+\definecolor{cellNull}{RGB}{237,233,224}   % fila nula (apagada)
+
+\newcommand{\cell}[4]{\node[draw=cellEdge, line width=0.4pt, fill=#3,
+   minimum size=6.6mm, inner sep=0pt, font=\small\color{ink}] at (#1,#2) {#4};}
+
+\begin{document}
+
+% ===================== PORTADA ======================================
+\begin{slidec}
+  \coverphoto{assets/cover.jpg}
+  \raggedright
+  \serlead{Serie · Matemáticas para Machine Learning}
+  \vspace{1mm}
+  \sertitle{\fontsize{40}{43}\selectfont Rango}
+  \vspace{4mm}
+  \hand{El número de direcciones \hl{independientes}}
+\end{slidec}
+\clearpage
+
+% ===================== ARTICULO =====================================
+\RaggedRight\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\parindent}{0pt}\setlength{\parskip}{1.4mm}
+\fontsize{13.5}{16}\selectfont\vspace*{1mm}
+
+% -------------------------------------------------- qué es ---------
+\topic{Qué es el rango}
+\hand{El \uhand{rango} $\operatorname{rk}(A)$ es el número de columnas linealmente \hl{independientes} de $A$ —y resulta ser también el de filas independientes.}
+\keyeq{\operatorname{rk}(A) = \operatorname{rk}(A^\top)}
+\hand{Se lee contando \hl{pivotes} tras la eliminación gaussiana:}
+\begin{center}
+\begin{tikzpicture}[x=6.6mm, y=6.6mm]
+  \cell{0}{0}{hlA}{$1$}\cell{1}{0}{cellBase}{$2$}\cell{2}{0}{cellBase}{$1$}
+  \cell{0}{-1}{cellBase}{$0$}\cell{1}{-1}{hlA}{$1$}\cell{2}{-1}{cellBase}{$3$}
+  \cell{0}{-2}{cellNull}{$0$}\cell{1}{-2}{cellNull}{$0$}\cell{2}{-2}{cellNull}{$0$}
+  \node[font=\scriptsize\color{ink}, anchor=west] at (2.8,-1){$\operatorname{rk}=2$};
+\end{tikzpicture}
+\end{center}
+\obs{Dos pivotes (aqua) y una fila nula dan rango $2$.}
+
+% -------------------------------------------------- es dimensión ---
+\topic{El rango es una dimensión}
+\hand{Las columnas de $A$ generan un subespacio —la \hl{imagen} de $A$— y su dimensión es exactamente el rango:}
+\keyeq{\dim(\operatorname{im} A) = \operatorname{rk}(A)}
+\obs{Lo mismo vale por filas. Por eso el rango mide cuánta información \hl{no redundante} carga la matriz.}
+
+% -------------------------------------------------- qué dice ------
+\topic{Qué te dice el rango}
+\begin{center}
+\begin{tikzpicture}
+  \node[draw=cellEdge, line width=0.4pt, fill=cellBase, rounded corners=1.4mm,
+        text width=74mm, inner sep=2.6mm, font=\small\color{ink}] {%
+    \textbf{Invertible:}\ $A_{n\times n}$ es regular $\iff \operatorname{rk}(A)=n$.\\[1.5mm]
+    \textbf{Resoluble:}\ $A\mathbf{x}=\mathbf{b}$ tiene solución $\iff \operatorname{rk}(A)=\operatorname{rk}([A\mid\mathbf{b}])$.\\[1.5mm]
+    \textbf{Núcleo:}\ las soluciones de $A\mathbf{x}=\mathbf{0}$ forman un subespacio de dimensión $n-\operatorname{rk}(A)$.};
+\end{tikzpicture}
+\end{center}
+
+% -------------------------------------------------- rango completo -
+\topic{Rango completo}
+\hand{El rango nunca pasa de $\min(m,n)$. Cuando lo alcanza, la matriz tiene \hl{rango completo}:}
+\keyeq{\operatorname{rk}(A) = \min(m,n)}
+\obs{Si se queda corto, es \hl{deficiente}: hay columnas (o filas) que son combinación de las demás —redundancia pura.}
+
+\clearpage
+% ===================== CIERRE =======================================
+\begin{slidec}
+  \raggedright
+  \sertitle{\fontsize{25}{28}\selectfont ¿Tus datos tienen rango completo o les sobran columnas?}
+  \vspace{5mm}
+  \hand{Forma parte de la serie \hl{Matemáticas para Machine Learning}.}
+  \vspace{3mm}
+  \hand{\hl{Guarda} esto y \hl{sígueme} para las siguientes en \hl{asanchezyali.com}}
+\end{slidec}
+
+\end{document}

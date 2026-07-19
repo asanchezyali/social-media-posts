@@ -1,0 +1,161 @@
+% =====================================================================
+%  yalix  --  "Cambio de base"  (apuntes)  ·  Serie ML · #17
+%  Basado en: Deisenroth, Faisal, Ong -- Mathematics for ML (2.7.2)
+%  Compilar:  xelatex CambioDeBase.tex   (dos pasadas)
+% =====================================================================
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
+\input{../palette.tex}   % paleta de la serie "Matemáticas para ML"
+\settotalslides{9}
+\setseriestag{Álgebra lineal · ML \#17}
+
+% ---- colores para las ilustraciones ---------------------------------
+\definecolor{cellBase}{RGB}{233,241,242}   % pale aqua
+\definecolor{hlA}{RGB}{160,208,214}        % aqua  (columna b1 / diagonal)
+\definecolor{hlB}{RGB}{240,216,154}        % oro   (columna b2)
+\definecolor{hlC}{RGB}{184,220,176}        % verde (columna b3)
+\definecolor{cellEdge}{RGB}{144,170,178}   % borde
+\definecolor{setfill}{RGB}{198,224,208}    % nodos del diagrama
+\definecolor{gold}{RGB}{200,150,40}        % cambios de base S,T
+
+\newcommand{\cell}[4]{\node[draw=cellEdge, line width=0.4pt, fill=#3,
+   minimum size=6.6mm, inner sep=0pt, font=\small\color{ink}] at (#1,#2) {#4};}
+
+\begin{document}
+
+% ===================== PORTADA ======================================
+\begin{slidec}
+  \coverphoto{assets/cover.jpg}
+  \raggedright
+  \serlead{Serie · Matemáticas para Machine Learning}
+  \vspace{1mm}
+  \sertitle{\fontsize{40}{43}\selectfont Cambio de base}
+  \vspace{4mm}
+  \hand{La \hl{misma} aplicación, una matriz más simple}
+\end{slidec}
+\clearpage
+
+% ===================== ARTICULO =====================================
+\RaggedRight\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\parindent}{0pt}\setlength{\parskip}{1.4mm}
+\fontsize{13.5}{16}\selectfont\vspace*{1mm}
+
+% -------------------------------------------------- el problema ----
+\topic{Misma aplicación, otra matriz}
+\hand{La matriz $A_\Phi$ de una aplicación lineal $\Phi:V\to W$ depende de las bases elegidas. Si cambias de $(B,C)$ a $(\tilde B,\tilde C)$, obtienes \emph{otra} matriz $\tilde A_\Phi$ para la \hl{misma} $\Phi$.}
+\obs{La pregunta: ¿cómo se relacionan $A_\Phi$ y $\tilde A_\Phi$?}
+
+% -------------------------------------------------- teorema --------
+\topic{La fórmula del cambio}
+\hand{Basta con dos matrices de \hl{cambio de base}: $S$ pasa coordenadas de $\tilde B$ a $B$, y $T$ pasa de $\tilde C$ a $C$. Entonces:}
+\keyeq{\tilde A_\Phi = T^{-1}\,A_\Phi\,S}
+\obs{Las columnas de $S$ son los $\tilde{\mathbf{b}}_j$ escritos en la base $B$; las de $T$, los $\tilde{\mathbf{c}}_k$ en la base $C$. Ambas son \hl{invertibles}.}
+
+% -------------------------------------------------- diagrama ------
+\topic{El diagrama}
+\hand{Ir de $\tilde B$ a $\tilde C$ es dar un rodeo por las bases "viejas": subir con $S$, cruzar con $A_\Phi$, bajar con $T^{-1}$.}
+\begin{center}
+\begin{tikzpicture}[x=17mm,y=15mm,
+   nd/.style={circle, draw=cellEdge, line width=0.5pt, fill=setfill, fill opacity=0.55,
+              text opacity=1, minimum size=8.5mm, font=\color{ink}},
+   mp/.style={-{Latex[length=2.2mm]}, eqink, line width=1pt},
+   ch/.style={-{Latex[length=2.2mm]}, gold, line width=1pt}]
+  \node[nd] (B)  at (0,1) {$B$};
+  \node[nd] (C)  at (2,1) {$C$};
+  \node[nd] (Bt) at (0,0) {$\tilde B$};
+  \node[nd] (Ct) at (2,0) {$\tilde C$};
+  \draw[mp] (B) -- (C)  node[midway,above,font=\scriptsize\color{eqink}]{$A_\Phi$};
+  \draw[mp] (Bt)-- (Ct) node[midway,below,font=\scriptsize\color{eqink}]{$\tilde A_\Phi$};
+  \draw[ch] (Bt)-- (B)  node[midway,left, font=\scriptsize\color{gold}]{$S$};
+  \draw[ch] (Ct)-- (C)  node[midway,right,font=\scriptsize\color{gold}]{$T$};
+\end{tikzpicture}
+\end{center}
+\obs{El cuadrado \hl{conmuta}: los dos caminos de $\tilde B$ a $\tilde C$ dan lo mismo.}
+
+% -------------------------------------------------- ejemplo: partida
+\topic{Un ejemplo: el punto de partida}
+\hand{Sea $\Phi:\mathbb{R}^3\to\mathbb{R}^4$ con esta matriz $A_\Phi$ en las bases \hl{estándar} $B$ y $C$:}
+\begin{center}
+\begin{tikzpicture}[x=6.6mm,y=6.6mm]
+  \cell{0}{0}{cellBase}{$1$}\cell{1}{0}{cellBase}{$2$}\cell{2}{0}{cellBase}{$0$}
+  \cell{0}{-1}{cellBase}{$-1$}\cell{1}{-1}{cellBase}{$1$}\cell{2}{-1}{cellBase}{$3$}
+  \cell{0}{-2}{cellBase}{$3$}\cell{1}{-2}{cellBase}{$7$}\cell{2}{-2}{cellBase}{$1$}
+  \cell{0}{-3}{cellBase}{$-1$}\cell{1}{-3}{cellBase}{$2$}\cell{2}{-3}{cellBase}{$4$}
+  \node[font=\scriptsize\color{ink}, anchor=east] at (-0.7,-1.5){$A_\Phi=$};
+\end{tikzpicture}
+\end{center}
+\hand{La queremos ahora en dos bases \hl{nuevas}: $\tilde B$ de $\mathbb{R}^3$ y $\tilde C$ de $\mathbb{R}^4$.}
+
+% -------------------------------------------------- ejemplo: bases
+\topic{Las bases nuevas}
+\hand{Estas son las bases que elegimos (sus vectores, como columnas):}
+\eqfit{\tilde B = \left(\begin{bmatrix}1\\1\\0\end{bmatrix},\ \begin{bmatrix}0\\1\\1\end{bmatrix},\ \begin{bmatrix}1\\0\\1\end{bmatrix}\right)}
+\eqfit{\tilde C = \left(\begin{bmatrix}1\\1\\0\\0\end{bmatrix},\ \begin{bmatrix}1\\0\\1\\0\end{bmatrix},\ \begin{bmatrix}0\\1\\1\\0\end{bmatrix},\ \begin{bmatrix}1\\0\\0\\1\end{bmatrix}\right)}
+
+% -------------------------------------------------- ejemplo: S,T --
+\topic{Arma $S$ y $T$ con la base nueva}
+\hand{Las columnas de $S$ son justo los vectores de $\tilde B$ —en la base estándar salen directos:}
+\begin{center}
+\begin{tikzpicture}[x=6.6mm,y=6.6mm]
+  \node[font=\scriptsize\color{ink}] at (0,0.95){$\tilde{\mathbf{b}}_1$};
+  \node[font=\scriptsize\color{ink}] at (1,0.95){$\tilde{\mathbf{b}}_2$};
+  \node[font=\scriptsize\color{ink}] at (2,0.95){$\tilde{\mathbf{b}}_3$};
+  \cell{0}{0}{hlA}{$1$}\cell{1}{0}{hlB}{$0$}\cell{2}{0}{hlC}{$1$}
+  \cell{0}{-1}{hlA}{$1$}\cell{1}{-1}{hlB}{$1$}\cell{2}{-1}{hlC}{$0$}
+  \cell{0}{-2}{hlA}{$0$}\cell{1}{-2}{hlB}{$1$}\cell{2}{-2}{hlC}{$1$}
+  \node[font=\scriptsize\color{ink}, anchor=east] at (-0.7,-1){$S=$};
+\end{tikzpicture}
+\end{center}
+\obs{La matriz $T$ ($4\times4$) se arma igual: sus columnas son los vectores de la base nueva $\tilde C$.}
+
+% -------------------------------------------------- ejemplo: result
+\topic{Multiplica y listo}
+\hand{Solo queda una multiplicación con la fórmula $\tilde A_\Phi=T^{-1}A_\Phi S$:}
+\begin{center}
+\begin{tikzpicture}[x=6.6mm,y=6.6mm]
+  \cell{0}{0}{cellBase}{$-4$}\cell{1}{0}{cellBase}{$-4$}\cell{2}{0}{cellBase}{$-2$}
+  \cell{0}{-1}{cellBase}{$6$}\cell{1}{-1}{cellBase}{$0$}\cell{2}{-1}{cellBase}{$0$}
+  \cell{0}{-2}{cellBase}{$4$}\cell{1}{-2}{cellBase}{$8$}\cell{2}{-2}{cellBase}{$4$}
+  \cell{0}{-3}{cellBase}{$1$}\cell{1}{-3}{cellBase}{$6$}\cell{2}{-3}{cellBase}{$3$}
+  \node[font=\scriptsize\color{ink}, anchor=east] at (-0.7,-1.5){$\tilde A_\Phi=$};
+\end{tikzpicture}
+\end{center}
+\obs{La misma $\Phi$, otra matriz. Armar $S$ y $T$ fue solo \hl{apilar} las nuevas bases como columnas.}
+
+% -------------------------------------------------- por qué -------
+\topic{Por qué nos importa}
+\hand{Con la base correcta, la matriz se vuelve mucho más \hl{simple}. Ejemplo:}
+\begin{center}
+\begin{tikzpicture}[x=6.6mm, y=6.6mm]
+  % A original
+  \cell{0}{0}{cellBase}{$2$}\cell{1}{0}{cellBase}{$1$}
+  \cell{0}{-1}{cellBase}{$1$}\cell{1}{-1}{cellBase}{$2$}
+  \node[font=\scriptsize\color{ink}, anchor=east] at (-0.7,-0.5){$A=$};
+  % flecha
+  \draw[-{Latex[length=2mm]}, gold, line width=0.9pt] (2.2,-0.5)--(3.4,-0.5);
+  \node[font=\scriptsize\color{gold}] at (2.8,0.2){base $B$};
+  % A diagonal
+  \cell{4.1}{0}{hlA}{$3$}\cell{5.1}{0}{cellBase}{$0$}
+  \cell{4.1}{-1}{cellBase}{$0$}\cell{5.1}{-1}{hlA}{$1$}
+  \node[font=\scriptsize\color{ink}, anchor=west] at (5.8,-0.5){$=\tilde A$};
+\end{tikzpicture}
+\end{center}
+\obs{Con $B=\big((1,1),(1,-1)\big)$, la matriz $\big(\begin{smallmatrix}2&1\\1&2\end{smallmatrix}\big)$ se vuelve \hl{diagonal}. Esa es la semilla de las eigenbases y del PCA.}
+
+% -------------------------------------------------- equiv/similar -
+\topic{Equivalentes y similares}
+\obs{Son \hl{equivalentes} dos matrices cuando una es $T^{-1}AS$ de la otra ($S,T$ invertibles).}
+\obs{Son \hl{similares} —el caso $V\to V$, con una sola base— cuando $\tilde A = S^{-1}AS$. Toda pareja similar es equivalente; no al revés.}
+\obs{La similaridad preserva los \hl{autovalores}: por eso hallar una base donde $\tilde A$ sea diagonal revela la estructura esencial de $\Phi$ —el corazón de eigen y PCA.}
+
+\clearpage
+% ===================== CIERRE =======================================
+\begin{slidec}
+  \raggedright
+  \sertitle{\fontsize{24}{27}\selectfont ¿Y si existe una base donde tu matriz es diagonal?}
+  \vspace{5mm}
+  \hand{Forma parte de la serie \hl{Matemáticas para Machine Learning}.}
+  \vspace{3mm}
+  \hand{\hl{Guarda} esto y \hl{sígueme} para las siguientes en \hl{asanchezyali.com}}
+\end{slidec}
+
+\end{document}

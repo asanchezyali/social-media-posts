@@ -102,7 +102,8 @@
 \AddToShipoutPictureBG{\GridBackground}
 
 % =====================================================================
-%  Header: none.   Footer: progress dots only.
+%  Header: none.   Footer: series tag (left) + swipe arrow (right).
+%    No progress dots.  Both nudged up a little (\raisebox).
 % =====================================================================
 \pagestyle{fancy}
 \fancyhf{}
@@ -110,15 +111,9 @@
 \renewcommand{\footrulewidth}{0pt}
 \fancyhead[L]{}\fancyhead[R]{}
 
-\newcommand{\carouseldots}{%
-  \begin{tikzpicture}[baseline]
-    \foreach \i in {1,...,\totalslides}{%
-      \ifnum\i=\value{page}
-        \fill[ink] (0.40*\i,0) circle (1.7pt);
-      \else
-        \fill[mauve!80] (0.40*\i,0) circle (1.4pt);
-      \fi}
-  \end{tikzpicture}}
+% readable chrome tone (darker than mauve so the footer tag is legible)
+\definecolor{chromeink}{RGB}{92,104,80}
+
 % hand-drawn "swipe" arrow, pen-style (curved shaft + two head strokes)
 \newcommand{\penarrow}{%
   \begin{tikzpicture}[baseline]
@@ -127,8 +122,13 @@
     \draw[mauve, line width=1pt, line cap=round] (7.2mm,0) -- (5.4mm,1.3mm);
     \draw[mauve, line width=1pt, line cap=round] (7.2mm,0) -- (5.6mm,-1.2mm);
   \end{tikzpicture}}
-\fancyfoot[C]{\carouseldots}
-\fancyfoot[R]{\penarrow}
+
+% series tag -> footer LEFT, next to the swipe arrow (footer RIGHT). Legible.
+\newcommand{\seriestag}{}
+\newcommand{\setseriestag}[1]{\renewcommand{\seriestag}{#1}}
+\fancyfoot[L]{\raisebox{1.6mm}{\displayfont\itshape\fontsize{8.5}{10}\selectfont\color{chromeink}\seriestag}}
+\fancyfoot[C]{}
+\fancyfoot[R]{\raisebox{1.6mm}{\penarrow}}
 
 % subtle attribution watermark on every slide (top-right) -> reshares credit you
 \newcommand{\watermark}{@asanchezyali}
@@ -136,14 +136,6 @@
 \AddToShipoutPictureFG{\begin{tikzpicture}[remember picture, overlay]
   \node[anchor=north east, inner sep=0pt] at ($(current page.north east)+(-11mm,-9mm)$)
     {\displayfont\itshape\fontsize{8}{9}\selectfont\color{mauve}\watermark};
-\end{tikzpicture}}
-
-% series tag on every slide (top-left) -> signals this is part of a series
-\newcommand{\seriestag}{}
-\newcommand{\setseriestag}[1]{\renewcommand{\seriestag}{#1}}
-\AddToShipoutPictureFG{\begin{tikzpicture}[remember picture, overlay]
-  \node[anchor=north west, inner sep=0pt] at ($(current page.north west)+(11mm,-9mm)$)
-    {\displayfont\itshape\fontsize{8}{9}\selectfont\color{mauve}\seriestag};
 \end{tikzpicture}}
 
 % =====================================================================
@@ -202,7 +194,7 @@
 % it to the whole topic's height, e.g. \topic[84mm]{...}, so the entire block
 % (heading + text + figure) moves to the next page together instead of the
 % figure tearing off onto its own slide.
-\newcommand{\topic}[2][4mm]{\par\addvspace{3mm}\needspace{#1}\refstepcounter{topicnum}%
+\newcommand{\topic}[2][14mm]{\par\addvspace{3mm}\needspace{#1}\refstepcounter{topicnum}%
   \noindent\begin{tikzpicture}
     \node[anchor=base west, inner sep=0pt] (tt) at (0,0)
       {\handfont\fontsize{19}{23}\selectfont\color{ink}#2};

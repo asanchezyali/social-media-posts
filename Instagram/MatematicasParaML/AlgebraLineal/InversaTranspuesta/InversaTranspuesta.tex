@@ -1,0 +1,187 @@
+% =====================================================================
+%  yalix  --  "Inversa y transpuesta"  (apuntes)   ·  Serie ML · #3
+%  Basado en: Deisenroth, Faisal, Ong -- Mathematics for ML (2.2.2)
+%  Compilar:  xelatex InversaTranspuesta.tex   (dos pasadas)
+% =====================================================================
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
+\input{../palette.tex}   % paleta de la serie "Matemáticas para ML"
+\settotalslides{8}
+\setseriestag{Álgebra lineal · ML \#3}
+
+% ---- pastel fills for the didactic illustrations --------------------
+\definecolor{cellBase}{RGB}{233,241,242}   % pale aqua
+\definecolor{hlA}{RGB}{160,208,214}        % aqua
+\definecolor{hlB}{RGB}{240,216,154}        % oro
+\definecolor{hlC}{RGB}{184,220,176}        % verde
+\definecolor{cellV}{RGB}{210,201,235}       % violeta
+\definecolor{cellEdge}{RGB}{144,170,178}    % borde
+\definecolor{amber}{RGB}{190,132,44}        % ámbar (signos)
+
+% one grid cell:  \cell{col}{row}{fill}{content}
+\newcommand{\cell}[4]{\node[draw=cellEdge, line width=0.4pt, fill=#3,
+   minimum size=6.2mm, inner sep=0pt, font=\small\color{ink}] at (#1,#2) {#4};}
+
+\begin{document}
+
+% ===================== PORTADA ======================================
+\begin{slidec}
+  \coverphoto{assets/cover.jpg}
+  \raggedright
+  \serlead{Serie · Matemáticas para Machine Learning}
+  \vspace{1mm}
+  \sertitle{\fontsize{34}{37}\selectfont Inversa y transpuesta}
+  \vspace{4mm}
+  \hand{\hl{Revertir} una transformación y \hl{girar} filas por columnas}
+\end{slidec}
+\clearpage
+
+% ===================== ARTICULO =====================================
+\RaggedRight\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\parindent}{0pt}\setlength{\parskip}{1.4mm}
+\fontsize{13.5}{16}\selectfont\vspace*{1mm}
+
+% -------------------------------------------------- inversa ----------
+\topic{La matriz inversa}
+\hand{La inversa $A^{-1}$ \hl{deshace} lo que hace $A$: al multiplicarlas se cancelan y queda la identidad.}
+\begin{center}
+\begin{tikzpicture}[x=6.2mm, y=6.2mm]
+  % A (oro)
+  \cell{0}{0.5}{hlB}{}\cell{1}{0.5}{hlB}{}\cell{0}{-0.5}{hlB}{}\cell{1}{-0.5}{hlB}{}
+  \node[font=\small\color{ink}] at (0.5,1.35) {$A$};
+  \node[font=\large\color{eqink}] at (2.5,0) {$\times$};
+  % A^{-1} (aqua)
+  \cell{4}{0.5}{hlA}{}\cell{5}{0.5}{hlA}{}\cell{4}{-0.5}{hlA}{}\cell{5}{-0.5}{hlA}{}
+  \node[font=\small\color{ink}] at (4.5,1.35) {$A^{-1}$};
+  \node[font=\large\color{eqink}] at (6.5,0) {$=$};
+  % I (identidad)
+  \cell{8}{0.5}{hlC}{$1$}\cell{9}{0.5}{cellBase}{$0$}
+  \cell{8}{-0.5}{cellBase}{$0$}\cell{9}{-0.5}{hlC}{$1$}
+  \node[font=\small\color{ink}] at (8.5,1.35) {$I$};
+\end{tikzpicture}
+\end{center}
+\obs{Solo una matriz \hl{cuadrada} puede tener inversa y, cuando existe, es \hl{única}.}
+
+% -------------------------------------------------- determinante -----
+\topic{El determinante de una 2×2}
+\hand{Un solo número decide si hay inversa. Para una $2\times2$ es la diagonal menos la antidiagonal:}
+\begin{center}
+\begin{tikzpicture}[x=8mm, y=8mm]
+  % bandas tipo resaltador sobre las diagonales (detrás de las letras)
+  \draw[accent, opacity=0.42, line width=5.5mm, line cap=round] (0,0) -- (1,-1); % diagonal ad (verde)
+  \draw[amber,  opacity=0.42, line width=5.5mm, line cap=round] (1,0) -- (0,-1); % antidiagonal bc (ámbar)
+  % entradas
+  \node[font=\large\color{ink}] at (0,0){$a$};
+  \node[font=\large\color{ink}] at (1,0){$b$};
+  \node[font=\large\color{ink}] at (0,-1){$c$};
+  \node[font=\large\color{ink}] at (1,-1){$d$};
+  % corchetes de la matriz
+  \draw[ink, line width=0.7pt, line cap=round] (-0.5,0.62) -- (-0.7,0.62) -- (-0.7,-1.62) -- (-0.5,-1.62);
+  \draw[ink, line width=0.7pt, line cap=round] (1.5,0.62) -- (1.7,0.62) -- (1.7,-1.62) -- (1.5,-1.62);
+  % fórmula
+  \node[font=\footnotesize\color{ink}, anchor=west] at (2.2,-0.5)
+     {$\det A = \textcolor{eqink}{ad}-\textcolor{amber}{bc}$};
+\end{tikzpicture}
+\end{center}
+\obs{Si $\det A = 0$ la matriz es \hl{singular}: no tiene inversa. Si no, es \hl{regular} (invertible).}
+
+% -------------------------------------------------- receta 2x2 -------
+\topic{La inversa de una 2×2}
+\hand{Hay una receta: \hl{intercambia} la diagonal, cambia el \hl{signo} de la antidiagonal y divide por el determinante.}
+\begin{center}
+\begin{tikzpicture}[x=6.4mm, y=6.4mm]
+  % A: diagonal (a,d) oro -> se intercambia ; antidiagonal (b,c) aqua -> se niega
+  \cell{0}{0.5}{hlB}{$a$}\cell{1}{0.5}{hlA}{$b$}
+  \cell{0}{-0.5}{hlA}{$c$}\cell{1}{-0.5}{hlB}{$d$}
+  \node[font=\small\color{ink}] at (0.5,1.45) {$A$};
+  % intercambio a <-> d (la diagonal)
+  \draw[eqink, line width=0.7pt, {Latex[length=1.4mm]}-{Latex[length=1.4mm]}]
+     (0.16,0.4) to[bend left=26] (0.84,-0.4);
+  \draw[-{Latex[length=2mm]}, eqink, line width=0.8pt] (1.85,0) -- (2.6,0);
+  % A^{-1} = 1/(ad-bc) * [matriz reordenada]  -> la división como fracción, clara
+  \node[font=\small\color{ink}, anchor=west] at (2.8,0) {$A^{-1}=\dfrac{1}{ad-bc}$};
+  \cell{7.7}{0.5}{hlB}{$d$}\cell{8.7}{0.5}{hlA}{\textcolor{amber}{$-b$}}
+  \cell{7.7}{-0.5}{hlA}{\textcolor{amber}{$-c$}}\cell{8.7}{-0.5}{hlB}{$a$}
+\end{tikzpicture}
+\end{center}
+
+% -------------------------------------------------- ejemplo ----------
+\topic{Un ejemplo}
+\eg{estas dos matrices son inversas, porque su producto es la identidad:}
+\eqfit{A=\begin{bmatrix}1&2&1\\4&4&5\\6&7&7\end{bmatrix}\!,\quad
+       A^{-1}=\begin{bmatrix}-7&-7&6\\2&1&-1\\4&5&-4\end{bmatrix}}
+\hand{Multiplícalas y obtienes $I$ — ni más, ni menos.}
+
+% -------------------------------------------------- transpuesta ------
+\topic{La transpuesta}
+\hand{Transponer es \hl{reflejar} la matriz sobre su diagonal: las \hl{filas} se vuelven \hl{columnas}, y $a_{ij}$ pasa al lugar $a_{ji}$.}
+\begin{center}
+\begin{tikzpicture}[x=6.4mm, y=6.4mm]
+  % A (2x3): fila 1 aqua, fila 2 oro
+  \cell{0}{0.5}{hlA}{$a_{11}$}\cell{1}{0.5}{hlA}{$a_{12}$}\cell{2}{0.5}{hlA}{$a_{13}$}
+  \cell{0}{-0.5}{hlB}{$a_{21}$}\cell{1}{-0.5}{hlB}{$a_{22}$}\cell{2}{-0.5}{hlB}{$a_{23}$}
+  \node[font=\small\color{ink}] at (1,1.4) {$A$};
+  \draw[-{Latex[length=2mm]}, eqink, line width=0.8pt] (3.0,-0.05) -- (4.1,-0.05);
+  \node[font=\scriptsize\itshape\color{eqink}] at (3.55,0.6) {$\top$};
+  % A^T (3x2): columna 1 = fila 1 de A (aqua), columna 2 = fila 2 (oro)
+  \cell{5}{1}{hlA}{$a_{11}$}\cell{6}{1}{hlB}{$a_{21}$}
+  \cell{5}{0}{hlA}{$a_{12}$}\cell{6}{0}{hlB}{$a_{22}$}
+  \cell{5}{-1}{hlA}{$a_{13}$}\cell{6}{-1}{hlB}{$a_{23}$}
+  \node[font=\small\color{ink}] at (5.5,1.9) {$A^{\top}$};
+\end{tikzpicture}
+\end{center}
+
+% -------------------------------------------------- propiedades ------
+\topic{El orden se invierte}
+\hand{Al invertir o transponer un \hl{producto}, el orden de los factores se \hl{invierte} (como quitarse zapatos y medias):}
+\begin{center}
+\begin{tikzpicture}[x=1mm, y=1mm]
+  \node[font=\Large] (l) at (0,0) {$(\,\textcolor{eqink}{A}\,\textcolor{amber}{B}\,)^{-1}$};
+  \node[font=\Large\color{ink}] at (26,0) {$=$};
+  \node[font=\Large] (r) at (48,0) {$\textcolor{amber}{B}^{-1}\textcolor{eqink}{A}^{-1}$};
+  \draw[eqink, -{Latex[length=1.5mm]}, line width=0.5pt] (5,7) to[bend left=22] (53,7);
+  \draw[amber, -{Latex[length=1.5mm]}, line width=0.5pt] (12,-7) to[bend right=22] (43,-7);
+  \node[font=\scriptsize\itshape\color{ink}] at (26,-15) {el orden se invierte};
+\end{tikzpicture}
+\end{center}
+\eqx{(AB)^{-1} = B^{-1}A^{-1}}
+\eqx{(AB)^{\top} = B^{\top}A^{\top}}
+
+% -------------------------------------------------- más reglas -------
+\topic{Más reglas de la transpuesta}
+\hand{La transpuesta se lleva bien con la suma, y aplicada dos veces vuelve al inicio:}
+\eqx{(A+B)^{\top} = A^{\top}+B^{\top}}
+\eqx{(A^{\top})^{\top} = A}
+\obs{La inversa, en cambio, no se reparte sobre la suma: $(A+B)^{-1} \neq A^{-1}+B^{-1}$.}
+
+% -------------------------------------------------- simétricas -------
+\topic{Matrices simétricas}
+\hand{Una matriz es \hl{simétrica} cuando coincide con su transpuesta ($A=A^{\top}$): queda reflejada sobre su diagonal, pues $a_{ij}=a_{ji}$.}
+\begin{center}
+\begin{tikzpicture}[x=6.6mm, y=6.6mm]
+  % diagonal
+  \cell{0}{0}{cellBase}{$a_{11}$}\cell{1}{-1}{cellBase}{$a_{22}$}\cell{2}{-2}{cellBase}{$a_{33}$}
+  % pares espejo: (1,2)&(2,1) aqua, (1,3)&(3,1) oro, (2,3)&(3,2) verde
+  \cell{1}{0}{hlA}{$a_{12}$}\cell{0}{-1}{hlA}{$a_{21}$}
+  \cell{2}{0}{hlB}{$a_{13}$}\cell{0}{-2}{hlB}{$a_{31}$}
+  \cell{2}{-1}{hlC}{$a_{23}$}\cell{1}{-2}{hlC}{$a_{32}$}
+  % línea de reflexión (diagonal) y las letras de la diagonal por encima
+  \draw[eqink, line width=0.6pt, densely dashed] (-0.5,0.5) -- (2.5,-2.5);
+  \node[fill=cellBase, inner sep=0.5pt, font=\small\color{ink}] at (0,0){$a_{11}$};
+  \node[fill=cellBase, inner sep=0.5pt, font=\small\color{ink}] at (1,-1){$a_{22}$};
+  \node[fill=cellBase, inner sep=0.5pt, font=\small\color{ink}] at (2,-2){$a_{33}$};
+\end{tikzpicture}
+\end{center}
+\obs{Aparecen por todas partes en ML: matrices de \hl{covarianza}, \hl{kernels}, Hessianas\dots}
+
+\clearpage
+% ===================== CIERRE =======================================
+\begin{slidec}
+  \raggedright
+  \sertitle{\fontsize{24}{27}\selectfont ¿Cuál se te resiste más: la inversa o la transpuesta?}
+  \vspace{5mm}
+  \hand{Forma parte de la serie \hl{Matemáticas para Machine Learning}.}
+  \vspace{3mm}
+  \hand{\hl{Guarda} esto y \hl{sígueme} para las siguientes en \hl{asanchezyali.com}}
+\end{slidec}
+
+\end{document}

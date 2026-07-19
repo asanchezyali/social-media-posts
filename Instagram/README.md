@@ -29,88 +29,75 @@ SignPainter is a **macOS system font** and has no bold/italic (a cosmetic
 | Titles | **Playfair Display** (vendored in `fonts/`) |
 | Handwriting | **SignPainter** (macOS system) |
 | Composition | text left-aligned; equations centred |
-| Chrome | progress dots + hand-drawn pen arrow; `@handle` watermark (top-right); series tag (top-left) |
+| Chrome | footer: series tag (left) + hand-drawn pen arrow (right); `@handle` watermark (top-right). No progress dots. |
 
 ## Per-series palettes
 
-The base template keeps the cream/teal/terracotta identity. A **series** overrides
+The base template keeps the cream/teal/terracotta identity. A **module** overrides
 the four semantic colours (`eqink`, `accent`, `hltopic`, `mauve`) in a small file
-`\input` **after** `Headers.tex`. Each **series has its own folder** with a
-`palette.tex` (e.g. `MatematicasParaML/palette.tex`, forest green) plus one
-subfolder per post. Copy the palette to theme a new series; keep paper, grid and
-general `ink` untouched.
+`\input` **after** `Headers.tex`. Each **module has its own folder** with a
+`palette.tex`: `AlgebraLineal/palette.tex` (forest green) and
+`GeometriaAnalitica/palette.tex` (indigo/violet), each plus one subfolder per
+post. Copy a palette to theme a new module; keep paper, grid and general `ink`
+untouched.
 
 ## Requirements & compile
 
-Needs **XeLaTeX** (`fontspec`) — not pdfLaTeX. Run twice (dots + page counter).
+Needs **XeLaTeX** (`fontspec`) — not pdfLaTeX. Run twice (safe for overlays).
 
 ```bash
-cd MatematicasParaML/Matrices
+cd MatematicasParaML/AlgebraLineal/Matrices
 xelatex -interaction=nonstopmode Matrices.tex   # pass 1
 xelatex -interaction=nonstopmode Matrices.tex   # pass 2
-pdfinfo Matrices.pdf | grep Pages               # confirm \settotalslides
+pdfinfo Matrices.pdf | grep Pages               # (settotalslides is now vestigial)
 ```
 
 ## Structure
 
-Posts are grouped **by series**, two levels below `Instagram/`:
+The series **Matemáticas para ML** is split into **modules**, each in its own
+folder with its own `palette.tex`; every module holds one subfolder per post:
 
 ```
 Instagram/
 ├── Headers/Headers.tex          # shared template: palette, fonts, layout, commands
 ├── Headers/veil.png             # cream alpha-PNG veil for the cover (required)
 ├── fonts/                       # vendored Playfair Display .otf
-├── MatematicasParaML/           # a SERIES
-│   ├── palette.tex              # this series' colour override
-│   ├── SistemasLineales/        # post #1
-│   │   ├── SistemasLineales.tex
-│   │   └── assets/cover.jpg
-│   ├── Matrices/                # post #2 (colourful TikZ illustrations)
-│   │   ├── Matrices.tex
-│   │   └── assets/cover.jpg
-│   ├── InversaTranspuesta/      # post #3 (inverse, determinant, transpose, symmetric)
-│   │   ├── InversaTranspuesta.tex
-│   │   └── assets/cover.jpg
-│   ├── MultiplicacionEscalar/   # post #4 (scalar multiplication)
-│   │   ├── MultiplicacionEscalar.tex
-│   │   └── assets/cover.jpg
-│   ├── SolucionParticularGeneral/  # post #5 (particular & general solution, affine subspace)
-│   │   ├── SolucionParticularGeneral.tex
-│   │   └── assets/cover.jpg
-│   ├── EliminacionGauss/        # post #6 (elementary transforms, row-echelon, RREF)
-│   │   ├── EliminacionGauss.tex
-│   │   └── assets/cover.jpg
-│   ├── TrucoMenosUno/           # post #7 (Minus-1 trick: kernel basis from RREF)
-│   │   ├── TrucoMenosUno.tex
-│   │   └── assets/cover.jpg
-│   ├── CalcularInversa/         # post #8 (inverse via Gauss-Jordan: [A|I]→[I|A⁻¹])
-│   │   ├── CalcularInversa.tex
-│   │   └── assets/cover.jpg
-│   ├── AlgoritmosSolucion/      # post #9 (methods map: inverse, least-squares/pseudo-inverse, gaussian elim., iterative)
-│   │   ├── AlgoritmosSolucion.tex
-│   │   └── assets/cover.jpg
-│   ├── EspaciosVectoriales/     # post #10 (§2.4: groups, Abelian, GL(n,R), vector spaces, column/row vectors)
-│   │   ├── EspaciosVectoriales.tex
-│   │   └── assets/cover.jpg
-│   └── Subespacios/             # post #11 (§2.4.3: vector subspaces, 3 conditions, R^2 figure, homogeneous systems)
-│       ├── Subespacios.tex
-│       └── assets/cover.jpg
+├── MatematicasParaML/                    # the SERIES
+│   ├── AlgebraLineal/                     # module 1 — forest-green palette (book §2)
+│   │   ├── palette.tex                    #   forest green
+│   │   ├── SistemasLineales/  … #1        #   19 posts, §2.1–§2.8:
+│   │   │   ├── SistemasLineales.tex       #     Sistemas, Matrices, InversaTranspuesta,
+│   │   │   ├── caption.md                 #     MultiplicacionEscalar, SolucionParticularGeneral,
+│   │   │   └── assets/cover.jpg           #     EliminacionGauss, TrucoMenosUno, CalcularInversa,
+│   │   ├── Matrices/ … EspaciosAfines/    #     AlgoritmosSolucion, EspaciosVectoriales, Subespacios,
+│   │   │                                  #     IndependenciaLineal, BaseYDimension, Rango,
+│   │   │                                  #     AplicacionesLineales, MatrizTransformacion,
+│   │   │                                  #     CambioDeBase, ImagenNucleo, EspaciosAfines (#19)
+│   └── GeometriaAnalitica/                # module 2 — indigo/violet palette (book §3)
+│       ├── palette.tex                    #   indigo / violet
+│       ├── Normas/  … #1                  #   §3.1: norm axioms, ℓ1/ℓ2, unit ball (rombo vs círculo)
+│       │   ├── Normas.tex
+│       │   ├── caption.md
+│       │   └── assets/cover.jpg
+│       └── ProductosInternos/ … #2        #   §3.2: dot/inner product, SPD matrix, ellipse vs hyperbola
+│           └── ProductosInternos.tex + caption.md + assets/cover.jpg
 └── MachineLearningMathematics/  # earlier standalone demo (1 level deep)
 ```
 
 `Headers.tex` resolves the shared fonts and `veil.png` via `\yalixroot` — the
 relative path from the post back to `Instagram/`. A post declares it before
-loading the template, so it works at any depth (`../../` for series posts, `../`
-for the old 1-level demo).
+loading the template, so it works at any depth: **`../../../`** for a module post
+(`MatematicasParaML/<Module>/<Post>/`), `../` for the old 1-level demo. Each post
+also does `\input{../palette.tex}` to pull its **module** palette (one level up).
 
 ## Authoring
 
 ```latex
-\def\yalixroot{../../}\input{\yalixroot Headers/Headers.tex}
+\def\yalixroot{../../../}\input{\yalixroot Headers/Headers.tex}
 \input{../palette.tex}                      % series palette (one level up)
 \settotalslides{10}                        % = real page count
 \setwatermark{@asanchezyali}
-\setseriestag{Matemáticas para ML · \#2}   % series tag (top-left) — carries the part number
+\setseriestag{Matemáticas para ML · \#2}   % series tag (footer-left) — carries the part number
 
 \begin{document}
 \begin{slidec}                                  % photo cover (vertically centred)
@@ -147,7 +134,7 @@ for the old 1-level demo).
 | `\eq{...}` / `\eqx{...}` | Centred equation, uniform size (break wide ones by hand) |
 | `\eqfit{...}` | Big block (matrix) scaled to fit the width |
 | `\keyeq{...}` | Key result boxed by hand-drawn pen strokes |
-| `\setseriestag{...}` / `\setwatermark{...}` | Top-left series tag / top-right handle |
+| `\setseriestag{...}` / `\setwatermark{...}` | Footer series tag / top-right handle |
 | `\polaroid[angle]{file}{width}` | Framed tilted photo (optional) |
 
 **Notes on layout:** text is left-aligned and flows (no manual `\\`); equations
