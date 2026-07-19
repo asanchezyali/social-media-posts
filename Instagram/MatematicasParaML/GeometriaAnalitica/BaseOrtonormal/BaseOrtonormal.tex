@@ -61,8 +61,26 @@
 \end{center}
 
 % -------------------------------------------------- Gram-Schmidt -
-\topic{¿Cómo conseguirla?}
-\obs{¿No tienes una ONB? \hl{Gram}--Schmidt convierte cualquier base en una: resta proyecciones para ortogonalizar y luego normaliza cada vector.}
+\topic[20mm]{¿Cómo conseguirla?}
+\hand{¿No tienes una ONB? \hl{Gram}--Schmidt fabrica una desde cualquier base $(\mathbf{v}_1,\dots,\mathbf{v}_n)$: a cada vector le \hl{restas} lo que ya cubren los anteriores y lo \hl{normalizas}.}
+\keyeq{\tilde{\mathbf{u}}_k = \mathbf{v}_k - \textstyle\sum_{i<k}\langle\mathbf{v}_k,\mathbf{u}_i\rangle\,\mathbf{u}_i}
+\hand{y después se normaliza cada uno:}
+\eqx{\mathbf{u}_k = \tilde{\mathbf{u}}_k \big/ \lVert\tilde{\mathbf{u}}_k\rVert}
+\begin{center}
+\begin{tikzpicture}[x=11mm,y=11mm,>={Latex[length=2mm]}]
+  \coordinate (O) at (0,0);
+  \coordinate (V2) at (1.35,1.15);
+  \coordinate (P)  at (1.35,0);
+  \draw[->, accent, line width=1.1pt] (O)--(1.75,0) node[below,font=\scriptsize\color{accent}]{$\mathbf{u}_1$};
+  \draw[->, ink, line width=1.1pt] (O)--(V2) node[above right,font=\scriptsize\color{ink}]{$\mathbf{v}_2$};
+  \draw[coral, densely dashed, line width=0.6pt] (V2)--(P);
+  \node[coral, font=\tiny, anchor=north] at (0.9,-0.03){$\langle\mathbf{v}_2,\mathbf{u}_1\rangle\,\mathbf{u}_1$};
+  \draw[->, eqink, line width=1.1pt] (P)--(V2) node[right,font=\scriptsize\color{eqink}]{$\tilde{\mathbf{u}}_2$};
+  \draw[coral, line width=0.6pt] (1.35,0.2)--(1.15,0.2)--(1.15,0);
+  \fill[ink] (O) circle (0.8pt);
+\end{tikzpicture}
+\end{center}
+\obs{Geométricamente: a $\mathbf{v}_2$ le quitas su \hl{sombra} sobre $\mathbf{u}_1$, y lo que sobra $\tilde{\mathbf{u}}_2$ queda perpendicular a $\mathbf{u}_1$.}
 
 \clearpage
 % ===================== CIERRE =======================================
