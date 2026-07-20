@@ -46,10 +46,8 @@ shared template.
   \kicker{\kgreen{quick guide · 10 commands}}
   \topictag{SQL}                   % compact blue topic badge
   \vskip 6mm
-  \headline{\hb{SQL} explained\\ for beginners.}   % \hb{} = blue word; \\ = manual break
+  \headline{\hb{SQL} explained\\ for beginners}   % \hb{} = blue word; \\ = manual break; NO trailing period
   \lead{Ten keywords that handle \tb{90\% of your day} with databases.}
-  \vfill
-  \sourceqr{https://github.com/asanchezyali/social-media-posts/tree/main/LinkedIn/SQLForBeginners}{scan for\\ the full source}
 \end{sld}
 
 \begin{sld}[01]                    % SECTION ([NN] arg kept but no longer drawn)
@@ -62,11 +60,14 @@ SELECT * FROM users;
   \end{codecard}
 \end{sld}
 
-\begin{sld}                        % CLOSING (no number) — ends with the author card
+\begin{sld}                        % CLOSING — author card + QR to the source
   \kicker{\kgreen{that's the 90\%}}
-  \headline{You just learned the \hb{core of SQL}.}
+  \headline{You just learned the \hb{core of SQL}}
   \lead{Which one do you reach for most?}
+  \vskip 3mm
   \authorcard
+  \vskip 6mm
+  \sourceqr{https://github.com/.../LinkedIn/SQLForBeginners}{study with me}{the full source on GitHub}
 \end{sld}
 \end{document}
 ```
@@ -79,9 +80,12 @@ deliberate line breaks — short headlines MUST be broken or they overflow),
 (mac-window SQL card; atomic — won't split), `\authorcard` (photo + name + role +
 site, on the closing slide), `\setdeck{N}` (dot count). **Title-page commands:**
 `\coverdark{img}` (full-bleed photo + baked dark overlay for that page),
-`\topictag{SQL}` (compact blue badge), `\sourceqr{url}{label}` (QR on a white card
-so it scans on the dark canvas). The `[NN]` optional arg of `sld` is retained but
-no longer drawn (the giant watermark was removed).
+`\topictag{SQL}` (compact blue badge), `\sourceqr{url}{heading}{subtitle}` (QR with
+**solid dark modules** on a white card so it scans — `\qrcode` inherits the text
+colour, so it's forced dark; goes on the **closing** slide, e.g. heading "study
+with me"). The `[NN]` optional arg of `sld` is retained but no longer drawn (the
+giant watermark was removed). Headlines carry **no trailing period**. The code
+card's `*` is raised via a listings `literate` (JetBrains Mono's asterisk sits low).
 
 **Gotchas learned:** `\pagestyle{empty}` kills default page numbers. The cover
 overlay is a **baked alpha PNG** (`Headers/overlay.png`), NOT a pgf-opacity fill —

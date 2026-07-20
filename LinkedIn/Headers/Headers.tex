@@ -199,7 +199,8 @@
     {0}{{\color{codenum}0}}1 {1}{{\color{codenum}1}}1 {2}{{\color{codenum}2}}1
     {3}{{\color{codenum}3}}1 {4}{{\color{codenum}4}}1 {5}{{\color{codenum}5}}1
     {6}{{\color{codenum}6}}1 {7}{{\color{codenum}7}}1 {8}{{\color{codenum}8}}1
-    {9}{{\color{codenum}9}}1 {->}{{\color{codecomment}$\to$}}2,
+    {9}{{\color{codenum}9}}1 {->}{{\color{codecomment}$\to$}}2
+    {*}{{\raisebox{0.45ex}{*}}}1,
 }
 \newtcblisting{codecard}[1]{%
   listing only, listing style=sqlstyle,
@@ -238,13 +239,16 @@
           inner xsep=3mm, inner ysep=2mm]
       {\monob\fontsize{12}{14}\selectfont #1};
   \end{tikzpicture}}
-% QR to the source, on a white card so it scans on the dark canvas + a label
-\newcommand{\sourceqr}[2]{%
+% QR to the source: SOLID DARK modules on a white card (crisp + scannable) +
+% a heading and a subtitle.  \qrcode draws in the current colour, so force it dark.
+%   \sourceqr{url}{heading}{subtitle}
+\newcommand{\sourceqr}[3]{%
   \par\noindent\begin{tikzpicture}[baseline]
-    \node[fill=white, rounded corners=2pt, inner sep=1.8mm] (q)
-      {\qrcode[height=17mm]{#1}};
-    \node[anchor=west, text=textmuted, align=left] at ([xshift=3.5mm]q.east)
-      {\mono\fontsize{8.5}{11}\selectfont #2};
+    \node[anchor=north west, fill=white, rounded corners=3pt, inner sep=2.4mm] (q)
+      at (0,0) {\color{bg}\qrcode[height=15mm]{#1}};
+    \node[anchor=west, align=left, inner sep=0pt] at ([xshift=4.5mm]q.east |- q.center)
+      {\interbold\fontsize{12}{14}\selectfont\textcolor{textbright}{#2}\\[1.4mm]
+       \mono\fontsize{8.5}{12}\selectfont\textcolor{textmuted}{#3}};
   \end{tikzpicture}\par}
 
 % =====================================================================
