@@ -1,9 +1,10 @@
 % =====================================================================
 %  LinkedIn  --  "SQL explained for beginners"  (code-editor carousel)
+%  Balanced depth: each slide teaches the what + the why + a real gotcha.
 %  Compile:  xelatex SQLForBeginners.tex   (run twice)
 % =====================================================================
 \def\lnkroot{../}\input{\lnkroot Headers/Headers.tex}
-\setdeck{12}
+\setdeck{13}
 
 \begin{document}
 
@@ -11,146 +12,168 @@
 \begin{sld}
   \coverdark{assets/cover.jpg}
   \vspace*{3mm}
-  \kicker{\kgreen{quick guide · 10 commands}}
+  \kicker{\kgreen{quick guide · 9 commands}}
   \topictag{SQL}
   \vskip 6mm
   \headline{\hb{SQL} explained\\ for beginners}
-  \lead{Ten keywords that handle \tb{90\% of your day} with databases.}
+  \lead{The nine keywords that handle \tb{90\% of your day} with databases — and the gotchas nobody warns you about.}
+\end{sld}
+
+% ===================== CONTEXT ======================================
+\begin{sld}
+  \kicker{\kgreen{before the syntax}}
+  \headlinesm{SQL is the skill that\\ \hb{outlives frameworks}}
+  \body{Frameworks come and go, but relational databases have run the world's data for 50 years. Learn to think in \tb{sets} and the same model works everywhere.}
+  \pt{It's \tb{declarative} — you say what you want, the engine finds how.}
+  \pt{Indexes and the optimizer do the heavy lifting, \tb{if you let them}.}
+  \begin{callout}{WHY IT MATTERS}
+  Backend, analytics, ML — every data role runs on SQL. You rarely get to avoid it.
+  \end{callout}
 \end{sld}
 
 % ===================== 01 · SELECT ==================================
-\begin{sld}[01]
+\begin{sld}
   \kicker{\kblue{01} · read data}
-  \pill{SELECT}
-  \headline{Pick \hb{which columns}\\ you want}
-  \lead{Ask a table for the columns you need. \chip{*} means \tb{all of them}.}
+  \headlinesm{Pick \hb{which columns} you want}
   \begin{codecard}{select.sql}
--- all columns
 SELECT * FROM users;
--- only the ones you need
-SELECT name, email FROM users;
+SELECT id, name FROM users;
   \end{codecard}
+  \begin{callout}[dotamber]{GOTCHA}
+  \chip{SELECT *} ships every column and breaks when the schema changes. Name the columns you actually use in production.
+  \end{callout}
 \end{sld}
 
 % ===================== 02 · WHERE ===================================
-\begin{sld}[02]
+\begin{sld}
   \kicker{\kblue{02} · filter rows}
-  \pill{WHERE}
-  \headline{Keep only the rows that \hb{match}}
-  \lead{Like a search box inside the table: \tb{filter} and keep just what you care about.}
+  \headlinesm{Keep only the rows that \hb{match}}
   \begin{codecard}{where.sql}
 SELECT * FROM users
-WHERE age >= 18
-  AND country = 'MX';
+WHERE country = 'MX'
+  AND last_login IS NOT NULL;
   \end{codecard}
+  \begin{callout}[dotamber]{GOTCHA · NULL}
+  \chip{= NULL} never matches — NULL means "unknown". Use \chip{IS NULL}. And a function on the column blocks the index.
+  \end{callout}
 \end{sld}
 
 % ===================== 03 · ORDER BY ================================
-\begin{sld}[03]
+\begin{sld}
   \kicker{\kblue{03} · sort}
-  \pill{ORDER BY}
-  \headline{Sort the result \hb{your way}}
-  \lead{Ascending by default; add \chip{DESC} for \tb{highest first}.}
+  \headlinesm{Sort the result \hb{your way}}
   \begin{codecard}{order.sql}
-SELECT name, age FROM users
-ORDER BY age DESC;
+SELECT * FROM users
+ORDER BY created_at DESC, id;
   \end{codecard}
+  \begin{callout}[dotamber]{GOTCHA}
+  Ties sort in an undefined order — add a tiebreaker like \chip{id}. Sorting big results is costly unless the column is indexed.
+  \end{callout}
 \end{sld}
 
 % ===================== 04 · LIMIT ===================================
-\begin{sld}[04]
-  \kicker{\kblue{04} · cap rows}
-  \pill{LIMIT}
-  \headline{Ask for\\ \hb{just a few} rows}
-  \lead{Perfect for \tb{top-N} lists and fast table previews.}
+\begin{sld}
+  \kicker{\kblue{04} · paginate}
+  \headlinesm{Ask for \hb{just a few} rows}
   \begin{codecard}{limit.sql}
 SELECT * FROM users
-ORDER BY created_at DESC
-LIMIT 10;
+ORDER BY id
+LIMIT 20;
   \end{codecard}
+  \begin{callout}[dotgreen]{PRO TIP}
+  \chip{OFFSET n} re-scans n rows on every page. For deep pagination, filter by the last id (\chip{WHERE id > ...}) instead.
+  \end{callout}
 \end{sld}
 
 % ===================== 05 · JOIN ====================================
-\begin{sld}[05]
+\begin{sld}
   \kicker{\kblue{05} · combine tables}
-  \pill{JOIN}
-  \headline{Glue two tables\\ by a \hb{shared column}}
-  \lead{Data lives split (users, orders). JOIN connects them by a key, like \chip{user\_id}.}
+  \headlinesm{Glue two tables\\ by a \hb{shared key}}
   \begin{codecard}{join.sql}
 SELECT u.name, o.total
 FROM users u
-JOIN orders o
-  ON o.user_id = u.id;
+LEFT JOIN orders o ON o.user_id = u.id;
   \end{codecard}
+  \begin{callout}[dotamber]{GOTCHA}
+  INNER drops unmatched rows; LEFT keeps them as NULL. Many matches on the right \tb{fan out} into duplicates — aggregate for one row per user.
+  \end{callout}
 \end{sld}
 
 % ===================== 06 · GROUP BY ================================
-\begin{sld}[06]
+\begin{sld}
   \kicker{\kblue{06} · aggregate}
-  \pill{GROUP BY}
-  \headline{Collapse rows into \hb{one per group}}
-  \lead{Pair it with \chip{COUNT}, \chip{SUM} or \chip{AVG} to \tb{summarize} your data.}
+  \headlinesm{Collapse rows into \hb{one per group}}
   \begin{codecard}{group.sql}
 SELECT country, COUNT(*)
 FROM users
-GROUP BY country;
+GROUP BY country
+HAVING COUNT(*) > 100;
   \end{codecard}
+  \begin{callout}[dotamber]{GOTCHA}
+  Every selected column must be aggregated or in GROUP BY. \chip{WHERE} filters rows before grouping; \chip{HAVING} filters groups after.
+  \end{callout}
 \end{sld}
 
 % ===================== 07 · LIKE ====================================
-\begin{sld}[07]
+\begin{sld}
   \kicker{\kblue{07} · search text}
-  \pill{LIKE}
-  \headline{Match text\\ by a \hb{pattern}}
-  \lead{\chip{\%} is a wildcard: \chip{'A\%'} means \tb{starts with A}.}
+  \headlinesm{Match text by a \hb{pattern}}
   \begin{codecard}{like.sql}
 SELECT * FROM users
 WHERE name LIKE 'A%';
   \end{codecard}
+  \begin{callout}[dotamber]{GOTCHA}
+  A leading wildcard (\chip{'\%term'}) can't use an index and scans the whole table. For real search, reach for full-text or trigram indexes.
+  \end{callout}
 \end{sld}
 
-% ===================== 08 · INSERT ==================================
-\begin{sld}[08]
+% ===================== 08 · INSERT =================================
+\begin{sld}
   \kicker{\kblue{08} · add data}
-  \pill{INSERT}
-  \headline{Add a \hb{new row} to a table}
-  \lead{List the columns, then the \tb{values} that fill them.}
+  \headlinesm{Add \hb{new rows} to a table}
   \begin{codecard}{insert.sql}
-INSERT INTO users (name, age)
-VALUES ('Ada', 36);
+INSERT INTO users (name, email) VALUES
+  ('Ada',  'ada@mail.com'),
+  ('Alan', 'alan@mail.com');
   \end{codecard}
+  \begin{callout}[dotgreen]{PRO TIP}
+  Insert many rows in one statement, not a loop — one round-trip instead of thousands.
+  \end{callout}
 \end{sld}
 
-% ===================== 09 · UPDATE ==================================
-\begin{sld}[09]
-  \kicker{\kblue{09} · change data}
-  \pill{UPDATE}
-  \headline{Edit rows that\\ \hb{already exist}}
-  \lead{No \chip{WHERE} means you change \tb{every row}. Never forget it.}
-  \begin{codecard}{update.sql}
-UPDATE users
-SET age = 37
-WHERE id = 1;
+% ===================== 09 · UPDATE / DELETE ========================
+\begin{sld}
+  \kicker{\kblue{09} · change \& remove}
+  \headlinesm{Edit or delete \hb{existing rows}}
+  \begin{codecard}{write.sql}
+UPDATE users SET active = false
+WHERE last_login < '2024-01-01';
+
+DELETE FROM users WHERE id = 42;
   \end{codecard}
+  \begin{callout}[dotamber]{GOTCHA}
+  No \chip{WHERE} means \tb{every row}. Run your filter as a \chip{SELECT} first to see exactly what you'll touch.
+  \end{callout}
 \end{sld}
 
-% ===================== 10 · DELETE ==================================
-\begin{sld}[10]
-  \kicker{\kblue{10} · remove data}
-  \pill{DELETE}
-  \headline{Remove rows you \hb{no longer need}}
-  \lead{Same rule: no \chip{WHERE}, and the \tb{whole table} is gone.}
-  \begin{codecard}{delete.sql}
-DELETE FROM users
-WHERE id = 1;
-  \end{codecard}
+% ===================== COMMON MISTAKES =============================
+\begin{sld}
+  \kicker{\kgreen{what trips people up}}
+  \headlinesm{The mistakes that \hb{cost you hours}}
+  \pt{\chip{IS NULL} matches nulls — \chip{= NULL} never does.}
+  \pt{No \chip{WHERE} on an UPDATE or DELETE hits \tb{every row}.}
+  \pt{\chip{SELECT *} in production ships columns you don't need.}
+  \pt{Functions on indexed columns \tb{quietly kill} performance.}
+  \begin{callout}[dotgreen]{PRO TIP}
+  Read the plan with \chip{EXPLAIN} before blaming the database. Most "slow SQL" is a missing index.
+  \end{callout}
 \end{sld}
 
 % ===================== CLOSING ======================================
 \begin{sld}
   \kicker{\kgreen{that's the 90\%}}
-  \headline{You just learned the \hb{core of SQL}}
-  \lead{Master these ten and you can query almost any database. Which one do you reach for most?}
+  \headlinesm{You just learned\\ the \hb{core of SQL}}
+  \lead{Master these nine and you can query almost any database. Which one bites you most often?}
   \vskip 3mm
   \authorcard
   \vskip 6mm

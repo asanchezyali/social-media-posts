@@ -73,10 +73,10 @@ SELECT * FROM users;
 ```
 
 **Commands:** `\kicker{...}` (mono `-- ` comment; wrap words in `\kgreen`/`\kblue`),
-`\pill{KEYWORD}`, `\headline{...}` (Inter Black; `\hb{}` blue word, `\\` for
-deliberate line breaks — short headlines MUST be broken or they overflow),
-`\lead{...}` (muted body; `\tb{}` = bold white, `\chip{...}` = inline code chip —
-**escape `_` and `%`** inside chips/leads), `\begin{codecard}{file.sql}…\end{codecard}`
+`\pill{KEYWORD}`, `\headline{...}` / `\headlinesm{...}` (Inter Black, big / smaller;
+`\hb{}` blue word, `\\` for deliberate line breaks — short headlines MUST be broken
+or they overflow), `\lead{...}` (muted 1-liner; `\tb{}` = bold white, `\chip{...}` =
+inline code chip — **escape `_` and `%`** inside chips/leads), `\begin{codecard}{file.sql}…\end{codecard}`
 (mac-window SQL card; atomic — won't split), `\authorcard` (photo + name + role +
 site, on the closing slide), `\setdeck{N}` (dot count). **Title-page commands:**
 `\coverdark{img}` (full-bleed photo + baked dark overlay for that page),
@@ -86,6 +86,24 @@ colour, so it's forced dark; goes on the **closing** slide, e.g. heading "study
 with me"). The `[NN]` optional arg of `sld` is retained but no longer drawn (the
 giant watermark was removed). Headlines carry **no trailing period**. The code
 card's `*` is raised via a listings `literate` (JetBrains Mono's asterisk sits low).
+
+**Content-depth blocks (the "balance" — professional substance, not influencer-thin):**
+`\body{...}` (a 2-line explanation: what + why), `\pt{...}` (one bullet, blue ▸
+marker), and `\begin{callout}[colour]{LABEL} … \end{callout}` — a value box with a
+coloured left border: **GOTCHA** (`dotamber`), **WHY IT MATTERS** (default blue),
+**PRO TIP** (`dotgreen`). The callout is where the *senior insight* lives (the trap,
+the trade-off, the perf note) — that's what separates it from a syntax listicle.
+
+**Balanced slide anatomy (learned from the 4:5 height budget ≈ 101mm):** you
+CANNOT fit `body + code + callout` on one slide. Compose by slide type:
+- **Concept slide** (no code): `kicker → headlinesm → body → \pt bullets → callout`.
+- **Example slide** (with code): `kicker → headlinesm → codecard → callout` — no
+  separate body; the **callout carries the depth**. Keep code ≤3 lines, callout ≤3.
+- **Recap slide**: `kicker → headlinesm → \pt bullets → PRO TIP callout`.
+Deck shape: cover (photo) → 1 context slide → N example slides → a "common
+mistakes" recap → closing (author + QR). ~13 slides ≈ a 5-min read. Always
+recompile and confirm the page count == number of `sld`s (an overflowing slide
+silently spills to a 2nd page).
 
 **Gotchas learned:** `\pagestyle{empty}` kills default page numbers. The cover
 overlay is a **baked alpha PNG** (`Headers/overlay.png`), NOT a pgf-opacity fill —

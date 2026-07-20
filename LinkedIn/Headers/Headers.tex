@@ -161,7 +161,7 @@
 \newcommand{\headline}[1]{%
   {\interblack\fontsize{23}{26}\selectfont\color{textbright}#1\par}\vskip 3.5mm}
 \newcommand{\headlinesm}[1]{%
-  {\interblack\fontsize{20}{23}\selectfont\color{textbright}#1\par}\vskip 3mm}
+  {\interblack\fontsize{19}{22}\selectfont\color{textbright}#1\par}\vskip 2.6mm}
 
 % -- keyword pill: full-width blue bar, dark bold-mono label (SELECT / WHERE ...)
 \newcommand{\pill}[1]{%
@@ -180,6 +180,28 @@
     {\mono\fontsize{10.5}{12}\selectfont\color{accentblue}#1};}}
 \newcommand{\lead}[1]{%
   {\fontsize{12}{16.5}\selectfont\color{textmuted}#1\par}\vskip 3.5mm}
+
+% =====================================================================
+%  Content-depth blocks  (professional substance, not just syntax):
+%    \body{...}   a paragraph of explanation (what + why), smaller than \lead
+%    \pt{...}     one bullet point (blue ▸ marker, hanging indent)
+%    \begin{callout}[colour]{LABEL} ... \end{callout}   a value box with a
+%                 coloured left border — GOTCHA (amber), WHY IT MATTERS (blue),
+%                 PRO TIP (green).  Inline `\tb{}` and `\chip{}` work inside.
+% =====================================================================
+\newcommand{\body}[1]{%
+  {\fontsize{11}{15.6}\selectfont\color{textmuted}#1\par}\vskip 2.2mm}
+\newcommand{\pt}[1]{\par\vskip 1.7mm\noindent
+  \hangindent=5.4mm\hangafter=1
+  \raisebox{0.3ex}{\tikz{\fill[accentblue] (0,0)--(0,1.4mm)--(1.35mm,0.7mm)--cycle;}}%
+  \hspace{2.6mm}{\fontsize{11}{15.5}\selectfont\color{textmuted}#1}\par}
+\newtcolorbox{callout}[2][accentblue]{%
+  enhanced, colback=cardbg, colframe=cardbg, boxrule=0pt, arc=2pt,
+  borderline west={2.6pt}{0pt}{#1},
+  left=4.5mm, right=3.5mm, top=2.3mm, bottom=2.3mm, before skip=0.6mm, after skip=0.6mm,
+  fontupper=\fontsize{10.5}{14.2}\selectfont\color{textmuted},
+  before upper={{\monob\fontsize{7.5}{9}\selectfont\textcolor{#1}{#2}}\par\vskip1.2mm},
+}
 
 % =====================================================================
 %  Code card  --  mac window (3 dots + filename) + SQL listing
@@ -205,16 +227,16 @@
 \newtcblisting{codecard}[1]{%
   listing only, listing style=sqlstyle,
   enhanced, colback=cardbg, colframe=cardframe, boxrule=1pt, arc=3.4pt,
-  left=5mm, right=4mm, top=10mm, bottom=4mm,
+  left=5mm, right=4mm, top=8.4mm, bottom=3.4mm,
   overlay={%
-    \fill[dotblue]  ([xshift=5mm,yshift=-5mm]frame.north west) circle (1mm);
-    \fill[dotamber] ([xshift=8mm,yshift=-5mm]frame.north west) circle (1mm);
-    \fill[dotgreen] ([xshift=11mm,yshift=-5mm]frame.north west) circle (1mm);
+    \fill[dotblue]  ([xshift=5mm,yshift=-4.3mm]frame.north west) circle (1mm);
+    \fill[dotamber] ([xshift=8mm,yshift=-4.3mm]frame.north west) circle (1mm);
+    \fill[dotgreen] ([xshift=11mm,yshift=-4.3mm]frame.north west) circle (1mm);
     \node[anchor=west, text=codecomment]
-      at ([xshift=15mm,yshift=-5mm]frame.north west)
+      at ([xshift=15mm,yshift=-4.3mm]frame.north west)
       {\mono\fontsize{8.5}{9}\selectfont #1};
     \draw[cardframe, line width=0.5pt]
-      ([yshift=-9mm]frame.north west) -- ([yshift=-9mm]frame.north east);
+      ([yshift=-7.6mm]frame.north west) -- ([yshift=-7.6mm]frame.north east);
   },
 }
 
