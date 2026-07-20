@@ -101,8 +101,8 @@
       \shade[inner color=bgglow, outer color=bg]
         ([shift={(6mm,-2mm)}]current page.north east) circle (78mm);
     \end{scope}
-    % line-number gutter (2..16), faint, down the left edge
-    \foreach \n [count=\i from 0, evaluate=\i as \yy using -16.5-\i*8.9] in {2,...,16}{%
+    % line-number gutter, faint, down the left edge (tight editor spacing)
+    \foreach \n [count=\i from 0, evaluate=\i as \yy using -10-\i*5.3] in {2,...,27}{%
       \node[anchor=east, text=gutter, inner sep=0pt]
         at ([xshift=9mm, yshift=\yy mm]current page.north west)
         {\mono\fontsize{7}{7}\selectfont \n};
