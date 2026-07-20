@@ -79,6 +79,8 @@
 
 \AtBeginDocument{\color{textmuted}}
 \setlength{\parindent}{0pt}
+% never hyphenate SQL keywords in prose (SE-LECT looks broken)
+\hyphenation{SELECT INSERT UPDATE DELETE WHERE GROUP HAVING ORDER}
 
 % =====================================================================
 %  Deck state
@@ -135,17 +137,19 @@
 % NOTE: \currentwm is set GLOBALLY (\gdef): a page ships at the NEXT slide's
 % \clearpage, after this environment's group has closed, so a local value would
 % already be gone by shipout.
+% Content is anchored to the top, so the headline lands in the same place on
+% every swipe (a consistent read anchor across the carousel).
 \newenvironment{sld}[1][]{%
   \clearpage\stepcounter{deckpage}%
   \gdef\currentwm{#1}%
   \RaggedRight\setlength{\parskip}{0pt}%
 }{\par}
-% a vertically-centred slide (cover / closing)
-\newenvironment{sldc}[1][]{%
+% alias kept for the cover (same behaviour; named for intent)
+\newenvironment{sldt}[1][]{%
   \clearpage\stepcounter{deckpage}%
   \gdef\currentwm{#1}%
-  \RaggedRight\vspace*{\fill}%
-}{\par\vspace*{\fill}}
+  \RaggedRight\setlength{\parskip}{0pt}%
+}{\par}
 
 % =====================================================================
 %  Building blocks

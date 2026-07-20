@@ -12,7 +12,7 @@ Most data work isn't fancy. It's the same handful of keywords, over and over. Bu
 08 · INSERT — add rows. Batch them in one statement, not a loop: one round-trip instead of thousands.
 09 · UPDATE / DELETE — no `WHERE` means every row. Run your filter as a SELECT first.
 
-Pro tip: read the plan with `EXPLAIN` before blaming the database. Most "slow SQL" is a missing index.
+The "aha" that ties it together: SQL doesn't run top to bottom. The real order is FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT — which is exactly why a SELECT alias isn't available back in WHERE.
 
 Which one bites you most often? 👇
 

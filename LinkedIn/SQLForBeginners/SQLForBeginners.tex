@@ -9,14 +9,14 @@
 \begin{document}
 
 % ===================== COVER  (title page — old LinkedIn style) =====
-\begin{sld}
+\begin{sldt}
   \coverdark{assets/cover.jpg}
   \vspace*{3mm}
   \topictag{SQL}
   \vskip 6mm
   \headline{\hb{SQL} explained\\ for beginners}
   \lead{The nine keywords that handle \tb{90\% of your day} with databases — and the gotchas nobody warns you about.}
-\end{sld}
+\end{sldt}
 
 % ===================== CONTEXT ======================================
 \begin{sld}
@@ -26,7 +26,7 @@
   \pt{It's \tb{declarative} — you say what you want, the engine finds how.}
   \pt{Indexes and the optimizer do the heavy lifting, \tb{if you let them}.}
   \begin{callout}{WHY IT MATTERS}
-  Backend, analytics, ML — every data role runs on SQL. You rarely get to avoid it.
+  Backend, analytics, ML — they all run on SQL. Learn it once, and it pays off for your whole career.
   \end{callout}
 \end{sld}
 
@@ -155,17 +155,20 @@ DELETE FROM users WHERE id = 42;
   \end{callout}
 \end{sld}
 
-% ===================== COMMON MISTAKES =============================
+% ===================== MENTAL MODEL — execution order =============
 \begin{sld}
-  \kicker{\kgreen{what trips people up}}
-  \headlinesm{The mistakes that \hb{cost you hours}}
-  \pt{\chip{IS NULL} matches nulls — \chip{= NULL} never does.}
-  \pt{No \chip{WHERE} on an UPDATE or DELETE hits \tb{every row}.}
-  \pt{\chip{SELECT *} in production ships columns you don't need.}
-  \pt{Functions on indexed columns \tb{quietly kill} performance.}
-  \begin{callout}[dotgreen]{PRO TIP}
-  Read the plan with \chip{EXPLAIN} before blaming the database. Most "slow SQL" is a missing index.
-  \end{callout}
+  \kicker{\kgreen{the mental model}}
+  \headlinesm{SQL runs in a \hb{surprising order}}
+  \body{You write \tb{SELECT} first, but the engine runs it almost last — so a column alias isn't ready yet when WHERE runs.}
+  \begin{codecard}{how-sql-runs.sql}
+1. FROM       -- pick the tables
+2. WHERE      -- filter rows
+3. GROUP BY   -- make groups
+4. HAVING     -- filter groups
+5. SELECT     -- choose columns
+6. ORDER BY   -- sort
+7. LIMIT      -- cut
+  \end{codecard}
 \end{sld}
 
 % ===================== CLOSING ======================================
