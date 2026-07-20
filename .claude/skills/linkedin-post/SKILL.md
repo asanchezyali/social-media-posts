@@ -1,6 +1,6 @@
 ---
 name: linkedin-post
-description: Generate LaTeX technical carousel/post content for LinkedIn — the dark-theme slides organized by programming language/topic (Python/JavaScript/AI) compiled with pdfLaTeX. Use when the user asks to create, draft, or restyle a LinkedIn post here, add a new topic, or work with the dark-theme templates. NOTE: for the cream Instagram "study notes" (yalix) carousels, use the instagram-carousel skill instead.
+description: Generate LaTeX technical carousel/post content for LinkedIn (dark theme). Two systems — the NEW code-editor 4:5 carousel in LinkedIn/ (XeLaTeX + vendored Inter/JetBrains Mono, clean & low-density) and the legacy dense articles in Python/JavaScript/AI (pdfLaTeX). Use when the user asks to create, draft, or restyle a LinkedIn post, add a new topic, or work with the dark-theme templates. NOTE: for the cream Instagram "study notes" (yalix) carousels, use the instagram-carousel skill instead.
 ---
 
 # Social Media Post Skill - LaTeX Technical Articles (LinkedIn)
@@ -10,6 +10,83 @@ This skill generates technical social media posts (designed for LinkedIn) using 
 > For the **Instagram** cream grid-paper "study notes" carousels (yalix brand,
 > XeLaTeX + SignPainter), use the separate **`instagram-carousel`** skill. This
 > skill is only the LinkedIn dark-theme format.
+
+---
+
+## TWO LinkedIn systems — pick the right one
+
+1. **`LinkedIn/` — code-editor carousel (NEW, preferred, English).** A clean,
+   low-density **4:5 carousel** (1080×1350) styled like a code editor: dark navy
+   canvas, a faint line-number gutter, a top-right glow, a giant ghost slide
+   number, monospace kicker comments, a blue keyword pill, big **Inter Display
+   Black** headlines with one word in blue, muted leads with inline code chips, a
+   mac-window **code card**, progress dots, and an author closing card. Mirrors
+   the Instagram architecture: shared `LinkedIn/Headers/Headers.tex` +
+   **vendored fonts** (`LinkedIn/fonts/`: Inter + JetBrains Mono) + one folder per
+   post. **XeLaTeX (fontspec), run twice.** Reference deck: `LinkedIn/SQLForBeginners/`.
+2. **`Python/`, `JavaScript/`, `ArtificialIntelligence/` — legacy dense articles.**
+   The older multi-page `article` decks (pdfLaTeX, Source Sans Pro, `macterminal`).
+   Documented in the rest of this file. Keep for maintaining old posts.
+
+### `LinkedIn/` carousel — authoring
+
+Paths mirror the yalix mechanism: a post declares its depth, then inputs the
+shared template.
+
+```latex
+\def\lnkroot{../}\input{\lnkroot Headers/Headers.tex}
+\setdeck{12}                       % total slides (for the progress dots)
+\begin{document}
+\begin{sld}                        % COVER (no watermark number)
+  \kicker{\kgreen{quick guide · 10 commands}}
+  \headline{\hb{SQL} explained\\ for beginners.}   % \hb{} = blue word; \\ = manual break
+  \lead{Ten keywords that handle \tb{90\% of your day}. One at a time.}
+  \begin{codecard}{query.sql}
+SELECT name FROM users
+WHERE age > 18;
+  \end{codecard}
+\end{sld}
+
+\begin{sld}[01]                    % SECTION (giant "01" watermark, top-right)
+  \kicker{\kblue{01} · read data}
+  \pill{SELECT}                    % full-width blue keyword bar
+  \headline{Pick \hb{which columns}\\ you want.}
+  \lead{Ask for the columns you need. \chip{*} means \tb{all of them}.}
+  \begin{codecard}{select.sql}
+SELECT * FROM users;
+  \end{codecard}
+\end{sld}
+
+\begin{sld}                        % CLOSING (no number) — ends with the author card
+  \kicker{\kgreen{that's the 90\%}}
+  \headline{You just learned the \hb{core of SQL}.}
+  \lead{Which one do you reach for most?}
+  \authorcard
+\end{sld}
+\end{document}
+```
+
+**Commands:** `\kicker{...}` (mono `-- ` comment; wrap words in `\kgreen`/`\kblue`),
+`\pill{KEYWORD}`, `\headline{...}` (Inter Black; `\hb{}` blue word, `\\` for
+deliberate line breaks — short headlines MUST be broken or they overflow),
+`\lead{...}` (muted body; `\tb{}` = bold white, `\chip{...}` = inline code chip —
+**escape `_` and `%`** inside chips/leads), `\begin{codecard}{file.sql}…\end{codecard}`
+(mac-window SQL card; atomic — won't split), `\authorcard` (photo + name + role +
+site, on the closing slide), `\setdeck{N}` (dot count). The `[NN]` optional arg of
+`sld` is the giant watermark number (omit on cover/closing).
+
+**Gotchas learned:** the watermark is set with `\gdef` (global) because a page
+ships at the *next* slide's `\clearpage`, after the env group closed. `\pagestyle{empty}`
+kills default page numbers. 4:5 is shorter than 3:4, so keep leads to ~2 lines and
+code cards to ~4 lines or a slide overflows to a 2nd page (recompile and check the
+page count == `\setdeck`). Palette/fonts/commands all live in `LinkedIn/Headers/Headers.tex`.
+
+**Compile:** `cd LinkedIn/<Post> && xelatex -interaction=nonstopmode <Post>.tex` (twice),
+then `pdftoppm -png -scale-to-x 1080 -scale-to-y 1350 <Post>.pdf preview` to inspect.
+
+---
+
+## Legacy dense-article format (Python / JavaScript / AI)
 
 ## Project Structure
 
