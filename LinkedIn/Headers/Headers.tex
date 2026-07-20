@@ -25,6 +25,7 @@
 \usepackage{needspace}
 \usepackage{listings}
 \usepackage[most]{tcolorbox}
+\usepackage{qrcode}
 \usetikzlibrary{calc,shadings,backgrounds,arrows.meta}
 
 % path from the post back to LinkedIn/  (default: post one level deep)
@@ -99,10 +100,6 @@
       % soft glow in the top-right
       \shade[inner color=bgglow, outer color=bg]
         ([shift={(6mm,-2mm)}]current page.north east) circle (78mm);
-      % giant faint slide-number watermark, top-right (bleeds off the corner)
-      \node[anchor=north east, inner sep=0pt, text=watermark]
-        at ([shift={(7mm,7mm)}]current page.north east)
-        {\interblack\fontsize{135}{135}\selectfont \currentwm};
     \end{scope}
     % line-number gutter (2..16), faint, down the left edge
     \foreach \n [count=\i from 0, evaluate=\i as \yy using -16.5-\i*8.9] in {2,...,16}{%
@@ -219,6 +216,36 @@
       ([yshift=-9mm]frame.north west) -- ([yshift=-9mm]frame.north east);
   },
 }
+
+% =====================================================================
+%  Title-page building blocks  (old-LinkedIn-style opening cover)
+% =====================================================================
+% full-bleed background photo + a pre-baked dark navy overlay (this page only).
+% Overlay is a baked alpha PNG (Headers/overlay.png) — avoids pgf-opacity in the
+% eso-pic stream (which corrupts under XeLaTeX).  Drawn AFTER \DeckChrome so it
+% covers the gutter/glow on the cover.
+\newcommand{\coverdark}[1]{%
+  \AddToShipoutPictureBG*{%
+    \AtPageLowerLeft{\includegraphics[width=\paperwidth,height=\paperheight,%
+      keepaspectratio=false]{#1}}%
+    \AtPageLowerLeft{\includegraphics[width=\paperwidth,height=\paperheight,%
+      keepaspectratio=false]{\lnkroot Headers/overlay.png}}%
+  }}
+% compact topic badge (small blue pill, not full-width) — the old \languagetag
+\newcommand{\topictag}[1]{%
+  \begin{tikzpicture}[baseline]
+    \node[fill=accentblue, rounded corners=2.4pt, text=pilltext,
+          inner xsep=3mm, inner ysep=2mm]
+      {\monob\fontsize{12}{14}\selectfont #1};
+  \end{tikzpicture}}
+% QR to the source, on a white card so it scans on the dark canvas + a label
+\newcommand{\sourceqr}[2]{%
+  \par\noindent\begin{tikzpicture}[baseline]
+    \node[fill=white, rounded corners=2pt, inner sep=1.8mm] (q)
+      {\qrcode[height=17mm]{#1}};
+    \node[anchor=west, text=textmuted, align=left] at ([xshift=3.5mm]q.east)
+      {\mono\fontsize{8.5}{11}\selectfont #2};
+  \end{tikzpicture}\par}
 
 % =====================================================================
 %  Author card  (closing slide)  --  photo + name + role + site

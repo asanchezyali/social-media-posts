@@ -7,18 +7,17 @@
 
 \begin{document}
 
-% ===================== COVER ========================================
+% ===================== COVER  (title page — old LinkedIn style) =====
 \begin{sld}
+  \coverdark{assets/cover.jpg}
+  \vspace*{3mm}
   \kicker{\kgreen{quick guide · 10 commands}}
+  \topictag{SQL}
+  \vskip 6mm
   \headline{\hb{SQL} explained\\ for beginners.}
-  \lead{Ten keywords that handle \tb{90\% of your day} with databases. One at a time.}
-  \begin{codecard}{query.sql}
-SELECT name FROM users
-WHERE age > 18
-ORDER BY name
-LIMIT 10;
--- your daily bread ->
-  \end{codecard}
+  \lead{Ten keywords that handle \tb{90\% of your day} with databases.}
+  \vfill
+  \sourceqr{https://github.com/asanchezyali/social-media-posts/tree/main/LinkedIn/SQLForBeginners}{scan for\\ the full source}
 \end{sld}
 
 % ===================== 01 · SELECT ==================================

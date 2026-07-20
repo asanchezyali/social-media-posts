@@ -24,6 +24,10 @@ This skill generates technical social media posts (designed for LinkedIn) using 
    the Instagram architecture: shared `LinkedIn/Headers/Headers.tex` +
    **vendored fonts** (`LinkedIn/fonts/`: Inter + JetBrains Mono) + one folder per
    post. **XeLaTeX (fontspec), run twice.** Reference deck: `LinkedIn/SQLForBeginners/`.
+   The **cover is an old-LinkedIn-style title page**: full-bleed photo + dark
+   overlay + topic tag + big title + subtitle + a **QR code to the source**.
+   (A giant ghost slide-number was tried and **removed** at Alejandro's request —
+   the `sld` `[NN]` arg is now a harmless no-op; the left line-number gutter stays.)
 2. **`Python/`, `JavaScript/`, `ArtificialIntelligence/` — legacy dense articles.**
    The older multi-page `article` decks (pdfLaTeX, Source Sans Pro, `macterminal`).
    Documented in the rest of this file. Keep for maintaining old posts.
@@ -37,17 +41,18 @@ shared template.
 \def\lnkroot{../}\input{\lnkroot Headers/Headers.tex}
 \setdeck{12}                       % total slides (for the progress dots)
 \begin{document}
-\begin{sld}                        % COVER (no watermark number)
+\begin{sld}                        % COVER — photo title page (old-LinkedIn style)
+  \coverdark{assets/cover.jpg}     % full-bleed photo + dark overlay (this page)
   \kicker{\kgreen{quick guide · 10 commands}}
+  \topictag{SQL}                   % compact blue topic badge
+  \vskip 6mm
   \headline{\hb{SQL} explained\\ for beginners.}   % \hb{} = blue word; \\ = manual break
-  \lead{Ten keywords that handle \tb{90\% of your day}. One at a time.}
-  \begin{codecard}{query.sql}
-SELECT name FROM users
-WHERE age > 18;
-  \end{codecard}
+  \lead{Ten keywords that handle \tb{90\% of your day} with databases.}
+  \vfill
+  \sourceqr{https://github.com/asanchezyali/social-media-posts/tree/main/LinkedIn/SQLForBeginners}{scan for\\ the full source}
 \end{sld}
 
-\begin{sld}[01]                    % SECTION (giant "01" watermark, top-right)
+\begin{sld}[01]                    % SECTION ([NN] arg kept but no longer drawn)
   \kicker{\kblue{01} · read data}
   \pill{SELECT}                    % full-width blue keyword bar
   \headline{Pick \hb{which columns}\\ you want.}
@@ -72,14 +77,18 @@ deliberate line breaks — short headlines MUST be broken or they overflow),
 `\lead{...}` (muted body; `\tb{}` = bold white, `\chip{...}` = inline code chip —
 **escape `_` and `%`** inside chips/leads), `\begin{codecard}{file.sql}…\end{codecard}`
 (mac-window SQL card; atomic — won't split), `\authorcard` (photo + name + role +
-site, on the closing slide), `\setdeck{N}` (dot count). The `[NN]` optional arg of
-`sld` is the giant watermark number (omit on cover/closing).
+site, on the closing slide), `\setdeck{N}` (dot count). **Title-page commands:**
+`\coverdark{img}` (full-bleed photo + baked dark overlay for that page),
+`\topictag{SQL}` (compact blue badge), `\sourceqr{url}{label}` (QR on a white card
+so it scans on the dark canvas). The `[NN]` optional arg of `sld` is retained but
+no longer drawn (the giant watermark was removed).
 
-**Gotchas learned:** the watermark is set with `\gdef` (global) because a page
-ships at the *next* slide's `\clearpage`, after the env group closed. `\pagestyle{empty}`
-kills default page numbers. 4:5 is shorter than 3:4, so keep leads to ~2 lines and
-code cards to ~4 lines or a slide overflows to a 2nd page (recompile and check the
-page count == `\setdeck`). Palette/fonts/commands all live in `LinkedIn/Headers/Headers.tex`.
+**Gotchas learned:** `\pagestyle{empty}` kills default page numbers. The cover
+overlay is a **baked alpha PNG** (`Headers/overlay.png`), NOT a pgf-opacity fill —
+pgf transparency corrupts the eso-pic stream under XeLaTeX (same lesson as the
+Instagram veil). 4:5 is shorter than 3:4, so keep leads to ~2 lines and code cards
+to ~4 lines or a slide overflows to a 2nd page (recompile and check the page count
+== `\setdeck`). Palette/fonts/commands all live in `LinkedIn/Headers/Headers.tex`.
 
 **Compile:** `cd LinkedIn/<Post> && xelatex -interaction=nonstopmode <Post>.tex` (twice),
 then `pdftoppm -png -scale-to-x 1080 -scale-to-y 1350 <Post>.pdf preview` to inspect.
