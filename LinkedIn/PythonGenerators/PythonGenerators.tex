@@ -52,6 +52,25 @@ next(g)   # prints "start",   returns 1
 next(g)   # prints "resumed", returns 2
 \end{pycard}
 
+\begin{diagram}
+\begin{tikzpicture}[font=\mono\footnotesize,
+    seg/.style={draw=commentgreen, line width=1pt, rounded corners=3pt,
+                fill=cardbg, text=codeident, minimum height=7.5mm, inner xsep=3mm}]
+  \node[seg] (b1) {start;  yield 1};
+  \node[seg, below=8mm of b1] (b2) {resumed;  yield 2};
+  \node[left=9mm of b1, text=accentblue] (n1) {next()};
+  \node[left=9mm of b2, text=accentblue] (n2) {next()};
+  \draw[-{Latex[length=1.8mm]}, accentblue, line width=1pt] (n1) -- (b1);
+  \draw[-{Latex[length=1.8mm]}, accentblue, line width=1pt] (n2) -- (b2);
+  \node[right=9mm of b1, text=dotamber] (v1) {1};
+  \node[right=9mm of b2, text=dotamber] (v2) {2};
+  \draw[-{Latex[length=1.8mm]}, dotamber, line width=1pt] (b1) -- (v1);
+  \draw[-{Latex[length=1.8mm]}, dotamber, line width=1pt] (b2) -- (v2);
+  \node[text=textmuted, font=\scriptsize] at ($(b1)!0.5!(b2)$) {(frozen)};
+\end{tikzpicture}
+\diagcap{Each next() resumes the frozen function, runs to the next yield, hands back a value, and freezes again.}
+\end{diagram}
+
 \begin{callout}[dotamber]{GOTCHA}
 A generator is \tb{exhausted after one pass}. Loop over it twice and the second loop sees nothing; the state ran to the end. Rebuild it (or materialise a \code{list}) when you need to iterate again.
 \end{callout}

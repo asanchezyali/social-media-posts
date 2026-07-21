@@ -30,6 +30,25 @@ def greet(name):
     return f"Hi, {name}"
 \end{pycard}
 
+\begin{diagram}
+\begin{tikzpicture}[font=\mono\footnotesize]
+  \node[text=commentgreen] (b) {before};
+  \node[draw=dotamber, line width=1pt, rounded corners=3pt, fill=bg,
+        text=codeident, right=5mm of b, inner sep=2mm] (g) {greet()};
+  \node[text=commentgreen, right=5mm of g] (a) {after};
+  \node[draw=accentblue, line width=1pt, rounded corners=5pt,
+        fit=(b)(g)(a), inner xsep=6mm, inner ysep=7mm] (box) {};
+  \node[layertag=accentblue, anchor=west] at ([xshift=5mm]box.north west) {wrapper};
+  \draw[-{Latex[length=1.6mm]}, textmuted] (b) -- (g);
+  \draw[-{Latex[length=1.6mm]}, textmuted] (g) -- (a);
+  \node[left=8mm of box, text=textbright] (call) {call};
+  \node[right=8mm of box, text=textbright] (res) {result};
+  \draw[-{Latex[length=2mm]}, accentblue, line width=1pt] (call) -- (box.west);
+  \draw[-{Latex[length=2mm]}, accentblue, line width=1pt] (box.east) -- (res);
+\end{tikzpicture}
+\diagcap{@log swaps greet for a wrapper: your call runs the extra logic, then the real function, then returns.}
+\end{diagram}
+
 \code{log} receives a function and hands back \code{wrapper}; Python then rebinds \code{greet} to that wrapper. The \code{*args, **kwargs} carry the whole call through untouched, so the same decorator fits a function with two positional arguments or one with keyword-only arguments.
 
 \begin{callout}{WHY IT MATTERS}

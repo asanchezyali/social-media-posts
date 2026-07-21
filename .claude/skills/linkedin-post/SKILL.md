@@ -115,10 +115,15 @@ The template provides:
   frames + a coloured corner tag per layer). Colours: `accentblue`, `commentgreen`,
   `dotamber` map to the same roles as the callouts/code.
 
-Reference: the "three layers" figure in `DecoratorsArticle.tex` §3 (retry → deco →
-wrapper). One strong diagram beats three weak ones — don't decorate for its own
-sake; a diagram is worth ~half a page, so let the article run to 9–10 pages if it
-earns the picture.
+**A diagram of the CORE mechanism doubles as the social-media hook** — it's what
+makes someone stop scrolling. Lead each article with one: the *wrapping* of a
+decorator (`call → [before → fn → after] → result`), the *pause/resume* of a
+generator (`next() → [run to yield] → value`, then frozen). Add a second,
+structural diagram where it helps (nesting, a pipeline). Two good figures per
+article is plenty. References: `DecoratorsArticle.tex` (§1 wrapping + §3 three
+layers) and `PythonGenerators.tex` (§2 pause/resume + §4 pipeline). One strong
+diagram beats three weak ones; each is worth ~half a page, so let the article run
+to 9–10 pages when it earns the picture.
 
 ## Style rules (baked in — keep them)
 
