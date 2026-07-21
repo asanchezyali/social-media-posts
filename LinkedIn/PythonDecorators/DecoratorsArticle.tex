@@ -89,20 +89,20 @@ So \code{italic} runs closest to \code{greet}, and \code{bold} wraps the result.
 
 \section{Don't reinvent it: the stdlib ships decorators}
 
-Before writing a caching or dispatch decorator, look in \code{functools}. \code{lru\_cache} memoizes a function by its arguments, turning exponential \code{fib} into linear.
+Before writing a caching or dispatch decorator, look in \code{functools}. Since Python 3.9, \code{@cache} memoizes a function by its arguments (a smaller, faster \code{@lru\_cache(maxsize=None)}), turning exponential \code{fib} into linear.
 
 \begin{pycard}{cache.py}
-from functools import lru_cache
+from functools import cache
 
-@lru_cache(maxsize=None)
+@cache
 def fib(n):
     return n if n < 2 else fib(n-1) + fib(n-2)
 \end{pycard}
 
-\code{fib(35)} drops from millions of calls to 36, and \code{fib.cache\_info()} reports \code{hits=33, misses=36}. A hand-written timing decorator (\code{codes/04\_timer.py}) is another good one to keep around.
+\code{fib(35)} drops from millions of calls to 36, and \code{fib.cache\_info()} reports \code{hits=33, misses=36}; use \code{@lru\_cache(maxsize=N)} when you need a bounded cache. The hand-written timer in \code{codes/04\_timer.py} is another to keep.
 
 \begin{callout}[dotgreen]{PRO TIP}
-Learn what \code{functools} already gives you: \code{lru\_cache}, \code{cached\_property} (compute once per instance), \code{singledispatch} (overload by type), \code{partial}, and \code{wraps} itself.
+Learn what \code{functools} already gives you: \code{cache} / \code{lru\_cache}, \code{cached\_property} (compute once per instance), \code{singledispatch} (overload by type), \code{partial}, and \code{wraps} itself.
 \end{callout}
 
 \section{Decorating classes}

@@ -92,12 +92,12 @@ So `italic` runs closest to `greet`, and `bold` wraps the result. Flip the two l
 
 ## 5. The stdlib already ships decorators
 
-Before you write a caching or dispatch decorator, check `functools`. `lru_cache` memoizes a function by its arguments:
+Before you write a caching or dispatch decorator, check `functools`. Since Python 3.9, `@cache` memoizes a function by its arguments — it's the smaller, faster form of `lru_cache(maxsize=None)`:
 
 ```python
-from functools import lru_cache
+from functools import cache
 
-@lru_cache(maxsize=None)
+@cache
 def fib(n):
     return n if n < 2 else fib(n-1) + fib(n-2)
 ```
@@ -108,7 +108,7 @@ def fib(n):
 CacheInfo(hits=33, misses=36, maxsize=None, currsize=36)
 ```
 
-Worth knowing from the same module: `cached_property` (compute once per instance), `singledispatch` (function overloading by type), `partial`, and `wraps` itself. See [`codes/04_timer.py`](codes/04_timer.py) for a hand-written timing decorator and [`codes/05_lru_cache.py`](codes/05_lru_cache.py) for the cache.
+Reach for `@lru_cache(maxsize=N)` when you want a *bounded* cache with eviction. Worth knowing from the same module: `cached_property` (compute once per instance), `singledispatch` (function overloading by type), `partial`, and `wraps` itself. See [`codes/04_timer.py`](codes/04_timer.py) for a hand-written timing decorator and [`codes/05_lru_cache.py`](codes/05_lru_cache.py) for the cache.
 
 ## 6. @property
 
