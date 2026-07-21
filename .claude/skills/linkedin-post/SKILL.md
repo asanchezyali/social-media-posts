@@ -123,6 +123,19 @@ folder's **`README.md`** (GitHub renders it as the folder landing page), and poi
 `\sourceqr` at the folder URL (`.../tree/main/LinkedIn/<Post>`) so scanning the QR
 lands on the guide with `codes/` right there. Reference deck: `LinkedIn/PythonDecorators/`.
 
+**ARTICLE format (`LinkedIn/Headers/Article.tex`).** A THIRD LinkedIn output: the
+old flowing multi-page *article* (sections, prose, references) dressed in the new
+navy palette (Inter + JetBrains Mono, mac-window code cards, callouts). Use it when
+the topic wants depth/long-form rather than a swipe deck — Alejandro asked for this
+"mix" for Python Decorators. 3:4 portrait document (180×240mm), XeLaTeX ×2. Preamble
+`\def\lnkroot{../}\input{\lnkroot Headers/Article.tex}`; commands: `\arttitlepage{tag}{Title}{Subtitle}{qr}`
+(magazine-style photo cover via `\coverphoto{img}` first), `\setarttag{...}` (header),
+`\section`/`\subsection`, `\begin{pycard}{f.py}`/`\begin{sqlcard}{f.sql}`,
+`\begin{callout}[colour]{LABEL}`, `\code{}` / `\hb{}` / `\tb{}`, `\artclosing{qr}`.
+Same folder as the deck (shares `codes/`, `assets/`, `README.md`). Reference:
+`LinkedIn/PythonDecorators/DecoratorsArticle.tex`. (Code-card filenames still can't
+contain `_`; the `callout` is unbreakable so it never orphans its label mid-page.)
+
 **Gotchas learned:** `\pagestyle{empty}` kills default page numbers. The cover
 overlay is a **baked alpha PNG** (`Headers/overlay.png`), NOT a pgf-opacity fill —
 pgf transparency corrupts the eso-pic stream under XeLaTeX (same lesson as the

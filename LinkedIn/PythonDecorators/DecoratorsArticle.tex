@@ -1,0 +1,201 @@
+% =====================================================================
+%  LinkedIn ARTICLE  --  "Python Decorators, from the ground up"
+%  Article structure (old posts) + new navy code-editor palette.
+%  Compile:  xelatex DecoratorsArticle.tex   (run twice)
+% =====================================================================
+\def\lnkroot{../}\input{\lnkroot Headers/Article.tex}
+\setarttag{Python · Decorators}
+
+\begin{document}
+
+% ---- title page ----
+\coverphoto{assets/cover.jpg}
+\arttitlepage{Python}{Decorators, from\\ the ground up}%
+  {The one-liner that adds behavior to any function — and the \tb{functools} details nobody explains. Eight runnable examples, no dependencies.}%
+  {https://github.com/asanchezyali/social-media-posts/tree/main/LinkedIn/PythonDecorators}
+
+% =====================================================================
+\section{What a decorator really is}
+
+A decorator takes a function and returns a new one that runs extra logic around it — logging, timing, caching, access checks — without changing the original code. That is the whole idea. The \code{@} syntax is sugar: writing \code{@log} above \code{greet} is exactly \code{greet = log(greet)}.
+
+\begin{pycard}{pattern.py}
+def log(fn):
+    def wrapper(*args, **kwargs):
+        print(f"-> {fn.__name__}")
+        return fn(*args, **kwargs)
+    return wrapper
+
+@log
+def greet(name):
+    return f"Hi, {name}"
+\end{pycard}
+
+\code{log} receives a function and hands back \code{wrapper}; Python then rebinds \code{greet} to that wrapper. The \code{*args, **kwargs} carry the whole call through untouched, so the same decorator fits a function with two positional arguments or one with keyword-only arguments.
+
+\begin{callout}{WHY IT MATTERS}
+This is how frameworks add behavior declaratively. Flask's \code{@app.route}, \code{@property}, \code{@dataclass} — all the same mechanism. One line above a function instead of ten inside it.
+\end{callout}
+
+\section{functools.wraps, the one you keep forgetting}
+
+Wrap a function naively and you overwrite its identity. \code{add.\_\_name\_\_} becomes \code{"wrapper"}, the docstring turns into \code{None}, and every tool that reads them — your debugger, \code{help()}, pytest's output — now reports the wrapper instead of your function.
+
+\begin{pycard}{wraps.py}
+from functools import wraps
+
+def log(fn):
+    @wraps(fn)          # copy __name__, __doc__, __wrapped__, ...
+    def wrapper(*a, **k):
+        return fn(*a, **k)
+    return wrapper
+\end{pycard}
+
+\code{@wraps(fn)} copies the metadata from the original onto the wrapper. Run \code{02\_wraps.py} and the difference is plain:
+
+\begin{callout}[dotamber]{GOTCHA}
+Add \code{@wraps} to \tb{every} decorator you write. It costs one line; skipping it costs an afternoon of debugging a stack trace that points at \code{wrapper} in three different places.
+\end{callout}
+
+\section{Decorators that take arguments}
+
+A decorator with its own arguments needs one more layer of nesting: the \tb{argument}, then the \tb{function}, then the \tb{wrapper}.
+
+\begin{pycard}{args.py}
+def retry(times):
+    def deco(fn):
+        def wrapper(*a, **k):
+            ...            # sees both `times` and `fn`
+        return wrapper
+    return deco
+
+@retry(3)
+def fetch(): ...
+\end{pycard}
+
+Read \code{@retry(3)} as two steps. First \code{retry(3)} runs and returns \code{deco}; then \code{deco} decorates \code{fetch}. Forget to return a layer, or try to take \code{times} and \code{fn} in the same function, and it fails with a confusing \code{TypeError}. A complete \code{retry} with backoff lives in \code{03\_decorator\_with\_args.py}.
+
+\section{Stacking order}
+
+Stacked decorators apply \tb{bottom-up}: the one nearest the function wraps first.
+
+\begin{pycard}{order.py}
+@bold
+@italic
+def greet(): ...
+# same as: greet = bold(italic(greet))
+\end{pycard}
+
+So \code{italic} runs closest to \code{greet}, and \code{bold} wraps the result. This is not cosmetic. Put a caching decorator above an auth check and you might serve a cached response to an unauthorized caller; swap them and you fix it. When two decorators interact, the order is part of the logic.
+
+\section{Don't reinvent it: the stdlib ships decorators}
+
+Before writing a caching or dispatch decorator, look in \code{functools}. \code{lru\_cache} memoizes a function by its arguments, turning exponential \code{fib} into linear.
+
+\begin{pycard}{cache.py}
+from functools import lru_cache
+
+@lru_cache(maxsize=None)
+def fib(n):
+    return n if n < 2 else fib(n-1) + fib(n-2)
+\end{pycard}
+
+\code{fib(35)} drops from millions of calls to 36, and \code{fib.cache\_info()} reports \code{hits=33, misses=36}. A hand-written timing decorator is worth keeping too:
+
+\begin{pycard}{timer.py}
+from time import perf_counter
+
+def timer(fn):
+    @wraps(fn)
+    def wrapper(*a, **k):
+        start = perf_counter()
+        try:
+            return fn(*a, **k)
+        finally:
+            print(f"{fn.__name__}: {perf_counter()-start:.3f}s")
+    return wrapper
+\end{pycard}
+
+\begin{callout}[dotgreen]{PRO TIP}
+Learn what \code{functools} already gives you: \code{lru\_cache}, \code{cached\_property} (compute once per instance), \code{singledispatch} (overload by type), \code{partial}, and \code{wraps} itself.
+\end{callout}
+
+\section{Decorating classes}
+
+\subsection{@property — methods that read like data}
+
+\code{@property} turns a method into a read-only attribute: you read \code{c.area}, not \code{c.area()}. Pair it with a setter to guard writes.
+
+\begin{pycard}{property.py}
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius        # goes through the setter
+    @property
+    def radius(self):
+        return self._radius
+    @radius.setter
+    def radius(self, value):
+        if value <= 0:
+            raise ValueError("radius must be positive")
+        self._radius = value
+    @property
+    def area(self):
+        return math.pi * self._radius ** 2
+\end{pycard}
+
+Now \code{c.radius = -1} raises instead of silently corrupting the object, and \code{area} is always computed from a valid radius.
+
+\subsection{classmethod vs staticmethod}
+
+\code{@classmethod} receives the class as \code{cls}; \code{@staticmethod} receives nothing.
+
+\begin{pycard}{methods.py}
+class User:
+    @classmethod
+    def from_json(cls, data):       # alternate constructor
+        return cls(data["name"], data["email"])
+    @staticmethod
+    def valid(email):               # helper, doesn't touch the class
+        return "@" in email
+\end{pycard}
+
+Use \code{classmethod} for alternate constructors — because it gets \code{cls}, \code{User.from\_json(...)} keeps working in subclasses. Use \code{staticmethod} for helpers that belong to the class conceptually but need neither the instance nor the class.
+
+\section{When you need state: class-based decorators}
+
+Three nested functions get hard to read once the decorator has to remember something — a counter, a rate limit, a config. A class with \code{\_\_call\_\_} is clearer, and the state lives on the instance.
+
+\begin{pycard}{class-based.py}
+class CountCalls:
+    def __init__(self, fn):
+        self.fn = fn
+        self.count = 0
+        update_wrapper(self, fn)    # the class-based @wraps
+    def __call__(self, *a, **k):
+        self.count += 1
+        return self.fn(*a, **k)
+\end{pycard}
+
+\code{update\_wrapper(self, fn)} is the class-based equivalent of \code{@wraps}. After \code{@CountCalls}, \code{ping.count} is real, inspectable state.
+
+\section{Common mistakes}
+
+\begin{itemize}
+  \item \tb{No \code{@wraps}.} Broken \code{\_\_name\_\_}, lost docstrings, confused tooling. Ten seconds to fix; hours to debug.
+  \item \tb{Confusing definition time with call time.} The decorator body runs \emph{once}, when the function is defined. The \code{wrapper} runs on \emph{every} call. Put expensive setup in the decorator, not the wrapper.
+  \item \tb{Shared mutable state in the closure.} A \code{list} or \code{dict} created in the decorator is shared across every call — a feature for a cache, a bug for everything else.
+  \item \tb{Nested functions when you need state.} If it holds state or config, use a class with \code{\_\_call\_\_}.
+\end{itemize}
+
+\section{Run the code \& read more}
+
+Every snippet above has a complete, dependency-free version in \code{codes/}. Clone and run any of them with \code{python codes/02\_wraps.py}.
+
+\begin{itemize}
+  \item Python docs — \emph{functools}: \href{https://docs.python.org/3/library/functools.html}{docs.python.org/3/library/functools}
+  \item PEP 318 — the decorator syntax: \href{https://peps.python.org/pep-0318/}{peps.python.org/pep-0318}
+\end{itemize}
+
+\artclosing{https://github.com/asanchezyali/social-media-posts/tree/main/LinkedIn/PythonDecorators}
+
+\end{document}

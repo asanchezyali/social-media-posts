@@ -1,0 +1,229 @@
+% =====================================================================
+%  LinkedIn ARTICLE template  --  the old flowing multi-page article
+%  structure, dressed in the NEW code-editor palette (navy + Inter +
+%  JetBrains Mono + mac-window code cards + callouts).
+%  3:4 portrait document (180x240mm).  XeLaTeX (fontspec), run twice.
+%     \def\lnkroot{../}\input{\lnkroot Headers/Article.tex}
+% =====================================================================
+\documentclass[11pt]{article}
+
+\usepackage{geometry}
+\geometry{paperwidth=180mm, paperheight=240mm,
+  left=20mm, right=20mm, top=22mm, bottom=20mm,
+  headheight=10mm, headsep=7mm, footskip=12mm}
+
+\usepackage{fontspec}
+\usepackage{xcolor}
+\usepackage{amssymb}     % \blacktriangleright (bullet marker)
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{eso-pic}
+\usepackage{ragged2e}
+\usepackage{listings}
+\usepackage[most]{tcolorbox}
+\usepackage{qrcode}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+\usetikzlibrary{calc}
+\providecommand{\lnkroot}{../}
+
+% =====================================================================
+%  Palette  --  dark navy "editor" (matches the LinkedIn carousel)
+% =====================================================================
+\definecolor{bg}{RGB}{11, 16, 26}
+\definecolor{bgsoft}{RGB}{16, 23, 36}
+\definecolor{textbright}{RGB}{236, 241, 247}   % headings
+\definecolor{textbody}{RGB}{199, 208, 221}     % body (readable long-form)
+\definecolor{textmuted}{RGB}{143, 156, 176}    % captions, chrome
+\definecolor{accentblue}{RGB}{88, 170, 237}
+\definecolor{commentgreen}{RGB}{126, 224, 140}
+\definecolor{rulecol}{RGB}{34, 45, 63}
+\definecolor{chipbg}{RGB}{22, 31, 47}
+% code card
+\definecolor{cardbg}{RGB}{14, 20, 31}
+\definecolor{cardframe}{RGB}{38, 48, 66}
+\definecolor{codeident}{RGB}{198, 209, 223}
+\definecolor{codekw}{RGB}{88, 170, 237}
+\definecolor{codestring}{RGB}{126, 198, 142}
+\definecolor{codenum}{RGB}{232, 184, 96}
+\definecolor{codecomment}{RGB}{104, 118, 140}
+\definecolor{dotblue}{RGB}{90, 152, 232}
+\definecolor{dotamber}{RGB}{232, 184, 96}
+\definecolor{dotgreen}{RGB}{120, 200, 132}
+
+\pagecolor{bg}
+
+% =====================================================================
+%  Fonts  (vendored — same as the carousel)
+% =====================================================================
+\newfontfamily\interhead[Path=\lnkroot fonts/, Extension=.otf]{InterDisplay-Bold}
+\newfontfamily\interblack[Path=\lnkroot fonts/, Extension=.otf]{InterDisplay-Black}
+\newfontfamily\intersemi[Path=\lnkroot fonts/, Extension=.otf]{Inter-SemiBold}
+\newfontfamily\intermed[Path=\lnkroot fonts/, Extension=.otf]{Inter-Medium}
+\setmainfont{Inter}[Path=\lnkroot fonts/, Extension=.otf,
+  UprightFont=Inter-Regular, BoldFont=Inter-SemiBold]
+\newfontfamily\mono[Path=\lnkroot fonts/, Extension=.ttf,
+  UprightFont=JetBrainsMono-Regular, BoldFont=JetBrainsMono-Bold]{JetBrainsMono-Regular}
+\newfontfamily\monob[Path=\lnkroot fonts/, Extension=.ttf]{JetBrainsMono-Bold}
+
+\AtBeginDocument{\color{textbody}}
+\setlength{\parindent}{0pt}\setlength{\parskip}{2.6mm}
+\linespread{1.16}
+\sloppy\hyphenpenalty=1500
+
+% =====================================================================
+%  Section headings  --  blue mono number + Inter heading + thin rule
+% =====================================================================
+\titleformat{\section}[hang]
+  {\interhead\fontsize{16}{20}\selectfont\color{textbright}}
+  {\textcolor{accentblue}{\monob\fontsize{12}{16}\selectfont\thesection\,}}{2.5mm}
+  {}[{\vskip1.2mm\color{rulecol}\titlerule[0.5pt]}]
+\titleformat{\subsection}[hang]
+  {\intersemi\fontsize{12.5}{16}\selectfont\color{accentblue}}
+  {}{0pt}{}
+\titlespacing*{\section}{0pt}{7mm}{3mm}
+\titlespacing*{\subsection}{0pt}{4mm}{1.5mm}
+
+% =====================================================================
+%  Inline bits
+% =====================================================================
+\newcommand{\code}[1]{%
+  \tikz[baseline=(c.base)]{\node[fill=chipbg, rounded corners=1.4pt,
+    inner xsep=1.3mm, inner ysep=0.4mm] (c)
+    {\mono\fontsize{9.5}{11}\selectfont\color{accentblue}#1};}}
+\newcommand{\hb}[1]{{\color{accentblue}#1}}          % accent word
+\newcommand{\tb}[1]{{\intersemi\color{textbright}#1}} % bold-bright emphasis
+% bullet list, blue markers
+\setlist[itemize]{leftmargin=6mm, itemsep=1.2mm, topsep=1.2mm,
+  label={\textcolor{accentblue}{\small$\blacktriangleright$}}}
+
+% =====================================================================
+%  Code cards  (mac window: 3 dots + filename) — inline or from file
+% =====================================================================
+\lstdefinestyle{cardbase}{%
+  basicstyle=\mono\fontsize{9}{13}\selectfont\color{codeident},
+  keywordstyle=\monob\color{codekw},
+  commentstyle=\mono\color{codecomment},
+  stringstyle=\mono\color{codestring},
+  showstringspaces=false, columns=fullflexible, keepspaces=true,
+  breaklines=true, tabsize=4,
+  literate=%
+    {0}{{\color{codenum}0}}1 {1}{{\color{codenum}1}}1 {2}{{\color{codenum}2}}1
+    {3}{{\color{codenum}3}}1 {4}{{\color{codenum}4}}1 {5}{{\color{codenum}5}}1
+    {6}{{\color{codenum}6}}1 {7}{{\color{codenum}7}}1 {8}{{\color{codenum}8}}1
+    {9}{{\color{codenum}9}}1 {*}{{\raisebox{0.28ex}{*}}}1,
+}
+\lstdefinestyle{pystyle}{style=cardbase, language=Python,
+  morekeywords={None,True,False,async,await}}
+\lstdefinestyle{sqlstyle}{style=cardbase, language=SQL}
+% mac-window frame; the filename #1 is drawn in the title bar (avoid `_` in it)
+\newtcblisting{pycard}[1]{%
+  listing only, listing style=pystyle, enhanced,
+  colback=cardbg, colframe=cardframe, boxrule=1pt, arc=3pt,
+  left=5mm, right=4mm, top=8.4mm, bottom=3.6mm,
+  overlay={%
+    \fill[dotblue]  ([xshift=5mm,yshift=-4.3mm]frame.north west) circle (1mm);
+    \fill[dotamber] ([xshift=8mm,yshift=-4.3mm]frame.north west) circle (1mm);
+    \fill[dotgreen] ([xshift=11mm,yshift=-4.3mm]frame.north west) circle (1mm);
+    \node[anchor=west, text=codecomment]
+      at ([xshift=15mm,yshift=-4.3mm]frame.north west)
+      {\mono\fontsize{8.5}{9}\selectfont #1};
+    \draw[cardframe, line width=0.5pt]
+      ([yshift=-7.6mm]frame.north west) -- ([yshift=-7.6mm]frame.north east);
+  }}
+\newtcblisting{sqlcard}[1]{%
+  listing only, listing style=sqlstyle, enhanced,
+  colback=cardbg, colframe=cardframe, boxrule=1pt, arc=3pt,
+  left=5mm, right=4mm, top=8.4mm, bottom=3.6mm,
+  overlay={%
+    \fill[dotblue]  ([xshift=5mm,yshift=-4.3mm]frame.north west) circle (1mm);
+    \fill[dotamber] ([xshift=8mm,yshift=-4.3mm]frame.north west) circle (1mm);
+    \fill[dotgreen] ([xshift=11mm,yshift=-4.3mm]frame.north west) circle (1mm);
+    \node[anchor=west, text=codecomment]
+      at ([xshift=15mm,yshift=-4.3mm]frame.north west)
+      {\mono\fontsize{8.5}{9}\selectfont #1};
+    \draw[cardframe, line width=0.5pt]
+      ([yshift=-7.6mm]frame.north west) -- ([yshift=-7.6mm]frame.north east);
+  }}
+
+% =====================================================================
+%  Callout  --  coloured left border + label (GOTCHA / PRO TIP / NOTE)
+% =====================================================================
+\newtcolorbox{callout}[2][accentblue]{%
+  enhanced, colback=bgsoft, colframe=bgsoft, boxrule=0pt, arc=2pt,
+  borderline west={2.6pt}{0pt}{#1},
+  left=5mm, right=4mm, top=3mm, bottom=3mm, before skip=3mm, after skip=3mm,
+  fontupper=\color{textbody},
+  before upper={{\monob\fontsize{8}{10}\selectfont\textcolor{#1}{#2}}\par\vskip1.4mm},
+}
+
+% =====================================================================
+%  Header + footer chrome
+% =====================================================================
+\pagestyle{fancy}\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}\renewcommand{\footrulewidth}{0pt}
+\newcommand{\arttag}{}
+\newcommand{\setarttag}[1]{\renewcommand{\arttag}{#1}}
+\fancyhead[L]{\mono\fontsize{8.5}{10}\selectfont\color{textmuted}-{}- \arttag}
+\fancyhead[R]{\mono\fontsize{8.5}{10}\selectfont\color{textmuted}asanchezyali.com}
+\fancyfoot[C]{\mono\fontsize{8.5}{10}\selectfont\color{textmuted}\thepage}
+
+% =====================================================================
+%  Title page  --  full-bleed photo + overlay + tag + title + author + QR
+% =====================================================================
+\newcommand{\coverphoto}[1]{%
+  \AddToShipoutPictureBG*{%
+    \AtPageLowerLeft{\includegraphics[width=\paperwidth,height=\paperheight,%
+      keepaspectratio=false]{#1}}%
+    \AtPageLowerLeft{\includegraphics[width=\paperwidth,height=\paperheight,%
+      keepaspectratio=false]{\lnkroot Headers/overlay.png}}%
+  }}
+\newcommand{\topictag}[1]{%
+  \begin{tikzpicture}[baseline]
+    \node[fill=accentblue, rounded corners=2.4pt, text=bg,
+          inner xsep=3mm, inner ysep=2mm]
+      {\monob\fontsize{12}{14}\selectfont #1};
+  \end{tikzpicture}}
+% \arttitlepage{tag}{Title}{Subtitle}{qr-url}
+\newcommand{\arttitlepage}[4]{%
+  \thispagestyle{empty}
+  \vspace*{\fill}
+  {\mono\fontsize{10}{13}\selectfont\color{commentgreen}-{}- a field guide}\par\vskip5mm
+  \topictag{#1}\par\vskip7mm
+  {\interblack\fontsize{34}{39}\selectfont\color{textbright}#2\par}\vskip4mm
+  {\fontsize{13}{19}\selectfont\color{textbody}#3\par}
+  \vspace*{\fill}\vskip4mm
+  \noindent
+  \begin{minipage}[b]{0.60\linewidth}
+    \begin{tikzpicture}[baseline]
+      \begin{scope}\clip (0,0) circle (7mm);
+        \node at (0,0) {\includegraphics[width=14mm,height=14mm]{\lnkroot ../Images/profile-image.jpeg}};
+      \end{scope}
+      \draw[cardframe, line width=0.6pt] (0,0) circle (7mm);
+      \node[anchor=west, text=textbright, inner sep=0pt] at (9.5mm,2.8mm)
+        {\intersemi\fontsize{12}{14}\selectfont Alejandro Sánchez Yalí};
+      \node[anchor=west, text=textmuted, inner sep=0pt] at (9.5mm,-2.2mm)
+        {\intermed\fontsize{8.5}{10}\selectfont Software Developer · AI \& Blockchain};
+    \end{tikzpicture}
+  \end{minipage}\hfill
+  \begin{minipage}[b]{0.36\linewidth}\raggedleft
+    \begin{tikzpicture}[baseline]
+      \node[fill=white, rounded corners=2.5pt, inner sep=2mm]
+        {\color{bg}\qrcode[height=16mm]{#4}};
+    \end{tikzpicture}\\[1.4mm]
+    {\mono\fontsize{8}{10}\selectfont\color{textmuted}read the full guide}
+  \end{minipage}\par
+  \clearpage}
+
+% closing author + QR block (call at the end)
+\newcommand{\artclosing}[1]{%
+  \par\vskip4mm\noindent{\color{rulecol}\titlerule[0.5pt]}\par\vskip4mm
+  \noindent\begin{tikzpicture}[baseline]
+    \node[anchor=north west, fill=white, rounded corners=3pt, inner sep=2.4mm] (q)
+      at (0,0) {\color{bg}\qrcode[height=17mm]{#1}};
+    \node[anchor=west, align=left, inner sep=0pt] at ([xshift=4.5mm]q.east |- q.center)
+      {\intersemi\fontsize{12}{14}\selectfont\color{textbright}Clone the code\\[1mm]
+       \mono\fontsize{8.5}{11}\selectfont\textcolor{textmuted}{8 runnable examples on GitHub}};
+  \end{tikzpicture}\par}
