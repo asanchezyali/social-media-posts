@@ -1,0 +1,172 @@
+% =====================================================================
+%  LinkedIn ARTICLE  --  "Python Generators, one value at a time"
+%  Article template (LinkedIn/Headers/Article.tex). XeLaTeX x2.
+%  Verified against the official docs (itertools, PEP 380, PEP 479).
+% =====================================================================
+\def\lnkroot{../}\input{\lnkroot Headers/Article.tex}
+\setheader{Python}{Generators}
+
+\begin{document}
+
+% ---- title page ----
+\coverphoto{assets/cover.jpg}
+\arttitlepage{Python}{Generators, one\\ value at a time}%
+  {How \tb{yield} turns a function into a lazy stream — and lets you process data
+   that would never fit in memory. Eight runnable examples, no dependencies.}
+
+% =====================================================================
+\section{What a generator is}
+
+A function with a \code{yield} in it doesn't return a value — it returns a \tb{generator}: an iterator that produces values lazily, one at a time, only when asked. It never builds the whole sequence.
+
+\begin{pycard}{basic.py}
+def count_up(n):
+    i = 0
+    while i < n:
+        yield i
+        i += 1
+
+for x in count_up(3):   # 0, 1, 2
+    ...
+\end{pycard}
+
+Calling \code{count\_up(3)} runs \tb{no code} yet; it hands back a generator. The body only advances when the \code{for} loop pulls the next value.
+
+\begin{callout}{WHY IT MATTERS}
+This is how you handle streams and huge (or infinite) data: you hold \tb{one value at a time}, not the whole list. A log reader, a paginated API, a number sequence, all in constant memory.
+\end{callout}
+
+\section{yield pauses and resumes}
+
+Each \code{yield} hands back a value and \tb{freezes} the function, keeping its locals and its exact position. The next pull resumes right after that \code{yield}, state intact.
+
+\begin{pycard}{pause.py}
+def gen():
+    print("start")
+    yield 1
+    print("resumed")
+    yield 2
+
+g = gen()
+next(g)   # prints "start",   returns 1
+next(g)   # prints "resumed", returns 2
+\end{pycard}
+
+\begin{callout}[dotamber]{GOTCHA}
+A generator is \tb{exhausted after one pass}. Loop over it twice and the second loop sees nothing; the state ran to the end. Rebuild it (or materialise a \code{list}) when you need to iterate again.
+\end{callout}
+
+\section{Generator expressions save memory}
+
+Swap the brackets of a list comprehension for parentheses and you get a lazy generator instead of a materialised list. Same syntax, wildly different memory.
+
+\begin{pycard}{genexpr.py}
+nums = [x * x for x in range(10_000_000)]   # ~400 MB list in RAM
+nums = (x * x for x in range(10_000_000))   # a generator, a few hundred bytes
+
+total = sum(x * x for x in range(10_000_000))  # streamed, no list built
+\end{pycard}
+
+\begin{callout}[dotamber]{GOTCHA}
+The expression is \tb{lazy}: nothing runs when you write it. Side effects and exceptions are deferred to the moment you consume it, not the moment you create it.
+\end{callout}
+
+\section{Chaining generators into a pipeline}
+
+Because each stage is lazy, you can chain generators and a \tb{single item} flows all the way through per pull. The memory stays flat no matter how big the input.
+
+\begin{pycard}{pipeline.py}
+from itertools import islice
+
+lines  = (line.rstrip() for line in open("app.log"))
+errors = (l for l in lines if "ERROR" in l)
+first  = islice(errors, 10)          # nothing has been read yet
+for e in first:
+    print(e)                         # now it pulls, one line at a time
+\end{pycard}
+
+\begin{diagram}
+\begin{tikzpicture}[font=\mono\footnotesize, node distance=7mm,
+    stage/.style={draw=#1, line width=1pt, rounded corners=3pt, fill=cardbg,
+                  text=codeident, minimum height=9mm, inner xsep=3mm},
+    stage/.default=accentblue]
+  \node[stage=accentblue]              (a) {read lines};
+  \node[stage=commentgreen, right=of a] (b) {keep ERRORs};
+  \node[stage=dotamber, right=of b]     (c) {take 10};
+  \node[right=6mm of c, text=textmuted] (d) {for e ...};
+  \draw[-{Latex[length=2mm]}, accentblue,   line width=1pt] (a) -- (b);
+  \draw[-{Latex[length=2mm]}, commentgreen, line width=1pt] (b) -- (c);
+  \draw[-{Latex[length=2mm]}, dotamber,     line width=1pt] (c) -- (d);
+\end{tikzpicture}
+\diagcap{The consumer pulls; one line travels the whole chain at a time, so memory stays flat even for a 10 GB log.}
+\end{diagram}
+
+\section{Infinite streams, bounded on demand}
+
+A generator can run forever (\code{while True: yield}). That's safe precisely because it's lazy: you only ever pull what you take. Bound it with \code{islice} or \code{takewhile}.
+
+\begin{pycard}{infinite.py}
+from itertools import count, islice
+
+def naturals():
+    n = 0
+    while True:
+        yield n
+        n += 1
+
+list(islice(naturals(), 5))   # [0, 1, 2, 3, 4]
+list(islice(count(10, 2), 3)) # 10, 12, 14  (the stdlib count)
+\end{pycard}
+
+\begin{callout}{WHY IT MATTERS}
+An eager list of "all the naturals" is impossible; a generator of them is one line. It's how you model event streams, retries, and paginated APIs: potentially endless, consumed one page at a time.
+\end{callout}
+
+\section{yield from — delegate to a sub-generator}
+
+\code{yield from} yields every value of another iterable (and passes its return value back). Since Python 3.3 (PEP 380) it replaces the manual re-yield loop.
+
+\begin{pycard}{yieldfrom.py}
+def chain(*iterables):
+    for it in iterables:
+        yield from it          # not: for x in it: yield x
+
+list(chain([1, 2], (3, 4)))    # [1, 2, 3, 4]
+\end{pycard}
+
+\section{itertools — the lazy toolkit}
+
+Before writing loops over a generator, check \code{itertools}: \code{islice}, \code{chain}, \code{count}, \code{groupby}, \code{takewhile}, \code{accumulate}. Two people often miss are newer:
+
+\begin{pycard}{itertools.py}
+from itertools import batched, pairwise
+
+list(batched("ABCDEFG", 3))   # [('A','B','C'), ('D','E','F'), ('G',)]
+list(pairwise([1, 2, 3, 4]))  # [(1,2), (2,3), (3,4)]
+\end{pycard}
+
+\begin{callout}[dotgreen]{PRO TIP}
+\code{pairwise} landed in Python 3.10 and \code{batched} in 3.12 (with a \code{strict=} flag in 3.13). They're lazy and C-fast, so reach for them instead of hand-rolled index loops.
+\end{callout}
+
+\section{Common mistakes}
+
+\begin{itemize}
+  \item \tb{Reusing an exhausted generator.} It yields nothing the second time. Keep a \code{list} if you truly need to iterate twice.
+  \item \tb{\code{list(gen)} on a huge stream.} That materialises everything and throws away the whole point; stay lazy end to end.
+  \item \tb{\code{raise StopIteration} to stop.} Since Python 3.7 (PEP 479) a \code{StopIteration} that escapes a generator is turned into a \code{RuntimeError}. Just \code{return}.
+  \item \tb{Expecting eager errors.} A bug inside the generator surfaces where you \emph{consume} it, not where you define it.
+\end{itemize}
+
+\section{Read more}
+
+Every snippet ships as a complete, dependency-free file in \code{codes/}. Primary sources:
+\begin{itemize}
+  \item Python docs: the \href{https://docs.python.org/3/reference/expressions.html\#yield-expressions}{yield expression} and the \href{https://docs.python.org/3/howto/functional.html}{functional HOWTO}.
+  \item \code{itertools} reference: \href{https://docs.python.org/3/library/itertools.html}{docs.python.org/3/library/itertools}.
+  \item \href{https://peps.python.org/pep-0380/}{PEP 380} (\code{yield from}) and \href{https://peps.python.org/pep-0479/}{PEP 479} (StopIteration).
+\end{itemize}
+
+\artclosing{https://github.com/asanchezyali/social-media-posts/tree/main/LinkedIn/PythonGenerators}
+
+\end{document}
