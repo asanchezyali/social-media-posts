@@ -1,7 +1,7 @@
 % =====================================================================
 %  yalix  --  grid-paper "study notes" carousel template
 %  Palette: cream & sage-green.  Titles: Playfair Display.
-%  Handwriting: SignPainter (brush).  Left-aligned text, centred equations.
+%  Handwriting: Patrick Hand (print).  Left-aligned text, centred equations.
 %  Engine: XeLaTeX (fontspec).  Compile:  xelatex <file>.tex  (run twice)
 % =====================================================================
 
@@ -59,7 +59,7 @@
 % =====================================================================
 %  Fonts
 %   - Playfair Display : display serif  (vendored in ../fonts)
-%   - SignPainter      : brush handwriting body  (macOS system)
+%   - Patrick Hand     : print handwriting body (vendored, not joined-up)
 % =====================================================================
 \newfontfamily\displayfont[
     Path = \yalixroot fonts/ , Extension = .otf ,
@@ -68,9 +68,13 @@
     BoldFont       = PlayfairDisplay-Bold ,
     BoldItalicFont = PlayfairDisplay-BoldItalic ]{PlayfairDisplay}
 
-\newfontfamily\handfont{SignPainter}
+% Handwriting body: Patrick Hand — a print (NOT joined-up) hand, far more legible
+% than the old SignPainter brush script (readers complained the joined letters
+% were hard to read).  Vendored in Instagram/fonts/.  Single weight (no bold/
+% italic), like SignPainter — so still don't use \textbf/\emph inside \hand{}.
+\newfontfamily\handfont[Path=\yalixroot fonts/, Extension=.ttf, Scale=0.90]{PatrickHand-Regular}
 \newfontfamily\codefont{Menlo}   % monospace for code cards (macOS system font)
-\setmainfont{SignPainter}
+\setmainfont[Path=\yalixroot fonts/, Extension=.ttf, Scale=0.90]{PatrickHand-Regular}
 
 % Maths stays in LaTeX's default Latin Modern maths font: clean, legible
 % primes/derivatives (f', f''). It is neutral notation, coloured via eqink below.
@@ -159,7 +163,7 @@
 }{\vspace*{\fill}\par}
 
 % ---- text styles -----------------------------------------------------
-% one uniform handwriting size everywhere (SignPainter, 15/21)
+% one uniform handwriting size everywhere (Patrick Hand, 15/21)
 \newcommand{\sertitle}[1]{{\displayfont\bfseries\color{ink}#1\par}}
 \newcommand{\serlead}[1]{{\handfont\fontsize{15}{21}\selectfont\color{ink}#1\par}}
 \newcommand{\hand}[1]{{\handfont\fontsize{15}{21}\selectfont\color{handInk}#1\par}}

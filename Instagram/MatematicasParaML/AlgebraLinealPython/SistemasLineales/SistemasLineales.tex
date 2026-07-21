@@ -69,7 +69,7 @@ True
 \end{pyout}
 
 \topic[70mm]{¿Y si no hay solución única?}
-\hand{\texttt{solve} solo funciona si $A$ es invertible. Si una fila es combinación de otras (aquí fila$_3$ = fila$_1$+fila$_2$), $A$ es \hl{singular} y falla:}
+\hand{\texttt{solve} solo funciona si $A$ es invertible. Con una fila combinación de otras (aquí fila$_3$ = fila$_1$+fila$_2$), $A$ es \hl{singular} y falla:}
 \begin{pycode}
 C = np.array([[1,  1, 1],
               [1, -1, 2],

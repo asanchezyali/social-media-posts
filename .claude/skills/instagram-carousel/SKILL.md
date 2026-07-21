@@ -1,6 +1,6 @@
 ---
 name: instagram-carousel
-description: Create yalix "study-notes" math/tech carousels for Instagram (3:4 portrait, cream grid-paper, XeLaTeX + SignPainter). Use when the user asks to create, draft, restyle, or extend an Instagram post/carousel in this repo — a new topic, a new part of a series, a new palette, or edits to the "apuntes" slides. The template lives in Instagram/Headers/Headers.tex. NOTE: for LinkedIn dark-theme code posts, use the linkedin-post skill instead.
+description: Create yalix "study-notes" math/tech carousels for Instagram (3:4 portrait, cream grid-paper, XeLaTeX + Patrick Hand). Use when the user asks to create, draft, restyle, or extend an Instagram post/carousel in this repo — a new topic, a new part of a series, a new palette, or edits to the "apuntes" slides. The template lives in Instagram/Headers/Headers.tex. NOTE: for LinkedIn dark-theme code posts, use the linkedin-post skill instead.
 ---
 
 # yalix carousel — study-notes math posts (Instagram)
@@ -35,16 +35,18 @@ advanced student (precise terms: núcleo/kernel, subespacio afín, definida posi
 
 - **Compile with XeLaTeX, run TWICE** (`fontspec` + a page-counter/overlays need
   two passes). NOT pdfLaTeX.
-- **Exactly two typefaces:** Playfair Display (display titles, vendored in
-  `Instagram/fonts/`) + **SignPainter** (brush handwriting body, a **macOS system
-  font** — this template assumes macOS). Math stays in default **Latin Modern**
-  (legible primes/derivatives), coloured — it reads as neutral notation, not a
-  third font. Never set math in Playfair.
-- SignPainter has **no bold and no italic** → don't use `\textbf`/`\emph` inside
-  `\hand{}`. A cosmetic `Font shape TU/SignPainter/b/n undefined` warning is
-  harmless; ignore it.
-- Unicode Spanish (á é í ó ú ñ ¿ ¡ —) renders fine in SignPainter. Use the real
-  `—` em-dash character, never `---` (SignPainter shows three hyphens).
+- **Exactly two typefaces:** Playfair Display (display titles) + **Patrick Hand**
+  (print handwriting body) — both **vendored in `Instagram/fonts/`**. Patrick Hand
+  replaced SignPainter (readers found the joined brush script hard to read); it's
+  a print, NOT joined-up hand, set at `Scale=0.90` in `Headers.tex`. Math stays in
+  default **Latin Modern** (legible primes/derivatives), coloured — neutral
+  notation, not a third font. Never set math in Playfair.
+- Patrick Hand is **single weight (no bold/italic)** → don't use `\textbf`/`\emph`
+  inside `\hand{}`. It's a bit wider than SignPainter was, so a multi-word `\hl{}`
+  at a line end can go slightly overfull — reword to move the highlight off the
+  margin (same fix pattern as before).
+- Unicode Spanish (á é í ó ú ñ ¿ ¡ —) renders fine. Use the real `—` em-dash
+  character, never `---`.
 
 ## Three-colour rule
 
@@ -96,7 +98,7 @@ The series **Matemáticas para ML** is split into **modules**; a post lives
 Instagram/
 ├── Headers/Headers.tex        # the shared template (don't fork; \input it)
 ├── Headers/veil.png           # cream alpha-PNG for the cover veil (required asset)
-├── fonts/                     # vendored Playfair Display .otf
+├── fonts/                     # vendored Playfair Display + Patrick Hand
 └── MatematicasParaML/         # the SERIES
     ├── AlgebraLineal/         # a MODULE (forest-green palette)
     │   ├── palette.tex        # this module's colour override
@@ -172,7 +174,7 @@ centred. Structure it with topic headings and note blocks:
 | `\begin{slidec}...\end{slidec}` | Vertically-centred slide — use for **cover** and **closing** |
 | `\coverphoto[opacity]{file}` | Full-bleed cover photo + uniform cream veil (default opacity 0.66) |
 | `\sertitle{...}` | Big Playfair display title (wrap in `\fontsize{..}{..}\selectfont` to size) |
-| `\serlead{...}` / `\hand{...}` | SignPainter body text, left-aligned, size 15/21 |
+| `\serlead{...}` / `\hand{...}` | Patrick Hand body text, left-aligned, size 15/21 |
 | `\topic[<height>]{...}` | Section heading (auto-numbered). Optional needspace (default 4 mm); set it to the topic height to keep a big figure with its text — see "Flow like a document" |
 | `\defn{full sentence}` | "Def." + sentence; underline the defined term with `\uhand{...}` |
 | `\obs{...}` | "Obs." remark. Write it **standalone**, not as a trailing connector |
