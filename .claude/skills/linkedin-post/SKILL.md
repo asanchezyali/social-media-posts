@@ -125,7 +125,7 @@ lands on the guide with `codes/` right there. Reference deck: `LinkedIn/PythonDe
 
 **ARTICLE format (`LinkedIn/Headers/Article.tex`).** A THIRD LinkedIn output: the
 old flowing multi-page *article* (sections, prose, references) dressed in the new
-navy palette (Inter + JetBrains Mono, mac-window code cards, callouts). Use it when
+navy palette (Inter + JetBrains Mono, mac-window code cards, callouts, left line-number gutter + top-right glow). Use it when
 the topic wants depth/long-form rather than a swipe deck — Alejandro asked for this
 "mix" for Python Decorators. 3:4 portrait document (180×240mm), XeLaTeX ×2. Preamble
 `\def\lnkroot{../}\input{\lnkroot Headers/Article.tex}`; commands: `\arttitlepage{tag}{Title}{Subtitle}{qr}`

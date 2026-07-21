@@ -26,7 +26,7 @@
 \usepackage{enumitem}
 \usepackage{fancyhdr}
 \usepackage[hidelinks]{hyperref}
-\usetikzlibrary{calc}
+\usetikzlibrary{calc,shadings}
 \providecommand{\lnkroot}{../}
 
 % =====================================================================
@@ -54,6 +54,31 @@
 \definecolor{dotgreen}{RGB}{120, 200, 132}
 
 \pagecolor{bg}
+\definecolor{bgglow}{RGB}{20, 29, 45}
+\definecolor{gutter}{RGB}{50, 62, 84}
+
+% =====================================================================
+%  Page chrome (every page): soft top-right glow + left line-number gutter —
+%  the "code editor" signature carried over from the carousel.  On the title
+%  page the full-bleed photo (added later, per-page) covers it.
+% =====================================================================
+\newcommand{\ArticleChrome}{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \begin{scope}
+      \clip (current page.south west) rectangle (current page.north east);
+      \shade[inner color=bgglow, outer color=bg]
+        ([shift={(10mm,-4mm)}]current page.north east) circle (95mm);
+    \end{scope}
+    \foreach \n [count=\i from 0, evaluate=\i as \yy using -12-\i*5.5] in {2,...,43}{%
+      \node[anchor=east, text=gutter, inner sep=0pt]
+        at ([xshift=11mm, yshift=\yy mm]current page.north west)
+        {\mono\fontsize{7}{7}\selectfont \n};
+    }
+    \draw[rulecol, line width=0.4pt]
+      ([xshift=15mm]current page.north west) -- ([xshift=15mm]current page.south west);
+  \end{tikzpicture}%
+}
+\AddToShipoutPictureBG{\ArticleChrome}
 
 % =====================================================================
 %  Fonts  (vendored — same as the carousel)
