@@ -28,7 +28,8 @@ callouts, a magazine-style photo cover, and an author bar on every page. It's fo
 1. **Write.** A real point of view, a concrete detail in every section, working
    code. Shape: photo title page → numbered sections (each = concept + code card +
    callout) → a "Common mistakes" section → a "Read more" section (references) +
-   the closing card. Keep it to **≤ 8 pages** — the `.tex` is the concise version;
+   the closing card. Aim for **~8 pages, up to 10** (a good diagram earns the extra
+   length) — the `.tex` is the concise version;
    push extra depth into the post's `README.md`.
 2. **Verify against current sources.** Before finishing, confirm the claims, API
    names, and behavior against the **official docs / primary sources** online
@@ -100,13 +101,33 @@ Add \code{@wraps} to \tb{every} decorator ...
 | `\code{}` / `\hb{}` / `\tb{}` | inline code chip / blue accent word / semibold-bright emphasis. **Escape `_` and `%`** inside `\code{}` and prose. |
 | `\artclosing{url}` | Closing cross-promo card (heading + description left, QR right). |
 
+## Visual resources — add a diagram when the topic earns one
+
+Depending on the topic, include a **didactic diagram** to explain a concept a
+picture makes obvious: nesting/wrapping, a flow, a state machine, a before/after,
+a pipeline. Prefer **native TikZ** (vector, on the navy palette) — SVG via
+`\includesvg` only if the figure is genuinely easier drawn in an external tool.
+The template provides:
+
+- `\begin{diagram}…\end{diagram}` — centres the figure; follow it with
+  `\diagcap{one-line caption}` (muted mono).
+- `layer` / `layertag` tikz styles for **nested-box** diagrams (concentric rounded
+  frames + a coloured corner tag per layer). Colours: `accentblue`, `commentgreen`,
+  `dotamber` map to the same roles as the callouts/code.
+
+Reference: the "three layers" figure in `DecoratorsArticle.tex` §3 (retry → deco →
+wrapper). One strong diagram beats three weak ones — don't decorate for its own
+sake; a diagram is worth ~half a page, so let the article run to 9–10 pages if it
+earns the picture.
+
 ## Style rules (baked in — keep them)
 
 - **Ragged-right** body + callouts (the template sets `\RaggedRight` +
   `\emergencystretch`). Justifying this narrow measure with inline chips makes
   ugly rivers — don't switch back to justified.
-- **≤ 8 pages.** If it runs over, move an example to `codes/` + the `README.md`
-  and reference it, rather than padding the PDF. Recompile and check the count.
+- **~8 pages, up to 10.** A diagram or an extra example can justify 9-10; past
+  that, move an example to `codes/` + the `README.md` and reference it rather than
+  padding the PDF. Recompile and check the count.
 - Header topic is **green**; the title page has **no QR and no kicker**.
 - The post folder also holds **`codes/NN_name.py`** (runnable, dependency-free —
   actually run them), a **`README.md`** deep-dive (GitHub renders it as the folder

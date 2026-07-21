@@ -26,7 +26,7 @@
 \usepackage{enumitem}
 \usepackage{fancyhdr}
 \usepackage[hidelinks]{hyperref}
-\usetikzlibrary{calc,shadings}
+\usetikzlibrary{calc,shadings,fit,positioning,arrows.meta}
 \providecommand{\lnkroot}{../}
 
 % =====================================================================
@@ -120,6 +120,13 @@
   \tikz[baseline=(c.base)]{\node[fill=chipbg, rounded corners=1.4pt,
     inner xsep=1.3mm, inner ysep=0.4mm] (c)
     {\mono\fontsize{9.5}{11}\selectfont\color{accentblue}#1};}}
+% ---- diagrams: a centred TikZ figure + small caption (topic-dependent) ----
+\newenvironment{diagram}{\par\vskip3mm\begin{center}}{\end{center}}
+\newcommand{\diagcap}[1]{\vskip1.5mm{\centering\mono\fontsize{8}{10}\selectfont\color{textmuted}#1\par}\vskip3mm}
+% a labelled layer box for "nesting" diagrams: \layerbox{colour}{name} fitting inner
+\tikzset{layer/.style={draw=#1, line width=1pt, rounded corners=4pt},
+         layertag/.style={fill=#1, text=bg, rounded corners=1.6pt, inner xsep=1.6mm,
+                          inner ysep=0.7mm, font=\monob\fontsize{7.5}{9}\selectfont}}
 \newcommand{\hb}[1]{{\color{accentblue}#1}}          % accent word
 \newcommand{\tb}[1]{{\intersemi\color{textbright}#1}} % bold-bright emphasis
 % bullet list, blue markers

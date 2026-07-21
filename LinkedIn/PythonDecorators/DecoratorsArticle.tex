@@ -72,6 +72,21 @@ def retry(times):
 def fetch(): ...
 \end{pycard}
 
+\begin{diagram}
+\begin{tikzpicture}[font=\mono\footnotesize]
+  \node[fill=cardbg, draw=dotamber, line width=1pt, rounded corners=3pt,
+        text=codeident, minimum width=32mm, minimum height=8mm] (w) {runs fn(*a, **k)};
+  \node[draw=commentgreen, line width=1pt, rounded corners=5pt,
+        fit=(w), inner xsep=8mm, inner ysep=8.5mm] (d) {};
+  \node[draw=accentblue, line width=1pt, rounded corners=7pt,
+        fit=(d), inner xsep=8mm, inner ysep=8.5mm] (r) {};
+  \node[layertag=accentblue, anchor=west]  at ([xshift=5mm]r.north west) {retry(times)};
+  \node[layertag=commentgreen, anchor=west] at ([xshift=5mm]d.north west) {deco(fn)};
+  \node[layertag=dotamber, anchor=west]     at ([xshift=4mm]w.north west) {wrapper};
+\end{tikzpicture}
+\diagcap{@retry(3) peels the layers outside-in: the arg, then the function, then the call.}
+\end{diagram}
+
 Read \code{@retry(3)} as two steps. First \code{retry(3)} runs and returns \code{deco}; then \code{deco} decorates \code{fetch}. Forget to return a layer, or try to take \code{times} and \code{fn} in the same function, and it fails with a confusing \code{TypeError}. A complete \code{retry} with backoff lives in \code{03\_decorator\_with\_args.py}.
 
 \section{Stacking order}
