@@ -11,8 +11,7 @@
 % ---- title page ----
 \coverphoto{assets/cover.jpg}
 \arttitlepage{Python}{Decorators, from\\ the ground up}%
-  {The one-liner that adds behavior to any function — and the \tb{functools} details nobody explains. Eight runnable examples, no dependencies.}%
-  {https://github.com/asanchezyali/social-media-posts/tree/main/LinkedIn/PythonDecorators}
+  {The one-liner that adds behavior to any function — and the \tb{functools} details nobody explains. Eight runnable examples, no dependencies.}
 
 % =====================================================================
 \section{What a decorator really is}
@@ -100,21 +99,7 @@ def fib(n):
     return n if n < 2 else fib(n-1) + fib(n-2)
 \end{pycard}
 
-\code{fib(35)} drops from millions of calls to 36, and \code{fib.cache\_info()} reports \code{hits=33, misses=36}. A hand-written timing decorator is worth keeping too:
-
-\begin{pycard}{timer.py}
-from time import perf_counter
-
-def timer(fn):
-    @wraps(fn)
-    def wrapper(*a, **k):
-        start = perf_counter()
-        try:
-            return fn(*a, **k)
-        finally:
-            print(f"{fn.__name__}: {perf_counter()-start:.3f}s")
-    return wrapper
-\end{pycard}
+\code{fib(35)} drops from millions of calls to 36, and \code{fib.cache\_info()} reports \code{hits=33, misses=36}. A hand-written timing decorator (\code{codes/04\_timer.py}) is another good one to keep around.
 
 \begin{callout}[dotgreen]{PRO TIP}
 Learn what \code{functools} already gives you: \code{lru\_cache}, \code{cached\_property} (compute once per instance), \code{singledispatch} (overload by type), \code{partial}, and \code{wraps} itself.
@@ -187,10 +172,9 @@ class CountCalls:
   \item \tb{Nested functions when you need state.} If it holds state or config, use a class with \code{\_\_call\_\_}.
 \end{itemize}
 
-\section{Run the code \& read more}
+\section{Read more}
 
-Every snippet above has a complete, dependency-free version in \code{codes/}. Clone and run any of them with \code{python codes/02\_wraps.py}.
-
+Every snippet above ships as a complete, dependency-free file in \code{codes/}. Two references worth bookmarking:
 \begin{itemize}
   \item Python docs — \emph{functools}: \href{https://docs.python.org/3/library/functools.html}{docs.python.org/3/library/functools}
   \item PEP 318 — the decorator syntax: \href{https://peps.python.org/pep-0318/}{peps.python.org/pep-0318}

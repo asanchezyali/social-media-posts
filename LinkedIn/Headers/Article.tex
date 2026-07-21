@@ -9,8 +9,8 @@
 
 \usepackage{geometry}
 \geometry{paperwidth=180mm, paperheight=240mm,
-  left=20mm, right=20mm, top=24mm, bottom=22mm,
-  headheight=12mm, headsep=6mm, footskip=14mm}
+  left=20mm, right=20mm, top=23mm, bottom=25mm,
+  headheight=12mm, headsep=6mm, footskip=13mm}
 
 \usepackage{fontspec}
 \usepackage{xcolor}
@@ -95,8 +95,8 @@
 \newfontfamily\monob[Path=\lnkroot fonts/, Extension=.ttf]{JetBrainsMono-Bold}
 
 \AtBeginDocument{\color{textbody}}
-\setlength{\parindent}{0pt}\setlength{\parskip}{2.6mm}
-\linespread{1.16}
+\setlength{\parindent}{0pt}\setlength{\parskip}{2.1mm}
+\linespread{1.11}
 \sloppy\hyphenpenalty=1500
 
 % =====================================================================
@@ -109,8 +109,8 @@
 \titleformat{\subsection}[hang]
   {\intersemi\fontsize{12.5}{16}\selectfont\color{accentblue}}
   {}{0pt}{}
-\titlespacing*{\section}{0pt}{7mm}{3mm}
-\titlespacing*{\subsection}{0pt}{4mm}{1.5mm}
+\titlespacing*{\section}{0pt}{5.5mm}{2.5mm}
+\titlespacing*{\subsection}{0pt}{3.5mm}{1.2mm}
 
 % =====================================================================
 %  Inline bits
@@ -200,11 +200,11 @@
       {\monob\fontsize{9}{11}\selectfont\MakeUppercase{\hdrlang}};
     \draw[textmuted, line width=0.9pt]
       ([xshift=2.6mm,yshift=-2mm]p.east) -- ([xshift=2.6mm,yshift=2mm]p.east);
-    \node[anchor=west, text=goldhead] at ([xshift=4.8mm]p.east)
+    \node[anchor=west, text=commentgreen] at ([xshift=4.8mm]p.east)
       {\monob\fontsize{9}{11}\selectfont\MakeUppercase{\hdrtopic}};
   \end{tikzpicture}}}
-% FOOTER — author bar (photo + name + role) on every page + page number right
-\fancyfoot[L]{\raisebox{-3mm}{%
+% FOOTER — author bar (photo + name + role) + page number, vertically aligned
+\fancyfoot[L]{\raisebox{-1.8mm}{%
   \begin{tikzpicture}[baseline]
     \begin{scope}\clip (0,0) circle (4.6mm);
       \node at (0,0) {\includegraphics[width=9.2mm,height=9.2mm]{\lnkroot ../Images/profile-image.jpeg}};
@@ -215,7 +215,7 @@
     \node[anchor=west, text=textmuted, inner sep=0pt] at (6.6mm,-1.9mm)
       {\intermed\fontsize{7.5}{9}\selectfont Software Developer · AI \& Blockchain};
   \end{tikzpicture}}}
-\fancyfoot[R]{\raisebox{-1mm}{\mono\fontsize{8}{10}\selectfont\color{textmuted}\thepage}}
+\fancyfoot[R]{\raisebox{-1.8mm}{\mono\fontsize{9}{11}\selectfont\color{textmuted}\thepage}}
 
 % =====================================================================
 %  Title page  --  full-bleed photo + overlay + tag + title + author + QR
@@ -233,45 +233,41 @@
           inner xsep=3mm, inner ysep=2mm]
       {\monob\fontsize{12}{14}\selectfont #1};
   \end{tikzpicture}}
-% \arttitlepage{tag}{Title}{Subtitle}{qr-url}
-\newcommand{\arttitlepage}[4]{%
+% \arttitlepage{tag}{Title}{Subtitle}  (no QR on the title page)
+\newcommand{\arttitlepage}[3]{%
   \thispagestyle{empty}
   \vspace*{\fill}
-  {\mono\fontsize{10}{13}\selectfont\color{commentgreen}-{}- a field guide}\par\vskip5mm
   \topictag{#1}\par\vskip7mm
   {\interblack\fontsize{34}{39}\selectfont\color{textbright}#2\par}\vskip4mm
   {\fontsize{13}{19}\selectfont\color{textbody}#3\par}
   \vspace*{\fill}\vskip4mm
-  \noindent
-  \begin{minipage}[b]{0.60\linewidth}
-    \begin{tikzpicture}[baseline]
-      \begin{scope}\clip (0,0) circle (7mm);
-        \node at (0,0) {\includegraphics[width=14mm,height=14mm]{\lnkroot ../Images/profile-image.jpeg}};
-      \end{scope}
-      \draw[cardframe, line width=0.6pt] (0,0) circle (7mm);
-      \node[anchor=west, text=textbright, inner sep=0pt] at (9.5mm,2.8mm)
-        {\intersemi\fontsize{12}{14}\selectfont Alejandro Sánchez Yalí};
-      \node[anchor=west, text=textmuted, inner sep=0pt] at (9.5mm,-2.2mm)
-        {\intermed\fontsize{8.5}{10}\selectfont Software Developer · AI \& Blockchain};
-    \end{tikzpicture}
-  \end{minipage}\hfill
-  \begin{minipage}[b]{0.36\linewidth}\centering
-    \begin{tikzpicture}[baseline]
-      \node[fill=white, rounded corners=2.5pt, inner sep=2mm]
-        {\color{bg}\qrcode[height=17mm]{#4}};
-    \end{tikzpicture}\\[1.8mm]
-    {\mono\fontsize{8}{10}\selectfont\color{textmuted}read the full guide}
-  \end{minipage}\par
+  \noindent\begin{tikzpicture}[baseline]
+    \begin{scope}\clip (0,0) circle (7mm);
+      \node at (0,0) {\includegraphics[width=14mm,height=14mm]{\lnkroot ../Images/profile-image.jpeg}};
+    \end{scope}
+    \draw[cardframe, line width=0.6pt] (0,0) circle (7mm);
+    \node[anchor=west, text=textbright, inner sep=0pt] at (9.5mm,2.8mm)
+      {\intersemi\fontsize{12}{14}\selectfont Alejandro Sánchez Yalí};
+    \node[anchor=west, text=textmuted, inner sep=0pt] at (9.5mm,-2.2mm)
+      {\intermed\fontsize{8.5}{10}\selectfont Software Developer · AI \& Blockchain};
+  \end{tikzpicture}\par
   \clearpage}
 
 % closing author + QR block (call at the end)
+% closing cross-promo card: heading + description on the LEFT, QR on the RIGHT
 \newcommand{\artclosing}[1]{%
-  \par\vskip5mm\noindent{\color{rulecol}\titlerule[0.5pt]}\par\vskip7mm
-  \begin{center}
-    \begin{tikzpicture}
-      \node[fill=white, rounded corners=3pt, inner sep=2.6mm]
-        {\color{bg}\qrcode[height=22mm]{#1}};
-    \end{tikzpicture}\\[3mm]
-    {\intersemi\fontsize{12.5}{15}\selectfont\color{textbright}Read the full guide}\par\vskip1mm
-    {\mono\fontsize{9}{12}\selectfont\color{textmuted}8 runnable examples · github.com/asanchezyali}
-  \end{center}}
+  \par\vskip4mm
+  \begin{tcolorbox}[enhanced, colback=bgsoft, colframe=cardframe, boxrule=1pt,
+      arc=4pt, left=6mm, right=5mm, top=5mm, bottom=5mm]
+    \noindent
+    \begin{minipage}[c]{0.62\linewidth}
+      {\interhead\fontsize{15}{19}\selectfont\color{commentgreen}Read the full guide}\par\vskip2mm
+      {\fontsize{10.5}{15}\selectfont\color{textbody}Eight runnable, dependency-free examples plus the complete write-up — clone the repo or read it right on GitHub.}
+    \end{minipage}\hfill
+    \begin{minipage}[c]{0.30\linewidth}\raggedleft
+      \begin{tikzpicture}
+        \node[fill=white, rounded corners=2.5pt, inner sep=2mm]
+          {\color{bg}\qrcode[height=21mm]{#1}};
+      \end{tikzpicture}
+    \end{minipage}
+  \end{tcolorbox}}

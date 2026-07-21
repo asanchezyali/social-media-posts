@@ -129,7 +129,7 @@ navy palette (Inter + JetBrains Mono, mac-window code cards, callouts, left line
 the topic wants depth/long-form rather than a swipe deck — Alejandro asked for this
 "mix" for Python Decorators. 3:4 portrait document (180×240mm), XeLaTeX ×2. Preamble
 `\def\lnkroot{../}\input{\lnkroot Headers/Article.tex}`; commands: `\arttitlepage{tag}{Title}{Subtitle}{qr}`
-(magazine-style photo cover via `\coverphoto{img}` first), `\setheader{Python}{Decorators}` (per-page header: blue LANG pill + divider + gold TOPIC; the footer is an author bar on every page; QR labels sit centered BELOW the QR),
+(magazine-style photo cover via `\coverphoto{img}` first — no kicker, no QR on it), `\setheader{Python}{Decorators}` (per-page header: blue LANG pill + divider + **green** TOPIC; the footer is an author bar + page number on every page; the closing `\artclosing{url}` is a horizontal cross-promo card — text left + QR right, old-post style. Keep the article **≤8 pages**; the `README.md` holds the deeper version),
 `\section`/`\subsection`, `\begin{pycard}{f.py}`/`\begin{sqlcard}{f.sql}`,
 `\begin{callout}[colour]{LABEL}`, `\code{}` / `\hb{}` / `\tb{}`, `\artclosing{qr}`.
 Same folder as the deck (shares `codes/`, `assets/`, `README.md`). Reference:
