@@ -67,8 +67,10 @@
 % =====================================================================
 \newfontfamily\interblack[Path=\lnkroot fonts/, Extension=.otf]{InterDisplay-Black}
 \newfontfamily\interxbold[Path=\lnkroot fonts/, Extension=.otf]{InterDisplay-ExtraBold}
+\newfontfamily\interhead[Path=\lnkroot fonts/, Extension=.otf]{InterDisplay-Bold} % headline weight — lighter than Black (less saturated)
 \newfontfamily\interbold[Path=\lnkroot fonts/, Extension=.otf]{Inter-Bold}
 \newfontfamily\intermed[Path=\lnkroot fonts/, Extension=.otf]{Inter-Medium}
+\newfontfamily\intersemi[Path=\lnkroot fonts/, Extension=.otf]{Inter-SemiBold}
 \setmainfont{Inter}[Path=\lnkroot fonts/, Extension=.otf,
   UprightFont=Inter-Regular, BoldFont=Inter-Bold]
 % JetBrains Mono (code + labels)
@@ -163,9 +165,9 @@
 % -- headline: Inter Display Black, near-white; \hb{...} colours a word blue
 \newcommand{\hb}[1]{{\color{accentblue}#1}}
 \newcommand{\headline}[1]{%
-  {\interblack\fontsize{23}{26}\selectfont\color{textbright}#1\par}\vskip 3.5mm}
+  {\interhead\fontsize{22}{26}\selectfont\color{textbright}#1\par}\vskip 3.5mm}
 \newcommand{\headlinesm}[1]{%
-  {\interblack\fontsize{19}{22}\selectfont\color{textbright}#1\par}\vskip 2.6mm}
+  {\interhead\fontsize{18}{22}\selectfont\color{textbright}#1\par}\vskip 2.8mm}
 
 % -- keyword pill: full-width blue bar, dark bold-mono label (SELECT / WHERE ...)
 \newcommand{\pill}[1]{%
@@ -177,13 +179,13 @@
   \end{tikzpicture}\par\vskip 3.5mm}
 
 % -- lead paragraph: muted body; \tb{} bold-white, \chip{} inline code chip
-\newcommand{\tb}[1]{{\interbold\color{textbright}#1}}
+\newcommand{\tb}[1]{{\intersemi\color{textbright}#1}}
 \newcommand{\chip}[1]{%
   \tikz[baseline=(c.base)]{\node[fill=chipbg, rounded corners=1.6pt,
     inner xsep=1.6mm, inner ysep=0.5mm] (c)
     {\mono\fontsize{10.5}{12}\selectfont\color{accentblue}#1};}}
 \newcommand{\lead}[1]{%
-  {\fontsize{12}{16.5}\selectfont\color{textmuted}#1\par}\vskip 3.5mm}
+  {\fontsize{11.5}{16.5}\selectfont\color{textmuted}#1\par}\vskip 3.5mm}
 
 % =====================================================================
 %  Content-depth blocks  (professional substance, not just syntax):
@@ -194,11 +196,11 @@
 %                 PRO TIP (green).  Inline `\tb{}` and `\chip{}` work inside.
 % =====================================================================
 \newcommand{\body}[1]{%
-  {\fontsize{11}{15.6}\selectfont\color{textmuted}#1\par}\vskip 2.2mm}
+  {\fontsize{10.5}{15.4}\selectfont\color{textmuted}#1\par}\vskip 2.2mm}
 \newcommand{\pt}[1]{\par\vskip 1.7mm\noindent
   \hangindent=5.4mm\hangafter=1
   \raisebox{0.3ex}{\tikz{\fill[accentblue] (0,0)--(0,1.4mm)--(1.35mm,0.7mm)--cycle;}}%
-  \hspace{2.6mm}{\fontsize{11}{15.5}\selectfont\color{textmuted}#1}\par}
+  \hspace{2.6mm}{\fontsize{10.5}{15.2}\selectfont\color{textmuted}#1}\par}
 \newtcolorbox{callout}[2][accentblue]{%
   enhanced, colback=cardbg, colframe=cardbg, boxrule=0pt, arc=2pt,
   borderline west={2.6pt}{0pt}{#1},

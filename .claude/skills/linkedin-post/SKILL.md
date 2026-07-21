@@ -73,7 +73,7 @@ SELECT * FROM users;
 ```
 
 **Commands:** `\kicker{...}` (mono `-- ` comment; wrap words in `\kgreen`/`\kblue`),
-`\pill{KEYWORD}`, `\headline{...}` / `\headlinesm{...}` (Inter Black, big / smaller;
+`\pill{KEYWORD}`, `\headline{...}` / `\headlinesm{...}` (Inter Display **Bold**, big / smaller — NOT Black; Black read as too heavy/saturated;
 `\hb{}` blue word, `\\` for deliberate line breaks — short headlines MUST be broken
 or they overflow), `\lead{...}` (muted 1-liner; `\tb{}` = bold white, `\chip{...}` =
 inline code chip — **escape `_` and `%`** inside chips/leads), `\begin{codecard}{file.sql}…\end{codecard}`
