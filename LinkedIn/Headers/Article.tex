@@ -94,10 +94,11 @@
   UprightFont=JetBrainsMono-Regular, BoldFont=JetBrainsMono-Bold]{JetBrainsMono-Regular}
 \newfontfamily\monob[Path=\lnkroot fonts/, Extension=.ttf]{JetBrainsMono-Bold}
 
-\AtBeginDocument{\color{textbody}}
+\AtBeginDocument{\color{textbody}\RaggedRight}
 \setlength{\parindent}{0pt}\setlength{\parskip}{2.1mm}
 \linespread{1.11}
-\sloppy\hyphenpenalty=1500
+\hyphenpenalty=2500\exhyphenpenalty=2500
+\setlength{\emergencystretch}{4em}   % absorb unbreakable \code{} chips at line ends
 
 % =====================================================================
 %  Section headings  --  blue mono number + Inter heading + thin rule
@@ -181,7 +182,7 @@
   enhanced, colback=bgsoft, colframe=bgsoft, boxrule=0pt, arc=2pt,
   borderline west={2.6pt}{0pt}{#1},
   left=5mm, right=4mm, top=3mm, bottom=3mm, before skip=3mm, after skip=3mm,
-  fontupper=\color{textbody},
+  fontupper=\color{textbody}\RaggedRight,
   before upper={{\monob\fontsize{8}{10}\selectfont\textcolor{#1}{#2}}\par\vskip1.4mm},
 }
 

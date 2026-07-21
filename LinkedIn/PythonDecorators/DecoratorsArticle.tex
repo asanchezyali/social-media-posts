@@ -16,7 +16,7 @@
 % =====================================================================
 \section{What a decorator really is}
 
-A decorator takes a function and returns a new one that runs extra logic around it — logging, timing, caching, access checks — without changing the original code. That is the whole idea. The \code{@} syntax is sugar: writing \code{@log} above \code{greet} is exactly \code{greet = log(greet)}.
+A decorator takes a function and returns a new one that runs extra logic around it (logging, timing, caching, access checks) without changing the original code. That is the whole idea. The \code{@} syntax is sugar: writing \code{@log} above \code{greet} is exactly \code{greet = log(greet)}.
 
 \begin{pycard}{pattern.py}
 def log(fn):
@@ -38,7 +38,7 @@ This is how frameworks add behavior declaratively. Flask's \code{@app.route}, \c
 
 \section{functools.wraps, the one you keep forgetting}
 
-Wrap a function naively and you overwrite its identity. \code{add.\_\_name\_\_} becomes \code{"wrapper"}, the docstring turns into \code{None}, and every tool that reads them — your debugger, \code{help()}, pytest's output — now reports the wrapper instead of your function.
+Wrap a function naively and you overwrite its identity. \code{add.\_\_name\_\_} becomes \code{"wrapper"}, the docstring turns into \code{None}, and every tool that reads them (your debugger, \code{help()}, pytest's output) now reports the wrapper instead of your function.
 
 \begin{pycard}{wraps.py}
 from functools import wraps
@@ -144,11 +144,11 @@ class User:
         return "@" in email
 \end{pycard}
 
-Use \code{classmethod} for alternate constructors — because it gets \code{cls}, \code{User.from\_json(...)} keeps working in subclasses. Use \code{staticmethod} for helpers that belong to the class conceptually but need neither the instance nor the class.
+Use \code{classmethod} for alternate constructors: because it gets \code{cls}, \code{User.from\_json()} keeps working in subclasses. Use \code{staticmethod} for helpers that belong to the class conceptually but need neither the instance nor the class.
 
 \section{When you need state: class-based decorators}
 
-Three nested functions get hard to read once the decorator has to remember something — a counter, a rate limit, a config. A class with \code{\_\_call\_\_} is clearer, and the state lives on the instance.
+Three nested functions get hard to read once the decorator has to remember something: a counter, a rate limit, a config. A class with \code{\_\_call\_\_} is clearer, and the state lives on the instance.
 
 \begin{pycard}{class-based.py}
 class CountCalls:
