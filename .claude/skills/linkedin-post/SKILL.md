@@ -105,6 +105,24 @@ mistakes" recap → closing (author + QR). ~13 slides ≈ a 5-min read. Always
 recompile and confirm the page count == number of `sld`s (an overflowing slide
 silently spills to a 2nd page).
 
+**Code cards per language:** `\begin{codecard}{f.sql}` = SQL highlighting;
+`\begin{pycard}{f.py}` = Python highlighting (both mac-window, atomic). Add a new
+`\lstdefinestyle` + `\newtcblisting` to Headers for another language. **The card's
+filename argument is typeset as text — avoid `_` in it** (use `args.py`, not
+`with_args.py`) or escape it. Inside the listing body, `_ % * @` are fine.
+
+**Covers use `Images/`, not `Photos/`.** LinkedIn covers come from the repo-root
+`Images/` pool (`../../Images/` — dark tech backdrops: Coder_at_Night, Futuristic
+Cybersecurity Analyst, Glowing Neon Abstract…). `Photos/` is the Instagram pool.
+Bake to 4:5: `magick "Images/<name>.jpeg" -auto-orient -resize 1080x1350^ -gravity
+center -extent 1080x1350 assets/cover.jpg`.
+
+**Porting an old post + a QR guide.** To rebuild a `Python/…` post in this format:
+put runnable examples in `codes/NN_name.py`, write the deep-dive as the post
+folder's **`README.md`** (GitHub renders it as the folder landing page), and point
+`\sourceqr` at the folder URL (`.../tree/main/LinkedIn/<Post>`) so scanning the QR
+lands on the guide with `codes/` right there. Reference deck: `LinkedIn/PythonDecorators/`.
+
 **Gotchas learned:** `\pagestyle{empty}` kills default page numbers. The cover
 overlay is a **baked alpha PNG** (`Headers/overlay.png`), NOT a pgf-opacity fill —
 pgf transparency corrupts the eso-pic stream under XeLaTeX (same lesson as the

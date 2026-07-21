@@ -1,0 +1,171 @@
+% =====================================================================
+%  LinkedIn  --  "Python decorators, demystified"  (code-editor carousel)
+%  New format. Full guide + runnable code in this folder (QR on the last slide).
+%  Compile:  xelatex PythonDecorators.tex   (run twice)
+% =====================================================================
+\def\lnkroot{../}\input{\lnkroot Headers/Headers.tex}
+\setdeck{11}
+
+\begin{document}
+
+% ===================== COVER ========================================
+\begin{sldt}
+  \coverdark{assets/cover.jpg}
+  \vspace*{3mm}
+  \topictag{Python}
+  \vskip 6mm
+  \headline{Python decorators,\\ \hb{demystified}}
+  \lead{The \chip{@} that adds behavior to any function — plus the \tb{functools details} nobody explains.}
+\end{sldt}
+
+% ===================== CONTEXT ======================================
+\begin{sld}
+  \kicker{\kgreen{before the syntax}}
+  \headlinesm{A decorator \hb{wraps a function}}
+  \body{It takes a function and returns a new one that runs extra logic around it — logging, timing, caching, access checks — while the original code stays untouched.}
+  \pt{The \chip{@} is just sugar: \chip{@log} above \chip{f} means \chip{f = log(f)}.}
+  \pt{You've used them already: \chip{@property} and Flask's \chip{@app.route}.}
+  \begin{callout}{WHY IT MATTERS}
+  It's how frameworks add behavior declaratively — one line above a function instead of ten inside it.
+  \end{callout}
+\end{sld}
+
+% ===================== 01 · the pattern ============================
+\begin{sld}
+  \kicker{\kblue{01} · the pattern}
+  \headlinesm{Take a function, \hb{return a new one}}
+  \begin{pycard}{pattern.py}
+def log(fn):
+    def wrapper(*args, **kwargs):
+        print(f"-> {fn.__name__}")
+        return fn(*args, **kwargs)
+    return wrapper
+  \end{pycard}
+  \begin{callout}[dotamber]{GOTCHA}
+  \chip{@log} above a function is nothing magic — it's just \chip{f = log(f)} run for you.
+  \end{callout}
+\end{sld}
+
+% ===================== 02 · functools.wraps ========================
+\begin{sld}
+  \kicker{\kblue{02} · keep the identity}
+  \headlinesm{Always add \hb{@wraps}}
+  \begin{pycard}{wraps.py}
+from functools import wraps
+def log(fn):
+    @wraps(fn)
+    def wrapper(*a, **k):
+        return fn(*a, **k)
+    return wrapper
+  \end{pycard}
+  \begin{callout}[dotamber]{GOTCHA}
+  Without it, the name becomes \chip{"wrapper"}, the docstring vanishes, and debugging/introspection break.
+  \end{callout}
+\end{sld}
+
+% ===================== 03 · decorator with args ====================
+\begin{sld}
+  \kicker{\kblue{03} · decorators that take args}
+  \headlinesm{Add arguments?\\ \hb{Three layers}}
+  \begin{pycard}{args.py}
+def retry(n):
+    def deco(fn):
+        def wrapper(*a, **k):
+            ...
+        return wrapper
+    return deco
+  \end{pycard}
+  \begin{callout}[dotamber]{GOTCHA}
+  Three layers: the \tb{arg}, the \tb{function}, the \tb{wrapper}. \chip{@retry(3)} calls \chip{retry(3)} first, then decorates.
+  \end{callout}
+\end{sld}
+
+% ===================== 04 · stacking order =========================
+\begin{sld}
+  \kicker{\kblue{04} · stacking}
+  \headlinesm{Stacked decorators run \hb{bottom-up}}
+  \begin{pycard}{order.py}
+@bold
+@italic
+def greet(): ...
+# greet = bold(italic(greet))
+  \end{pycard}
+  \begin{callout}[dotamber]{GOTCHA}
+  The decorator \tb{nearest the function} wraps first. Flip the order and you flip the output.
+  \end{callout}
+\end{sld}
+
+% ===================== 05 · lru_cache ==============================
+\begin{sld}
+  \kicker{\kblue{05} · don't reinvent it}
+  \headlinesm{The stdlib \hb{ships decorators}}
+  \begin{pycard}{cache.py}
+from functools import lru_cache
+
+@lru_cache(maxsize=None)
+def fib(n):
+    return n if n < 2 else fib(n-1) + fib(n-2)
+  \end{pycard}
+  \begin{callout}[dotgreen]{PRO TIP}
+  Before writing your own, reach for \chip{lru\_cache}, \chip{cached\_property}, \chip{singledispatch}, \chip{wraps}.
+  \end{callout}
+\end{sld}
+
+% ===================== 06 · property ===============================
+\begin{sld}
+  \kicker{\kblue{06} · methods as attributes}
+  \headlinesm{\hb{@property} hides\\ the parentheses}
+  \begin{pycard}{property.py}
+class Circle:
+    def __init__(self, r):
+        self.r = r
+    @property
+    def area(self):
+        return 3.14159 * self.r**2
+  \end{pycard}
+  \begin{callout}[dotamber]{GOTCHA}
+  It reads like data — \chip{c.area}, not \chip{c.area()}. Add \chip{@area.setter} to guard writes.
+  \end{callout}
+\end{sld}
+
+% ===================== 07 · classmethod / staticmethod =============
+\begin{sld}
+  \kicker{\kblue{07} · on classes}
+  \headlinesm{\hb{classmethod}\\ vs \hb{staticmethod}}
+  \begin{pycard}{methods.py}
+class User:
+    @classmethod
+    def from_json(cls, d): return cls(**d)
+    @staticmethod
+    def valid(e): return "@" in e
+  \end{pycard}
+  \begin{callout}[dotamber]{GOTCHA}
+  \chip{classmethod} gets \chip{cls} — great for alternate constructors. \chip{staticmethod} gets nothing.
+  \end{callout}
+\end{sld}
+
+% ===================== COMMON MISTAKES =============================
+\begin{sld}
+  \kicker{\kgreen{what trips people up}}
+  \headlinesm{The traps that\\ \hb{cost you hours}}
+  \pt{No \chip{@wraps} — broken names, lost docstrings, confused debuggers.}
+  \pt{Decorator body runs \tb{once at definition}; the wrapper runs \tb{every call}.}
+  \pt{Shared mutable state in the closure leaks across calls.}
+  \pt{Need per-instance state? Use a \tb{class-based} decorator.}
+  \begin{callout}[dotgreen]{PRO TIP}
+  If it holds state or config, a class with \chip{\_\_call\_\_} is clearer than three nested functions.
+  \end{callout}
+\end{sld}
+
+% ===================== CLOSING ======================================
+\begin{sld}
+  \kicker{\kgreen{go deeper}}
+  \headlinesm{Now decorate \hb{with intent}}
+  \lead{Full write-up + runnable code for every example — scan and clone it.}
+  \vskip 3mm
+  \authorcard
+  \vskip 6mm
+  \sourceqr{https://github.com/asanchezyali/social-media-posts/tree/main/LinkedIn/PythonDecorators}{the full guide}{code + deep-dive on GitHub}
+\end{sld}
+
+\end{document}

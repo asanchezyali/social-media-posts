@@ -246,6 +246,38 @@
   },
 }
 
+% --- Python variant of the code card:  \begin{pycard}{file.py} ... \end{pycard}
+\lstdefinelanguage{pythonx}[]{Python}{morekeywords={None,True,False,async,await}}
+\lstdefinestyle{pystyle}{%
+  language=pythonx,
+  basicstyle=\mono\fontsize{9}{12.6}\selectfont\color{codeident},
+  keywordstyle=\monob\color{codekw},
+  commentstyle=\mono\color{codecomment},
+  stringstyle=\mono\color{codestring},
+  showstringspaces=false, columns=fullflexible, keepspaces=true,
+  breaklines=true, tabsize=4,
+  literate=%
+    {0}{{\color{codenum}0}}1 {1}{{\color{codenum}1}}1 {2}{{\color{codenum}2}}1
+    {3}{{\color{codenum}3}}1 {4}{{\color{codenum}4}}1 {5}{{\color{codenum}5}}1
+    {6}{{\color{codenum}6}}1 {7}{{\color{codenum}7}}1 {8}{{\color{codenum}8}}1
+    {9}{{\color{codenum}9}}1 {*}{{\raisebox{0.28ex}{*}}}1,
+}
+\newtcblisting{pycard}[1]{%
+  listing only, listing style=pystyle,
+  enhanced, colback=cardbg, colframe=cardframe, boxrule=1pt, arc=3.4pt,
+  left=5mm, right=4mm, top=8.4mm, bottom=3.4mm,
+  overlay={%
+    \fill[dotblue]  ([xshift=5mm,yshift=-4.3mm]frame.north west) circle (1mm);
+    \fill[dotamber] ([xshift=8mm,yshift=-4.3mm]frame.north west) circle (1mm);
+    \fill[dotgreen] ([xshift=11mm,yshift=-4.3mm]frame.north west) circle (1mm);
+    \node[anchor=west, text=codecomment]
+      at ([xshift=15mm,yshift=-4.3mm]frame.north west)
+      {\mono\fontsize{8.5}{9}\selectfont #1};
+    \draw[cardframe, line width=0.5pt]
+      ([yshift=-7.6mm]frame.north west) -- ([yshift=-7.6mm]frame.north east);
+  },
+}
+
 % =====================================================================
 %  Title-page building blocks  (old-LinkedIn-style opening cover)
 % =====================================================================
